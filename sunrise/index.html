@@ -2,7 +2,6 @@
   <head>
     <meta charset="UTF-8"></meta>
     <title>Sunrise Tracker</title>
-    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <script src="js/angular.js"></script>
     <script type="text/javascript" src="js/jquery-1.11.1.js"></script>
     <script src="js/sorttable.js"></script>
@@ -13,6 +12,18 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"></link>
     <script src="js/bootstrap.js"></script>
     <script src="js/ui-bootstrap-tpls.js"></script>
+    <!-- <script>
+      $(document).ready(function() {
+        var url = "https://maps.googleapis.com/maps/api/js?sensor=false?key=" + API_KEY;
+        $.getScript( url, function( data, textStatus, jqxhr ) {
+          console.log( data ); // Data returned
+          console.log( textStatus ); // Success
+          console.log( jqxhr.status ); // 200
+          console.log( "Load was performed." );
+        });
+      });
+    </script> -->
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false?key=AIzaSyB4PJv3cQv8aQw21KKrVyKQOCJPHX-Uw2Q"></script>
     <script src="app.js"></script>
     <script src="services.js"></script>
   </head>
