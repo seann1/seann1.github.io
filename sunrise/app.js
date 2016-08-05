@@ -49,7 +49,7 @@ app.controller('MainCtrl', [
 	   				dates.push(counterStartDate.format("M-D-YYYY"));
 	   				var latitude = results[0].geometry.location.lat();
 	   				var longitude = results[0].geometry.location.lng();
-	 					var sunriseurl = "http://api.sunrise-sunset.org/json?lat=" + latitude + "&lng=" + longitude + "&date=" + counterStartDate.format("YYYY-MM-DD") + "&callback=mycallback";
+	 					var sunriseurl = "https://api.sunrise-sunset.org/json?lat=" + latitude + "&lng=" + longitude + "&date=" + counterStartDate.format("YYYY-MM-DD") + "&callback=mycallback";
 			   		var response = $.ajax({
 							    		url: sunriseurl,
 							    		dataType: "JSONP",
