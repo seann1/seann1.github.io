@@ -46,7 +46,7 @@
           <span>👇</span>
           <p>Meet Sean Niesen</p>
         </div>
-        <svg
+        <!-- <svg
           class="scroll stagger1"
           width="40"
           height="77"
@@ -83,7 +83,7 @@
               fill="#fff"
             ></circle>
           </g>
-        </svg>
+        </svg> -->
       </div>
 
       <svg
@@ -193,17 +193,32 @@
           <p class="subtitle">Featured Project</p>
           <a href="#" class="featured-title">ReactMeals</a>
           <p class="featured-desc">
-            A food order placing React app that uses Google Material UI
-            components, Formik with Yup validation, and Google Firebase database
-            and photo storage.
+            A food order placing React app which uses Google Material UI
+            components, Formik with Yup validation, Google Firebase database and
+            photo storage, and the Google Maps Api.
           </p>
+          <!-- <button id="myBtn">View Demonstration Video</button> -->
+          <!-- <form action="https://youtu.be/jsPCtMTVIWg" target="_blank">
+            <input
+              type="submit"
+              class="glow-on-hover"
+              value="View Demonstration Video"
+            />
+          </form> -->
+          <button
+            class="glow-on-hover"
+            type="button"
+            onclick=" window.open('https://youtu.be/jsPCtMTVIWg','_blank')"
+          >
+            View Demonstration Video
+          </button>
         </div>
       </div>
       <div class="image-radius">
         <a href="https://food-order-app-d078d.web.app" target="_blank">
           <img
             class="right transition2 image-radius"
-            src="./images/ReactMeals-cropped.png"
+            src="./images/ReactMeals2-cropped.png"
             alt="featured project"
           />
         </a>
@@ -211,7 +226,7 @@
     </section>
 
     <section class="skills" id="mySkills">
-      <div class="skills-container">
+      <div class="skills-container skills-container-style">
         <ul>
           <li class="transition2">
             <div class="icon-container one">
@@ -238,6 +253,51 @@
             <p class="skill-title">CSS</p>
             <!-- <p class="featured-desc skill-desc">asdfadsfasdfadfadsf</p> -->
           </li>
+          <li class="transition2">
+            <div class="icon-container four">
+              <img src="images/wordpress-logo.svg" alt="Wordpress Icon" />
+            </div>
+            <p class="skill-title">WordPress</p>
+            <!-- <p class="featured-desc skill-desc">asdfadsfasdfadfadsf</p> -->
+          </li>
+        </ul>
+      </div>
+      <div class="skills-container2 skills-container-style">
+        <ul>
+          <li class="transition2">
+            <div class="icon-container five">
+              <img
+                src="images/Adobe_Illustrator_CC_icon.svg"
+                alt="Adobe Illustrator Icon"
+              />
+            </div>
+            <p class="skill-title">Illustrator</p>
+            <!-- <p class="featured-desc skill-desc">
+              Solid understanding of JavaScript, APIs, Databases, and frameworks
+            </p> -->
+          </li>
+          <li class="transition2">
+            <div class="icon-container six">
+              <img
+                src="images/Adobe_Photoshop_CC_icon.svg"
+                alt="Adobe Photoshop Icon"
+              />
+            </div>
+            <p class="skill-title">Photoshop</p>
+            <!-- <p class="featured-desc skill-desc">
+              Modern, declarative, component-based framework
+            </p> -->
+          </li>
+          <li class="transition2">
+            <div class="icon-container seven">
+              <img
+                src="images/Adobe_After_Effects_CC_icon.svg"
+                alt="Adobe After Effects Icon"
+              />
+            </div>
+            <p class="skill-title">After Effects</p>
+            <!-- <p class="featured-desc skill-desc">asdfadsfasdfadfadsf</p> -->
+          </li>
         </ul>
       </div>
     </section>
@@ -247,14 +307,11 @@
         <div class="portfolio-left">
           <div class="inner">
             <p class="subtitle">Netflix Clone</p>
-            <div class="featured-title">
-              A Netflix Web App Landing Page Clone
-            </div>
+            <div class="featured-title">A Netflix Web App Homepage Clone</div>
             <div class="featured-desc">
-              A clone of the Netflix Web App landing page made with React and
-              the TMDB API. A trailer of the selected movie is displayed on
-              click. Movie trailers are accessed through the movie-trailer npm
-              package.
+              A clone of the Netflix Web App homepage made with React and the
+              TMDB API. A trailer of the selected movie is displayed on click.
+              Movie trailers are accessed through the movie-trailer npm package.
             </div>
           </div>
         </div>
@@ -428,6 +485,32 @@
         duration: 1.2,
         stagger: 0.3,
       });
+
+      // Get the modal
+      var modal = document.getElementById("myModal");
+
+      // Get the button that opens the modal
+      var btn = document.getElementById("myBtn");
+
+      // Get the <span> element that closes the modal
+      var span = document.getElementsByClassName("close")[0];
+
+      // When the user clicks the button, open the modal
+      btn.onclick = function () {
+        modal.style.display = "block";
+      };
+
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function () {
+        modal.style.display = "none";
+      };
+
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      };
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   </body>
