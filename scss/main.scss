@@ -58,7 +58,10 @@ header {
 }
 
 .hero {
-  background: #6e00ff;
+  background: linear-gradient(-45deg, #6e00ff, #0068ff, #00aee1, #00b994);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+  //background: #6e00ff;
   color: white;
   display: grid;
   text-align: center;
@@ -276,7 +279,10 @@ section {
     padding: 0;
 
     .content {
-      background: #6e00ff;
+      //background: #6e00ff;
+      background: linear-gradient(-45deg, #6e00ff, #fd00b9, #ff7544, #ffbf3a);
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
       padding: 6em 8em 6em 4em;
       text-align: left;
 
@@ -286,6 +292,14 @@ section {
       }
     }
   }
+
+  // body {
+  //   background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  //   background-size: 400% 400%;
+  //   animation: gradient 15s ease infinite;
+  //   height: 100vh;
+  // }
+
   .meet {
     margin: unset;
   }
@@ -488,6 +502,18 @@ section {
   }
   100% {
     background-position: 0 0;
+  }
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
 
