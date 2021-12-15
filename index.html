@@ -387,6 +387,11 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/TextPlugin.min.js"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
     <script>
       // Define selector for selecting
       // anchor links with the hash
@@ -413,7 +418,8 @@
           });
         };
       });
-      gsap.registerPlugin(ScrollTrigger);
+      gsap.registerPlugin(ScrollTrigger, TextPlugin);
+
       let tl = gsap.timeline();
       tl.from(".content", {
         y: "-30%",
@@ -443,10 +449,14 @@
         "-=2"
       );
       gsap.from(".square-anim", {
-        stagger: 0.1,
+        stagger: 0.2,
         scale: 0.4,
+        fill: "rgb(150,0,150)",
+        attr: { x: 500 },
+        rotate: "360deg",
+        transformOrigin: "center",
         duration: 2,
-        ease: Back.easeOut.config(1.5),
+        ease: Back.easeOut.config(0.5),
       });
       gsap.from(".transition2", {
         scrollTrigger: {
@@ -456,8 +466,9 @@
         y: 50,
         x: 50,
         opacity: 0,
-        duration: 1.2,
-        stagger: 0.3,
+        skewY: "10deg",
+        duration: 1.0,
+        stagger: 0.2,
       });
       gsap.from(".transition3", {
         scrollTrigger: {
