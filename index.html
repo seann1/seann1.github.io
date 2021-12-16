@@ -41,7 +41,7 @@
     </div>
     <div class="hero">
       <div class="content">
-        <h1 class="stagger1">Frontend Web Developer</h1>
+        <h1 class="stagger1 dev-title">Frontend Web Developer</h1>
         <div class="meet stagger1">
           <span>👇</span>
           <p>Meet Sean Niesen</p>
@@ -421,6 +421,47 @@
       gsap.registerPlugin(ScrollTrigger, TextPlugin);
 
       let tl = gsap.timeline();
+      tl2 = new TimelineMax({
+        repeat: 1,
+        repeatDelay: 1,
+        yoyo: true,
+        delay: 1,
+      });
+
+      gsap.to(".dev-title", {
+        duration: 12,
+        text: {
+          value: "Frontend Web Developer",
+          newClass: "dev-title2",
+          oldClass: "dev-title1",
+        },
+        ease: "power4",
+        padSpace: true,
+        type: "diff",
+      });
+
+      // TweenMax.to(".dev-title", 2, {
+      //   text: "Frontend Web Developer",
+      //   ease: Linear.easeNone,
+      // });
+      tl2
+        .to(".dev-title", 0.5, {
+          rotationX: -90,
+          rotationY: -45,
+        })
+        .set(".dev-title", {
+          text: {
+            value: "Frontend Web Developer",
+            newClass: "dev-title2",
+            oldClass: "dev-title1",
+          },
+        })
+        .fromTo(
+          ".dev-title",
+          1,
+          { rotationX: 90 },
+          { rotationX: 0, immediateRender: false }
+        );
       tl.from(".content", {
         y: "-30%",
         opacity: 0,
