@@ -82,6 +82,19 @@ section {
 
 .featured {
   position: relative;
+  z-index: 3;
+}
+
+#myWork {
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: 10px;
+  border-radius: 5px;
+  height: 97%;
+}
+@media only screen and (min-width: 800px) {
+  #myWork {
+    margin-bottom: -4em;
+  }
 }
 
 .featured::before {
@@ -121,7 +134,7 @@ section {
 }
 
 .skills {
-  background: #cacaca;
+  background: linear-gradient(180deg, rgba(247, 247, 247, 0) 0%, #cacaca 100%);
 }
 
 .skills-container-style ul li {
@@ -129,6 +142,7 @@ section {
   padding: 2em;
   border-radius: 1em;
   margin-bottom: 1em;
+  filter: drop-shadow(0 0 0.5rem #cacaca);
 }
 .skills-container-style ul li .icon-container {
   height: 100px;
@@ -177,6 +191,7 @@ section {
   .featured,
 .portfolio {
     text-align: left;
+    margin-bottom: -9em;
   }
 
   .featured,
@@ -264,7 +279,7 @@ section {
   .hero {
     display: grid;
     grid-template-columns: 66% auto;
-    background: unset;
+    background: linear-gradient(180deg, rgba(202, 202, 202, 0.5) 0%, rgba(0, 212, 255, 0) 100%);
     padding: 0;
   }
   .hero .content {
@@ -277,6 +292,13 @@ section {
   .hero .content h1 {
     font-size: 3em;
     line-height: 1.2em;
+  }
+
+  body {
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+    height: 1vh;
   }
 
   .meet {
@@ -346,6 +368,8 @@ section {
 .hire-me-container {
   display: flex;
   justify-content: flex-start;
+  margin-top: 9em;
+  background: linear-gradient(180deg, #f7f7f7 0%, #f7f7f7 32%, rgba(0, 212, 255, 0) 100%);
 }
 
 .box-1 {
@@ -380,9 +404,15 @@ section {
   border-radius: 1em;
 }
 
+.no-top-margin {
+  margin-top: 0px;
+}
+
 .resume {
   font-size: 2em;
   text-decoration: none;
+  font-family: "Poppins";
+  color: #6e00ff;
   margin-left: 1em;
   margin-top: 0.5em;
 }
