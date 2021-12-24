@@ -188,6 +188,7 @@ section {
 
 .portfolio {
   background: #f7f7f7;
+  padding-bottom: 1em;
 }
 
 .portfolio-container a img {
@@ -373,39 +374,36 @@ section {
     z-index: 5;
   }
 }
-.hire-me-container {
+.hire-me-background {
   display: flex;
-  justify-content: flex-start;
-  margin-top: 9em;
   background: linear-gradient(180deg, #f7f7f7 0%, #f7f7f7 32%, rgba(0, 212, 255, 0) 100%);
 }
 
-.box-1 {
-  width: 16%;
-  margin-bottom: 1em;
+.hire-me-container {
+  display: flex;
 }
-@media only screen and (max-width: 580px) {
-  .box-1 {
-    margin-bottom: 0px;
+@media only screen and (min-width: 800px) {
+  .hire-me-container {
+    margin-top: 9em;
   }
 }
-
-.box-2 {
-  width: 7%;
+.hire-me-container ul {
+  display: flex;
+  justify-content: space-between;
+  width: 7em;
+  float: left;
+}
+.hire-me-container ul img {
+  width: 100px;
+}
+.hire-me-container ul .email {
+  width: 80px;
 }
 
-.box-3 {
-  width: 60%;
-}
-
-.linkedIn {
-  height: 5em;
-}
-
-.email {
-  padding-top: 0.6em;
-  height: 60px;
-  align-self: flex-start;
+.center-helper {
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
 }
 
 .image-radius {
@@ -417,12 +415,11 @@ section {
 }
 
 .resume {
-  font-size: 2em;
+  font-size: 1.5em;
+  margin-top: 10px;
   text-decoration: none;
   font-family: "Poppins";
   color: #6e00ff;
-  margin-left: 1em;
-  margin-top: 0.5em;
 }
 
 .glow-on-hover {

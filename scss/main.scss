@@ -210,6 +210,7 @@ section {
 
 .portfolio {
   background: #f7f7f7;
+  padding-bottom: 1em;
 }
 
 .portfolio-container a img {
@@ -293,7 +294,7 @@ section {
 
   .social-header {
     display: block;
-    // background-color: yellow;
+
     ul {
       display: flex;
       justify-content: space-between;
@@ -400,63 +401,39 @@ section {
     z-index: 5;
   }
 }
-
-.hire-me-container {
+.hire-me-background {
   display: flex;
-  justify-content: flex-start;
-  margin-top: 9em;
   background: linear-gradient(
     180deg,
     rgba(247, 247, 247, 1) 0%,
     rgba(247, 247, 247, 1) 32%,
     rgba(0, 212, 255, 0) 100%
   );
-  //flex-basis: 20%;
-  //align-items: flex-start;
-  //padding-left: 2em;
-
-  // @media only screen and (max-width: 580px) {
-  //   flex-direction: column;
-  // }
 }
+.hire-me-container {
+  display: flex;
 
-.box-1 {
-  //flex: 1;
-  //order: 1;
-  width: 16%;
-  margin-bottom: 1em;
-  //float: left;
-  @media only screen and (max-width: 580px) {
-    margin-bottom: 0px;
+  @media only screen and (min-width: 800px) {
+    margin-top: 9em;
+  }
+  ul {
+    display: flex;
+    justify-content: space-between;
+    width: 7em;
+    float: left;
+    img {
+      width: 100px;
+    }
+    .email {
+      width: 80px;
+    }
   }
 }
 
-.box-2 {
-  //flex: 1;
-  //order: 2;
-  width: 7%;
-  //margin-bottom: 2em;
-  //justify-content: flex-start;
-  //float: left;
-}
-.box-3 {
-  width: 60%;
-}
-
-.linkedIn {
-  height: 5em;
-  //filter: invert(93%) sepia(0%) saturate(14%) hue-rotate(39deg) brightness(97%)
-  //contrast(97%);
-}
-
-.email {
-  padding-top: 0.6em;
-  height: 60px;
-  align-self: flex-start;
-
-  //filter: invert(93%) sepia(0%) saturate(14%) hue-rotate(39deg) brightness(97%)
-  //contrast(97%);
-  //margin-right: auto;
+.center-helper {
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
 }
 
 .image-radius {
@@ -467,12 +444,11 @@ section {
 }
 
 .resume {
-  font-size: 2em;
+  font-size: 1.5em;
+  margin-top: 10px;
   text-decoration: none;
   font-family: "Poppins";
   color: #6e00ff;
-  margin-left: 1em;
-  margin-top: 0.5em;
 }
 
 .glow-on-hover {
