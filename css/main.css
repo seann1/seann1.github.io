@@ -118,6 +118,7 @@ section {
 }
 
 .subtitle {
+  margin-top: 2em;
   text-transform: uppercase;
   font-weight: bold;
   color: #6e00ff;
