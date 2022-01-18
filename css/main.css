@@ -105,6 +105,7 @@ section {
 @media only screen and (min-width: 800px) {
   #myWork {
     margin-bottom: -4em;
+    padding-bottom: 2em;
   }
 }
 
@@ -140,6 +141,14 @@ section {
 .featured-desc {
   color: #3b3b3b;
   margin-bottom: 3em;
+  font-size: 0.9em;
+  line-height: 1.8em;
+  font-weight: 500;
+}
+
+.featured-desc-bottom {
+  color: #3b3b3b;
+  margin-bottom: 1em;
   font-size: 0.9em;
   line-height: 1.8em;
   font-weight: 500;
@@ -488,6 +497,54 @@ section {
 @media only screen and (max-width: 1050px) {
   .resume-link-2 {
     display: none;
+  }
+}
+
+.github-repo-container {
+  display: flex;
+}
+.github-repo-container img {
+  float: left;
+  margin-left: 0em;
+}
+@media only screen and (max-width: 800px) {
+  .github-repo-container {
+    justify-content: center;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .github-repo {
+    width: 20px;
+  }
+}
+@media only screen and (min-width: 800px) {
+  .github-repo {
+    width: 30px;
+  }
+}
+
+.view-on-github {
+  color: #6700ee;
+  margin-left: 0.2em;
+  display: inline-block;
+  align-self: flex-end;
+  letter-spacing: 0.2em;
+  text-shadow: 2px 2px 8px white;
+}
+@media only screen and (min-width: 800px) {
+  .view-on-github {
+    font-size: 1em;
+  }
+}
+@media only screen and (max-width: 800px) {
+  .view-on-github {
+    font-size: 0.7em;
+  }
+}
+@media only screen and (min-width: 800px) {
+  .view-on-github {
+    padding-top: 0.6em;
   }
 }
 

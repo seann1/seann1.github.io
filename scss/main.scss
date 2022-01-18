@@ -116,6 +116,7 @@ section {
   height: 97%;
   @media only screen and (min-width: 800px) {
     margin-bottom: -4em;
+    padding-bottom: 2em;
   }
 }
 
@@ -151,6 +152,13 @@ section {
 .featured-desc {
   color: #3b3b3b;
   margin-bottom: 3em;
+  font-size: 0.9em;
+  line-height: 1.8em;
+  font-weight: 500;
+}
+.featured-desc-bottom {
+  color: #3b3b3b;
+  margin-bottom: 1em;
   font-size: 0.9em;
   line-height: 1.8em;
   font-weight: 500;
@@ -495,8 +503,6 @@ section {
   @media only screen and (min-width: 1050px) {
     display: none;
   }
-
-  // float: right;
 }
 .resume-flex-container {
   display: flex;
@@ -516,8 +522,43 @@ section {
   @media only screen and (max-width: 1050px) {
     display: none;
   }
+}
+.github-repo-container {
+  img {
+    float: left;
+    margin-left: 0em;
+  }
+  display: flex;
+  @media only screen and (max-width: 800px) {
+    justify-content: center;
+  }
+}
+.github-repo {
+  @media only screen and (max-width: 800px) {
+    width: 20px;
+  }
+  @media only screen and (min-width: 800px) {
+    width: 30px;
+  }
+}
+.view-on-github {
+  // font-weight: bold;
+  color: #6700ee;
+  @media only screen and (min-width: 800px) {
+    font-size: 1em;
+  }
+  @media only screen and (max-width: 800px) {
+    font-size: 0.7em;
+  }
+  margin-left: 0.2em;
+  @media only screen and (min-width: 800px) {
+    padding-top: 0.6em;
+  }
+  display: inline-block;
+  align-self: flex-end;
 
-  // float: right;
+  letter-spacing: 0.2em;
+  text-shadow: 2px 2px 8px white;
 }
 
 .glow-on-hover {
