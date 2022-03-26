@@ -8,6 +8,16 @@
     <link rel="stylesheet" href="css/main.css" />
   </head>
   <body>
+    <div class="background"></div>
+    <div class="theme-button">
+      <div class="switch">
+        <input name="switch" id="one" type="radio" onchange="proTheme()" checked/>
+        <label for="one" class="switch__label">Professional</label>
+        <input name="switch" id="two" onchange="colorTheme()" type="radio" />
+        <label for="two" class="switch__label">Colorful</label>
+        <div class="switch__indicator" /></div>
+      </div>
+    </div>
     <div class="nav-container">
       <header>
         <a href="index.html" class="logo">Sean Niesen</a>
@@ -15,7 +25,6 @@
           <ul>
             <li><a href="#myWork">My Work</a></li>
             <li><a href="#mySkills">My Skills</a></li>
-            <!-- <li><a href="#hireMe">Hire Me</a></li> -->
           </ul>
         </nav>
       </header>
@@ -48,7 +57,7 @@
       </div>
     </div>
 
-    <div class="hero">
+    <div id="hero" class="hero pro-gradient">
       <div class="social-header-2">
         <ul>
           <li>
@@ -76,7 +85,7 @@
           </li>
         </ul>
       </div>
-      <div class="content">
+      <div class="content pro-gradient" id="content">
         <div class="resume-flex-container">
           <div class="resume-link-2">
             <a href="./images/Resume.pdf" target="_blank">Resume</a>
@@ -258,6 +267,7 @@
       <div class="skills-container skills-container-style">
         <ul>
           <li class="transition2">
+            <div class="grid-container" id="grid-container1"></div>
             <div class="icon-container one">
               <img src="images/JavaScript_logo.svg" alt="JavaScript Icon" />
             </div>
@@ -267,6 +277,7 @@
             </p> -->
           </li>
           <li class="transition2">
+            <div class="grid-container" id="grid-container2"></div>
             <div class="icon-container two">
               <img src="images/React-icon.svg" alt="React Icon" />
             </div>
@@ -276,6 +287,7 @@
             </p> -->
           </li>
           <li class="transition2">
+            <div class="grid-container" id="grid-container3"></div>
             <div class="icon-container three">
               <img src="images/css-3/icon-css-3.svg" alt="CSS Icon" />
             </div>
@@ -283,6 +295,7 @@
             <!-- <p class="featured-desc skill-desc">asdfadsfasdfadfadsf</p> -->
           </li>
           <li class="transition2">
+            <div class="grid-container" id="grid-container4"></div>
             <div class="icon-container four">
               <img src="images/wordpress-logo.svg" alt="Wordpress Icon" />
             </div>
@@ -294,6 +307,7 @@
       <div class="skills-container2 skills-container-style">
         <ul>
           <li class="transition2">
+            <div class="grid-container" id="grid-container5"></div>
             <div class="icon-container five">
               <img
                 src="images/Adobe_Illustrator_CC_icon.svg"
@@ -306,6 +320,7 @@
             </p> -->
           </li>
           <li class="transition2">
+            <div class="grid-container" id="grid-container6"></div>
             <div class="icon-container six">
               <img
                 src="images/Adobe_Photoshop_CC_icon.svg"
@@ -318,6 +333,7 @@
             </p> -->
           </li>
           <li class="transition2">
+            <div class="grid-container" id="grid-container7"></div>
             <div class="icon-container seven">
               <img
                 src="images/Adobe_After_Effects_CC_icon.svg"
@@ -468,6 +484,35 @@
       referrerpolicy="no-referrer"
     ></script>
     <script>
+
+      function proTheme() {
+        var element = document.getElementById("hero");
+        var element2 = document.getElementById("content");
+        element.classList.add("pro-gradient");
+        element.classList.remove("color-gradient");
+        element2.classList.add("pro-gradient");
+        element2.classList.remove("color-gradient");
+        document.body.style.background = "linear-gradient(-45deg, #a7a7a7, #636363, #96adb5, #b0b6b5);"
+      }
+
+      function colorTheme() {
+        var element = document.getElementById("hero");
+        var element2 = document.getElementById("content");
+        element.classList.remove("pro-gradient");
+        element.classList.add("color-gradient");
+        element2.classList.remove("pro-gradient");
+        element2.classList.add("color-gradient");
+        var percentage1 = 50;
+        var color1 = "#C00";
+        var percentage2 = 100;
+        var color2 = "#000";
+        //document.body.backgroundSize = "background-size: 400% 400%";
+        //document.body.style.background = "linear-gradient(-45deg, #a7a7a7, #636363, #96adb5, #b0b6b5)"
+        //document.body.style.background = `linear-gradient(to left, ${color1} ${percentage1}%, ${color2} ${percentage2}%)`;
+        //document.body.style.animation = "gradient 15s ease infinite";
+        //document.body.style.background = "linear-gradient(-45deg, #a7a7a7, #636363, #96adb5, #b0b6b5);"
+
+      }
       // Define selector for selecting
       // anchor links with the hash
       let anchorSelector = 'a[href^="#"]';
@@ -635,31 +680,96 @@
         stagger: 0.3,
       });
 
-      // // Get the modal
-      // var modal = document.getElementById("myModal");
+      function hex(c) {
+        var s = "0123456789abcdef";
+        var i = parseInt(c);
+        if (i == 0 || isNaN(c)) return "00";
+        i = Math.round(Math.min(Math.max(0, i), 255));
+        return s.charAt((i - (i % 16)) / 16) + s.charAt(i % 16);
+      }
 
-      // // Get the button that opens the modal
-      // var btn = document.getElementById("myBtn");
+      /* Convert an RGB triplet to a hex string */
+      function convertToHex(rgb) {
+        return hex(rgb[0]) + hex(rgb[1]) + hex(rgb[2]);
+      }
 
-      // // Get the <span> element that closes the modal
-      // var span = document.getElementsByClassName("close")[0];
+      /* Remove '#' in color hex string */
+      function trim(s) {
+        return s.charAt(0) == "#" ? s.substring(1, 7) : s;
+      }
 
-      // // When the user clicks the button, open the modal
-      // btn.onclick = function () {
-      //   modal.style.display = "block";
-      // };
+      /* Convert a hex string to an RGB triplet */
+      function convertToRGB(hex) {
+        var color = [];
+        color[0] = parseInt(trim(hex).substring(0, 2), 16);
+        color[1] = parseInt(trim(hex).substring(2, 4), 16);
+        color[2] = parseInt(trim(hex).substring(4, 6), 16);
+        return color;
+      }
 
-      // // When the user clicks on <span> (x), close the modal
-      // span.onclick = function () {
-      //   modal.style.display = "none";
-      // };
+      function generateColor(colorStart, colorEnd, colorCount) {
+        // The beginning of your gradient
+        var start = convertToRGB(colorStart);
 
-      // // When the user clicks anywhere outside of the modal, close it
-      // window.onclick = function (event) {
-      //   if (event.target == modal) {
-      //     modal.style.display = "none";
-      //   }
-      // };
+        // The end of your gradient
+        var end = convertToRGB(colorEnd);
+
+        // The number of colors to compute
+        var len = colorCount;
+
+        //Alpha blending amount
+        var alpha = 0.1;
+
+        var array = [];
+
+        for (i = 0; i < len; i++) {
+          var c = [];
+          alpha += 1.0 / len;
+
+          c[0] = start[0] * alpha + (1 - alpha) * end[0];
+          c[1] = start[1] * alpha + (1 - alpha) * end[1];
+          c[2] = start[2] * alpha + (1 - alpha) * end[2];
+
+          array.push(convertToHex(c));
+        }
+
+        return array;
+      }
+
+      // Exemplo de como usar
+
+      var tmp = generateColor("#ffffff", "#E5E5E5", 144);
+
+      for (var j = 1; j < 8; j++) {
+        for (var i = 0; i < 37; i++) {
+          var div = document.createElement("div");
+          div.setAttribute("class", `grid-item-${i}`);
+          div.classList.add("box");
+          div.style.backgroundImage = `linear-gradient(45deg, white, #${tmp[i]}), linear-gradient(45deg, black, #${tmp[i]})`;
+          div.style.backgroundSize = "100% 100%, 2000% 100%";
+          div.style.animation = "move 5s infinite";
+          div.style.animationDirection = "alternate";
+          var gridContainer = document.getElementById(`grid-container${j}`);
+          gridContainer.append(div);
+        }
+      }
+
+      var gridTween = TweenMax.from(".box", {scrollTrigger: {
+          trigger: ".skills",
+          start: "top bottom",
+        },
+        duration: 2,
+        x: 20,
+        y: 20,
+        stagger: 0.008,
+        ease: "elastic",
+        rotation: 20,
+      });
+      var skillGrids = document.getElementsByClassName("grid-container");
+      [...skillGrids].forEach((el) => {
+        console.log(el);
+        el.addEventListener("mouseenter", () => gridTween.play());
+      });
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   </body>
