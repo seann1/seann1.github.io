@@ -215,11 +215,19 @@ section {
   padding-bottom: 1em;
 }
 
-.portfolio-container a img {
+.portfolio-container {
   border-radius: 1em;
   margin-bottom: 2em;
 }
+.portfolio-container a img {
+  border-radius: 1em;
+}
 
+@media only screen and (max-width: 1050px) {
+  .portfolio-left {
+    margin-bottom: 1em;
+  }
+}
 @media only screen and (min-width: 800px) {
   .featured,
 .portfolio {
@@ -516,6 +524,7 @@ section {
 }
 
 .github-repo-container {
+  align-items: center;
   display: flex;
 }
 .github-repo-container img {
@@ -526,6 +535,11 @@ section {
   .github-repo-container {
     justify-content: center;
   }
+}
+
+.github-link {
+  display: flex;
+  align-items: center;
 }
 
 @media only screen and (max-width: 800px) {
@@ -540,10 +554,9 @@ section {
 }
 
 .view-on-github {
+  margin-left: 0.4em;
   color: #6700ee;
-  margin-left: 0.2em;
   display: inline-block;
-  align-self: flex-end;
   letter-spacing: 0.2em;
   text-shadow: 2px 2px 8px white;
 }
@@ -557,12 +570,6 @@ section {
     font-size: 0.7em;
   }
 }
-@media only screen and (min-width: 800px) {
-  .view-on-github {
-    padding-top: 0.6em;
-  }
-}
-
 .grid-container {
   position: absolute;
   display: grid;

@@ -92,7 +92,8 @@
           </div>
         </div>
         <div class="content-margin">
-          <h1 class="stagger1 dev-title">Frontend Web Developer</h1>
+          <h1 class="splitString"><span class="transition5">F</span><span class="transition5">r</span><span class="transition5">o</span><span class="transition5">n</span><span class="transition5">t</span><span class="transition5">e</span><span class="transition5"></span><span class="transition5">n</span><span class="transition5">d</span> <span class="transition5">W</span><span class="transition5">e</span><span class="transition5">b</span> <span class="transition5">D</span><span class="transition5">e</span><span class="transition5">v</span><span class="transition5">e</span><span class="transition5">l</span><span class="transition5">o</span><span class="transition5">p</span><span class="transition5">e</span><span class="transition5">r</span></h1>
+
           <div class="meet stagger1">
             <span>👇</span>
             <p>Meet Sean Niesen</p>
@@ -232,6 +233,7 @@ A user can sign in with their Github account, add the technologies that they use
             <a
               href="https://github.com/chingu-voyages/v37-bears-team-14"
               target="_blank"
+              class="github-link"
               ><img
                 src="images/github.svg"
                 class="github-repo"
@@ -386,6 +388,7 @@ A user can sign in with their Github account, add the technologies that they use
               <a
                 href="https://github.com/seann1/food-order-react-app"
                 target="_blank"
+                class="github-link"
                 ><img
                   src="images/github.svg"
                   class="github-repo"
@@ -434,6 +437,7 @@ A user can sign in with their Github account, add the technologies that they use
               <a
                 href="https://github.com/seann1/coca-cola-twit-js"
                 target="_blank"
+                class="github-link"
                 ><img
                   src="images/github.svg"
                   class="github-repo"
@@ -471,6 +475,7 @@ A user can sign in with their Github account, add the technologies that they use
               <a
                 href="https://github.com/seann1/coca-cola-twit-js"
                 target="_blank"
+                class="github-link"
                 ><img
                   src="images/github.svg"
                   class="github-repo"
@@ -503,7 +508,7 @@ A user can sign in with their Github account, add the technologies that they use
               functionality.
             </div>
             <div class="github-repo-container">
-              <a href="https://github.com/seann1/CSS-Page-Test" target="_blank"
+              <a href="https://github.com/seann1/CSS-Page-Test" target="_blank" class="github-link"
                 ><img
                   src="images/github.svg"
                   class="github-repo"
@@ -631,6 +636,7 @@ A user can sign in with their Github account, add the technologies that they use
           { rotationX: 90 },
           { rotationX: 0, immediateRender: false }
         );
+
       tl.from(".content", {
         y: "-30%",
         opacity: 0,
@@ -692,6 +698,15 @@ A user can sign in with their Github account, add the technologies that they use
         skewY: "10deg",
         duration: 2.0,
         stagger: 0.2,
+        ease: "elastic.out(5, 1)"
+      });
+
+      gsap.from(".transition5", {
+        y: 50,
+        x: 50,
+        opacity: 0,
+        duration: 1.0,
+        stagger: 0.05,
         ease: "elastic.out(5, 1)"
       });
 
