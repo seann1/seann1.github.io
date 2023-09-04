@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="css/main.css" />
   </head>
   <body>
+    <canvas id="threeCan"></canvas>
     <div class="background"></div>
     <div class="theme-button">
       <div class="switch">
@@ -207,7 +208,7 @@
     </div>
     <section class="featured">
       <div class="left transition2-right" id="myWork">
-        <div class="inner transition2">
+        <div class="inner transition2 noBackground">
           <p class="subtitle">Featured Project</p>
           <a href="#"></a>
           <h2 class="featured-title">
@@ -216,13 +217,13 @@
             >
           </h2>
           <p class="featured-desc">
-A MERN stack based social network application which allows Github users to find open source projects that match their tech stack. 
+A MERN stack based social network application which allows Github users to find open source projects that match their tech stack.
           </p>
           <p class="featured-desc">
 A user can sign in with their Github account, add the technologies that they use to their profile,
  and browse or search projects based on tech stack. Users can create projects and add a list of
   technologies used to each project. Users can add other users to their projects. There are currently
-   three roles availabe for a project: Owner, Developer, and Designer.
+   three roles available for a project: Owner, Developer, and Designer.
           </p>
           <p class="featured-desc-bottom">
             I am currently working on this app with two other US based developers through an organization called Chingu which matches
@@ -855,5 +856,6 @@ A user can sign in with their Github account, add the technologies that they use
       });
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="module" src="js/main.js"></script>
   </body>
 </html>
