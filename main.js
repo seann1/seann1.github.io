@@ -1,4 +1,4 @@
-import * as THREE from '/node_modules/three';
+import * as THREE from './js/three.module.js';
 // import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 // import WebGL from '../node_modules/three/addons/capabilities/WebGL.js';
 
