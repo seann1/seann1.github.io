@@ -336,6 +336,7 @@ section {
   }
   .social-header ul img {
     width: 20px;
+    filter: invert(100%);
   }
 
   .hero {
