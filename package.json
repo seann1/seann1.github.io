@@ -2,20 +2,35 @@
   "name": "portfolio-2021",
   "version": "1.0.0",
   "description": "portfolio",
-  "main": "main.js",
+  "main": "src/main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack serve --mode development"
   },
   "author": "",
   "license": "MIT",
   "devDependencies": {
     "browser-sync": "^2.27.5",
+    "css-loader": "^6.8.1",
+    "glslify-loader": "^2.0.0",
     "gulp": "^4.0.2",
     "gulp-sass": "^5.0.0",
-    "sass": "^1.40.0",
-    "vite": "^4.3.3"
+    "html-loader": "^4.2.0",
+    "sass": "^1.69.5",
+    "sass-loader": "^13.3.2",
+    "shader-loader": "^1.3.1",
+    "style-loader": "^3.3.3",
+    "vite": "^4.3.3",
+    "webpack": "^5.89.0",
+    "webpack-glsl-loader": "^1.0.1"
   },
   "dependencies": {
-    "three": "^0.152.2"
+    "glslify": "^7.1.1",
+    "glslify-import-loader": "^0.1.2",
+    "html-webpack-plugin": "^5.5.3",
+    "raw-loader": "^4.0.2",
+    "three": "^0.152.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
   }
 }
