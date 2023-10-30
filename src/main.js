@@ -1,25 +1,25 @@
 import './scss/main.scss';
 import * as THREE from 'three';
-import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
+// import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import fragment from './shaders/fragment.glsl';
 import vertex from './shaders/vertex.glsl';
 import moonImage from './images/moon.jpg';
 import normalImage from './images/normal.jpg';
 
 // Loaders
-const rgbeLoader = new RGBELoader()
+// const rgbeLoader = new RGBELoader()
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / 400, 0.1, 1000 );
 const canvasElm = document.getElementById("threeCan");
 
-rgbeLoader.load('public/environmentMaps/the_sky_is_on_fire_2k.pic', (environmentMap) =>
-{
-    environmentMap.mapping = THREE.EquirectangularReflectionMapping
-
-    scene.background = environmentMap
-    scene.environment = environmentMap
-})
+// rgbeLoader.load('public/environmentMaps/the_sky_is_on_fire_2k.pic', (environmentMap) =>
+// {
+//     environmentMap.mapping = THREE.EquirectangularReflectionMapping
+//
+//     scene.background = environmentMap
+//     scene.environment = environmentMap
+// })
 
 const renderer = new THREE.WebGLRenderer({ canvas: canvasElm, alpha: true });
 renderer.toneMapping = THREE.LinearToneMapping
@@ -80,12 +80,12 @@ for (let i = 0; i < 30; i++) {
     capsules.push(capsule);
     const points = curve.getPoints( 20 );
     const geometry = new THREE.BufferGeometry().setFromPoints( points );
-    curves.push(new THREE.Line( geometry, new THREE.LineBasicMaterial( { color:  colors[Math.floor(Math.random()*colors.length)], width: 10}) ))
+    curves.push(new THREE.Line( geometry, new THREE.LineBasicMaterial( { color:  colors[Math.floor(Math.random()*colors.length)]}) ))
     position += 0.2
 }
 // const ellipse = new THREE.Line( geometry, new THREE.LineBasicMaterial( { color:  colors[Math.floor(Math.random()*colors.length)], width: 10}) );
 const lines = []
-lineGeometries.map(l => lines.push(new THREE.Line(l, new THREE.LineBasicMaterial( { color:  colors[Math.floor(Math.random()*colors.length)], width: 10}))))
+lineGeometries.map(l => lines.push(new THREE.Line(l, new THREE.LineBasicMaterial( { color:  colors[Math.floor(Math.random()*colors.length)]}))))
 lines.map(l => scene.add(l))
 curves.map(w => scene.add(w))
 const light = new THREE.AmbientLight( 0x404040, 30 ); // soft white light
