@@ -22,8 +22,8 @@ const canvasElm = document.getElementById("threeCan");
 // })
 
 const renderer = new THREE.WebGLRenderer({ canvas: canvasElm, alpha: true });
-renderer.toneMapping = THREE.LinearToneMapping
-renderer.toneMappingExposure = 0.3
+renderer.toneMapping = THREE.LinearToneMapping;
+renderer.toneMappingExposure = 0.3;
 renderer.setSize( window.innerWidth, window.innerHeight );
 
 
@@ -33,10 +33,10 @@ for(let col=0x000000;col<=0xFFFFFF;col += 100) {
   if (col.toString().length > 6) break;
 }
 
-let lineValue = 0
-let lineValue2 = 0
+let lineValue = 0;
+let lineValue2 = 0;
 
-const lineGeometries = []
+const lineGeometries = [];
 for(let i =0; i < 20; i++) {
     const points = [];
     points.push( new THREE.Vector3( -lineValue, -1, -lineValue2 ) );
@@ -44,13 +44,13 @@ for(let i =0; i < 20; i++) {
     points.push( new THREE.Vector3( lineValue, 0, -lineValue2 ) );
     lineGeometries[i] = new THREE.BufferGeometry().setFromPoints( points );
 
-    lineValue += Math.sin(0.5)
-    lineValue2 += Math.sin(0.3)
+    lineValue += Math.sin(0.5);
+    lineValue2 += Math.sin(0.3);
 }
 
-const curves = []
-const capsules = []
-let position = -6
+const curves = [];
+const capsules = [];
+let position = -6;
 
 const uniforms = {
     time: { type: "f", value: 1.0 },
@@ -60,7 +60,7 @@ const uniforms = {
 const shaderMat = new THREE.ShaderMaterial({
     uniforms: uniforms,
     vertexShader: vertex,
-    fragmentShader: fragment,
+    fragmentShader: fragment
 });
 
 for (let i = 0; i < 30; i++) {
@@ -70,26 +70,25 @@ for (let i = 0; i < 30; i++) {
         0,  2 * Math.PI,  // aStartAngle, aEndAngle
         false,            // aClockwise
         0                 // aRotation
-    )
+    );
     const capsuleGeo = new THREE.CapsuleGeometry( 1, 1, 4, 8 );
-
-      // new THREE.MeshLambertMaterial( { color:  colors[Math.floor(Math.random()*colors.length)]})
+    
     const capsule = new THREE.Mesh( capsuleGeo, shaderMat);
-    capsule.position.set(Math.pow(position, 2), Math.pow(position,2), position *  2)
-    scene.add(capsule)
+    capsule.position.set(Math.pow(position, 2), Math.pow(position,2), position *  2);
+    scene.add(capsule);
     capsules.push(capsule);
     const points = curve.getPoints( 20 );
     const geometry = new THREE.BufferGeometry().setFromPoints( points );
-    curves.push(new THREE.Line( geometry, new THREE.LineBasicMaterial( { color:  colors[Math.floor(Math.random()*colors.length)]}) ))
-    position += 0.2
-}
-// const ellipse = new THREE.Line( geometry, new THREE.LineBasicMaterial( { color:  colors[Math.floor(Math.random()*colors.length)], width: 10}) );
-const lines = []
-lineGeometries.map(l => lines.push(new THREE.Line(l, new THREE.LineBasicMaterial( { color:  colors[Math.floor(Math.random()*colors.length)]}))))
-lines.map(l => scene.add(l))
-curves.map(w => scene.add(w))
+    curves.push(new THREE.Line( geometry, new THREE.LineBasicMaterial( { color:  colors[Math.floor(Math.random()*colors.length)]}) ));
+    position += 0.2;
+};
+
+const lines = [];
+lineGeometries.map(l => lines.push(new THREE.Line(l, new THREE.LineBasicMaterial( { color:  colors[Math.floor(Math.random()*colors.length)]}))));
+lines.map(l => scene.add(l));
+curves.map(w => scene.add(w));
 const light = new THREE.AmbientLight( 0x404040, 30 ); // soft white light
-light.position.set(10,10,3)
+light.position.set(10,10,3);
 
 const pointLight = new THREE.PointLight(0xffffff);
 pointLight.position.set(5, 5, 5);
@@ -124,10 +123,10 @@ function addStar() {
 Array(200).fill().forEach(addStar);
 
 camera.position.z = 1.5;
-let xRot = 0.00
-let yRot = 0.00
-let zRot = 0.00
-let xPos = 0.00
+let xRot = 0.00;
+let yRot = 0.00;
+let zRot = 0.00;
+let xPos = 0.00;
 
 function moveCamera() {
     const t = document.body.getBoundingClientRect().top;
@@ -148,47 +147,47 @@ moveCamera();
 const sizes = {
     width: window.innerWidth,
     height: window.innerHeight
-}
+};
 
 window.addEventListener('resize', () =>
 {
     // Update sizes
-    sizes.width = window.innerWidth
-    sizes.height = window.innerHeight
+    sizes.width = window.innerWidth;
+    sizes.height = window.innerHeight;
     
     // Update camera
-    camera.aspect = sizes.width / sizes.height
-    camera.updateProjectionMatrix()
+    camera.aspect = sizes.width / sizes.height;
+    camera.updateProjectionMatrix();
     
     // Update renderer
-    renderer.setSize(sizes.width, sizes.height)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-})
-const clock = new THREE.Clock()
+    renderer.setSize(sizes.width, sizes.height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+});
+const clock = new THREE.Clock();
 function animate() {
 	requestAnimationFrame( animate );
-    const elapsedTime = clock.getElapsedTime()
-    const moonAngle = elapsedTime * 0.5
-    moon.position.x = Math.cos(moonAngle) * 0.4
-    moon.position.z = Math.sin(moonAngle) * 0.4
-    moon.position.y = Math.sin(elapsedTime * 0.3)
+    const elapsedTime = clock.getElapsedTime();
+    const moonAngle = elapsedTime * 0.5;
+    moon.position.x = Math.cos(moonAngle) * 0.4;
+    moon.position.z = Math.sin(moonAngle) * 0.4;
+    moon.position.y = Math.sin(elapsedTime * 0.3);
     curves.map(c => {
-        c.rotation.y += Math.sin(0.001)
-        c.position.x += xPos
-        xPos  > 0.001 ? xPos -= 0.0001 : xPos += 0.0001
+        c.rotation.y += Math.sin(0.001);
+        c.position.x += xPos;
+        xPos  > 0.001 ? xPos -= 0.0001 : xPos += 0.0001;
     })
     lines.map(l => {
-        l.rotation.x -= Math.sin(xRot)
-        l.rotation.y -= Math.sin(yRot)
-        l.rotation.z -= Math.sin(zRot)
+        l.rotation.x -= Math.sin(xRot);
+        l.rotation.y -= Math.sin(yRot);
+        l.rotation.z -= Math.sin(zRot);
         // xRot += 0.00001
-        xRot  > 0.01 ? xRot -= 0.0001 : xRot+= 0.0001
-        yRot  > 0.01 ? yRot -= 0.0001 : yRot+= 0.0001
-        zRot  > 0.01 ? zRot -= 0.0001 : zRot+= 0.0001
+        xRot  > 0.01 ? xRot -= 0.0001 : xRot+= 0.0001;
+        yRot  > 0.01 ? yRot -= 0.0001 : yRot+= 0.0001;
+        zRot  > 0.01 ? zRot -= 0.0001 : zRot+= 0.0001;
         }
     )
-    camera.rotation.x += 0.001
-    camera.rotation.y += 0.001
+    camera.rotation.x += 0.001;
+    camera.rotation.y += 0.001;
 	renderer.render( scene, camera );
 }
 

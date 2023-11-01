@@ -5,8 +5,8 @@
   "main": "src/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack serve --mode development",
-    "build": "webpack"
+    "start": "webpack serve --open --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js"
   },
   "author": "",
   "license": "MIT",
@@ -23,7 +23,8 @@
     "style-loader": "^3.3.3",
     "vite": "^4.3.3",
     "webpack": "^5.89.0",
-    "webpack-glsl-loader": "^1.0.1"
+    "webpack-glsl-loader": "^1.0.1",
+    "webpack-merge": "^5.10.0"
   },
   "dependencies": {
     "glslify": "^7.1.1",
