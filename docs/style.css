@@ -1,4 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap");
+/*!*************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/scss/main.scss ***!
+  \*************************************************************************************************************/
+@import url(https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap);
+/*!*****************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/scss/main.scss (1) ***!
+  \*****************************************************************************************************************/
 canvas {
   position: fixed;
   z-index: -1;
@@ -167,7 +173,7 @@ section {
 }
 
 .skills {
-  background: linear-gradient(180deg, rgba(247, 247, 247, 0) 0%, #cacaca 100%);
+  background: linear-gradient(180deg, rgba(247, 247, 247, 0) 0%, rgb(202, 202, 202) 100%);
 }
 
 .skills-container-style ul li {
@@ -230,50 +236,42 @@ section {
 }
 @media only screen and (min-width: 800px) {
   .featured,
-.portfolio {
+  .portfolio {
     text-align: left;
     margin-bottom: -9em;
   }
-
   .featured,
-.portfolio-container {
+  .portfolio-container {
     display: grid;
     grid-template-columns: 40% auto;
   }
-
   .left,
-.portfolio-left {
+  .portfolio-left {
     display: grid;
     place-content: center;
   }
-
   .right {
     margin-left: 2em;
     margin-top: 1em;
   }
-
   .skills {
     margin-top: -5em;
     margin-bottom: -7em;
     padding-top: 7em;
   }
-
   .skills-container ul {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-gap: 1em;
   }
-
   .skills-container2 ul {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 1em;
   }
-
   .portfolio {
     padding-top: 7em;
   }
-
   .portfolio-container img {
     margin-left: 2em;
   }
@@ -284,7 +282,7 @@ section {
 @media only screen and (max-width: 1050px) {
   .social-header-2 {
     display: block;
-    margin: 1em 0em 0em 1em;
+    margin: 1em 0 0 1em;
   }
 }
 .social-header-2 ul {
@@ -303,7 +301,6 @@ section {
   .hero {
     height: 90vh;
   }
-
   .nav-container {
     display: grid;
     grid-template-columns: 66% auto;
@@ -312,19 +309,15 @@ section {
   .nav-container header {
     background: #6700ee;
   }
-
   header {
     padding: 2em 2em 2em 4em;
   }
-
   .social-header {
     padding: 2em 4em 2em 0;
   }
-
   section {
     padding: 4em;
   }
-
   .social-header {
     display: block;
   }
@@ -338,7 +331,6 @@ section {
     width: 20px;
     filter: invert(100%);
   }
-
   .hero {
     display: grid;
     grid-template-columns: 66% auto;
@@ -357,25 +349,21 @@ section {
     font-size: 3em;
     line-height: 1.2em;
   }
-
   body {
     background: linear-gradient(-45deg, #ceb0a7, #b594a0, #79b6cc, #92c9bc);
     background-size: 400% 400%;
     animation: gradient 15s ease infinite;
     height: 1vh;
   }
-
   .meet {
     margin: unset;
   }
-
   .hero-design {
     display: unset;
     margin-left: -50%;
     margin-top: 15%;
     width: 100%;
   }
-
   .portfolio img {
     float: right;
     max-width: 500px;
@@ -383,43 +371,36 @@ section {
 }
 @media only screen and (max-width: 800px) {
   .content-margin {
-    margin: 0em 2em 0em 2em;
+    margin: 0 2em 0 2em;
   }
 }
 @media only screen and (min-width: 1250px) {
   header {
     padding: 2em 2em 2em 10em;
   }
-
   .social-header {
     padding: 2em 10em 2em 0;
   }
-
   section {
     padding: 10em 10em 4em 10em;
   }
-
   .content-margin {
-    margin: 0em 6em 4em 6em;
+    margin: 0 6em 4em 6em;
   }
 }
 @media only screen and (min-width: 1550px) {
   header {
     padding: 2em 2em 2em 20em;
   }
-
   .social-header {
     padding: 2em 20em 2em 0;
   }
-
   section {
     padding: 6em 20em 4em 20em;
   }
-
   .content-margin {
     margin: 2em 10em 6em 16em;
   }
-
   h1 * {
     font-size: 2em;
   }
@@ -440,7 +421,7 @@ section {
 }
 .hire-me-background {
   display: flex;
-  background: linear-gradient(180deg, #f7f7f7 0%, #f7f7f7 32%, rgba(0, 212, 255, 0) 100%);
+  background: linear-gradient(180deg, rgb(247, 247, 247) 0%, rgb(247, 247, 247) 32%, rgba(0, 212, 255, 0) 100%);
 }
 
 .hire-me-container {
@@ -502,7 +483,7 @@ section {
   background-color: #6700ee;
   color: #00f7ff;
   font-weight: bold;
-  border-radius: 30px 0% 0% 0%;
+  border-radius: 30px 0 0 0;
 }
 .resume-link a {
   text-decoration: none;
@@ -525,7 +506,7 @@ section {
   background-color: #6700ee;
   color: #00f7ff;
   font-weight: bold;
-  border-radius: 0px 0% 0% 30px;
+  border-radius: 0 0 0 30px;
 }
 .resume-link-2 a {
   text-decoration: none;
@@ -542,7 +523,7 @@ section {
 }
 .github-repo-container img {
   float: left;
-  margin-left: 0em;
+  margin-left: 0;
 }
 @media only screen and (max-width: 800px) {
   .github-repo-container {
@@ -583,6 +564,7 @@ section {
     font-size: 0.7em;
   }
 }
+
 .grid-container {
   position: absolute;
   display: grid;
@@ -674,13 +656,13 @@ section {
 }
 @keyframes gradient {
   0% {
-    background-position: 0% 50%;
+    background-position: 0 50%;
   }
   50% {
     background-position: 100% 50%;
   }
   100% {
-    background-position: 0% 50%;
+    background-position: 0 50%;
   }
 }
 .theme-button {
@@ -731,11 +713,11 @@ section {
   transform: translate3d(1rem, 0, 0);
 }
 .switch input#one:checked ~ .switch__indicator {
-  background: #d5d5d5;
+  background: rgb(213, 213, 213);
   transform: translate3d(1.2rem, 0, 0);
 }
 .switch input#two:checked ~ .switch__indicator {
-  background: #d5d5d5;
+  background: rgb(213, 213, 213);
   transform: translate3d(5.5rem, 0, 0);
 }
 .switch input[type=radio]:not(:checked), .switch input[type=radio]:checked {

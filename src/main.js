@@ -3,23 +3,10 @@ import * as THREE from 'three';
 // import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import fragment from './shaders/fragment.glsl';
 import vertex from './shaders/vertex.glsl';
-import moonImage from './images/moon.jpg';
-import normalImage from './images/normal.jpg';
-
-// Loaders
-// const rgbeLoader = new RGBELoader()
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / 400, 0.1, 1000 );
 const canvasElm = document.getElementById("threeCan");
-
-// rgbeLoader.load('public/environmentMaps/the_sky_is_on_fire_2k.pic', (environmentMap) =>
-// {
-//     environmentMap.mapping = THREE.EquirectangularReflectionMapping
-//
-//     scene.background = environmentMap
-//     scene.environment = environmentMap
-// })
 
 const renderer = new THREE.WebGLRenderer({ canvas: canvasElm, alpha: true });
 renderer.toneMapping = THREE.LinearToneMapping;
@@ -27,8 +14,8 @@ renderer.toneMappingExposure = 0.3;
 renderer.setSize( window.innerWidth, window.innerHeight );
 
 
-var colors = new Array();
-for(let col=0x000000;col<=0xFFFFFF;col += 100) {
+const colors = [];
+for(let col=0x000000; col<=0xFFFFFF; col += 100) {
   if (col.toString().length === 6) colors.push(col);
   if (col.toString().length > 6) break;
 }
@@ -96,9 +83,6 @@ pointLight.position.set(5, 5, 5);
 scene.add( light, pointLight );
 
 // Moon
-
-const moonTexture = new THREE.TextureLoader().load(moonImage);
-const normalTexture = new THREE.TextureLoader().load(normalImage);
 
 const moon = new THREE.Mesh(
     new THREE.SphereGeometry(3, 32, 32),
