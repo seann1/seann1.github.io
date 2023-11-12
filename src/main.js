@@ -3,6 +3,8 @@ import * as THREE from 'three';
 // import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import fragment from './shaders/fragment.glsl';
 import vertex from './shaders/vertex.glsl';
+import fragment2 from './shaders/fragment2.glsl';
+import vertex2 from './shaders/vertex2.glsl';
 import Lenis from '@studio-freight/lenis';
 
 const scene = new THREE.Scene();
@@ -51,6 +53,12 @@ const shaderMat = new THREE.ShaderMaterial({
     fragmentShader: fragment
 });
 
+const shaderMat2 = new THREE.ShaderMaterial({
+    uniforms: uniforms,
+    vertexShader: vertex2,
+    fragmentShader: fragment2
+});
+
 for (let i = 0; i < 30; i++) {
     const curve = new THREE.EllipseCurve(
         position,  position,            // ax, aY
@@ -82,12 +90,12 @@ const pointLight = new THREE.PointLight(0xffffff);
 pointLight.position.set(5, 5, 5);
 
 scene.add( light, pointLight );
-
+const materialsArray = [shaderMat, shaderMat2];
 // Moon
 
 const moon = new THREE.Mesh(
     new THREE.SphereGeometry(3, 32, 32),
-    shaderMat
+    shaderMat2
 );
 
 scene.add(moon);
@@ -95,7 +103,7 @@ scene.add(moon);
 moon.position.setX(-10);
 function addStar() {
     const geometry = new THREE.SphereGeometry(1, 24, 24);
-    const star = new THREE.Mesh(geometry, shaderMat);
+    const star = new THREE.Mesh(geometry, materialsArray[Math.floor(Math.random()*materialsArray.length)]);
     
     const [x, y, z] = Array(3)
         .fill()
@@ -179,8 +187,8 @@ function animate() {
         zRot  > 0.01 ? zRot -= 0.0001 : zRot+= 0.0001;
         }
     )
-    // camera.rotation.x += 0.001;
-    // camera.rotation.y += 0.001;
+    camera.rotation.x += 0.001;
+    camera.rotation.y += 0.001;
 	renderer.render( scene, camera );
 }
 
