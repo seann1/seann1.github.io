@@ -1,9 +1,7 @@
 import gsap, {Power4, Back, TweenMax} from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import TextPlugin from "gsap/TextPlugin";
-import Lenis from '@studio-freight/lenis';
 
-requestAnimationFrame(raf);
 function proTheme() {
   const element = document.getElementById("hero");
   const element2 = document.getElementById("content");
@@ -31,13 +29,6 @@ function colorTheme() {
   //document.body.style.animation = "gradient 15s ease infinite";
   //document.body.style.background = "linear-gradient(-45deg, #a7a7a7, #636363, #96adb5, #b0b6b5);"
   
-}
-
-const lenis = new Lenis();
-
-function raf(time) {
-  lenis.raf(time);
-  requestAnimationFrame(raf);
 }
 
 // Define selector for selecting

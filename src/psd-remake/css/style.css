@@ -1,10 +1,10 @@
 @font-face {
   font-family: Oswald-Bold;
-  src: url(Oswald-Bold.ttf); }
+  src: url(./fonts/Oswald-Bold.ttf); }
 
 @font-face {
   font-family: Oswald-Italic;
-  src: url(Oswald-MediumItalic.ttf); }
+  src: url(./fonts/Oswald-MediumItalic.ttf); }
 
 html,
 body {
@@ -16,7 +16,7 @@ body {
   cursor: pointer; }
 
 .hero {
-  background-image: url("hero-mountains-2.png");
+  background-image: url("./assets/hero-mountains-2.png");
   height: 590px;
   min-width: 100vw;
   background-size: cover;
@@ -84,7 +84,7 @@ body {
   color: black; }
 
 .second {
-  background-image: url("Bg-1.png");
+  background-image: url("./assets/Bg-1.png");
   min-height: 850px;
   min-width: 100vw;
   background-size: cover;
@@ -205,7 +205,7 @@ body {
   min-width: 1600px;
   min-height: 800px;
   margin-top: -130px;
-  background-image: url("tab-1-background.png");
+  background-image: url("./assets/tab-1-background.png");
   background-size: cover;
   background-repeat: repeat-x; }
 
@@ -223,7 +223,7 @@ body {
   min-width: 1600px;
   min-height: 800px;
   margin-top: -130px;
-  background-image: url("tab-2-background.png");
+  background-image: url("./assets/tab-2-background.png");
   background-size: cover;
   background-repeat: repeat-x; }
 
