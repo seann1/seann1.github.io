@@ -3,6 +3,7 @@ import * as THREE from 'three';
 // import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import fragment from './shaders/fragment.glsl';
 import vertex from './shaders/vertex.glsl';
+import Lenis from '@studio-freight/lenis';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / 400, 0.1, 1000 );
@@ -61,7 +62,7 @@ for (let i = 0; i < 30; i++) {
     const capsuleGeo = new THREE.CapsuleGeometry( 1, 1, 4, 8 );
     
     const capsule = new THREE.Mesh( capsuleGeo, shaderMat);
-    capsule.position.set(Math.pow(position, 2), Math.pow(position,2), position *  2);
+    capsule.position.set(Math.pow(position, 2), Math.pow(position,2), (position - 2) *  2);
     scene.add(capsule);
     capsules.push(capsule);
     const points = curve.getPoints( 20 );
@@ -106,7 +107,7 @@ function addStar() {
 
 Array(200).fill().forEach(addStar);
 
-camera.position.z = 1.5;
+camera.position.z = -1;
 let xRot = 0.00;
 let yRot = 0.00;
 let zRot = 0.00;
@@ -147,14 +148,22 @@ window.addEventListener('resize', () =>
     renderer.setSize(sizes.width, sizes.height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 });
+
+const lenis = new Lenis();
+function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+}
+
 const clock = new THREE.Clock();
 function animate() {
+    requestAnimationFrame(raf);
 	requestAnimationFrame( animate );
     const elapsedTime = clock.getElapsedTime();
-    const moonAngle = elapsedTime * 0.5;
-    moon.position.x = Math.cos(moonAngle) * 0.4;
-    moon.position.z = Math.sin(moonAngle) * 0.4;
-    moon.position.y = Math.sin(elapsedTime * 0.3);
+    // const moonAngle = elapsedTime * 0.5;
+    // moon.position.x = Math.cos(moonAngle) * 0.4;
+    // moon.position.z = Math.sin(moonAngle) * 0.4;
+    // moon.position.y = Math.sin(elapsedTime * 0.3);
     curves.map(c => {
         c.rotation.y += Math.sin(0.001);
         c.position.x += xPos;
@@ -170,8 +179,8 @@ function animate() {
         zRot  > 0.01 ? zRot -= 0.0001 : zRot+= 0.0001;
         }
     )
-    camera.rotation.x += 0.001;
-    camera.rotation.y += 0.001;
+    // camera.rotation.x += 0.001;
+    // camera.rotation.y += 0.001;
 	renderer.render( scene, camera );
 }
 
