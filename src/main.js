@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import fragment from './shaders/fragment.glsl';
 import vertex from './shaders/vertex.glsl';
 import fragment2 from './shaders/fragment2.glsl';
-import vertex2 from './shaders/vertex2.glsl';
+import vertex3 from './shaders/vertex3.glsl';
 import fragment3 from './shaders/fragment3.glsl';
 import Lenis from '@studio-freight/lenis';
 
@@ -45,26 +45,46 @@ const clock = new THREE.Clock();
 
 const uniforms = {
     time: { type: "f", value: 0 },
+    
+    uBigWavesElevation: { value: 0.2 },
+    uBigWavesFrequency: { value: new THREE.Vector2(4, 1.5) },
+    uBigWavesSpeed: { value: 0.75 },
+    
+    uSmallWavesElevation: { value: 0.15 },
+    uSmallWavesFrequency: { value: 3 },
+    uSmallWavesSpeed: { value: 0.2 },
+    uSmallIterations: { value: 4 },
+    
     resolution: { type: "v2", value: new THREE.Vector2() }
 };
 
 const shaderMat = new THREE.ShaderMaterial({
     uniforms: uniforms,
-    vertexShader: vertex,
+    vertexShader: vertex3,
     fragmentShader: fragment
 });
 
 const shaderMat2 = new THREE.ShaderMaterial({
     uniforms: uniforms,
-    vertexShader: vertex2,
+    vertexShader: vertex3,
     fragmentShader: fragment2
 });
 
 const shaderMat3 = new THREE.ShaderMaterial({
     uniforms: uniforms,
-    vertexShader: vertex2,
+    vertexShader: vertex3,
     fragmentShader: fragment3
 });
+
+const shaderPicker = (i) => {
+    if (i % 3 === 0){
+        return shaderMat3
+    } else if (i % 2 === 0) {
+        return shaderMat2
+    } else {
+        return shaderMat
+    }
+}
 
 for (let i = 0; i < 30; i++) {
     const curve = new THREE.EllipseCurve(
@@ -74,10 +94,12 @@ for (let i = 0; i < 30; i++) {
         false,            // aClockwise
         0                 // aRotation
     );
-    const capsuleGeo = new THREE.CapsuleGeometry( 1, 1, 4, 8 );
+    const capsuleGeo = new THREE.SphereGeometry( 1, 30, 30, 8 );
     
-    const capsule = new THREE.Mesh( capsuleGeo, shaderMat);
-    capsule.position.set(Math.pow(position, 2), Math.pow(position,2), (position - 1) *  2);
+    const capsule = new THREE.Mesh( capsuleGeo, shaderPicker(i));
+    capsule.position.set((Math.sin(Math.pow(position, 2))*2)+Math.pow(position, 2), Math.pow(position,2), (position - 1) *  2);
+    capsule.scale.set(i*0.05,i*0.05,i*0.05);
+    capsule.rotation.set(Math.PI/2, Math.PI/2, Math.PI/2)
     scene.add(capsule);
     capsules.push(capsule);
     const points = curve.getPoints( 20 );
@@ -177,10 +199,6 @@ function animate() {
     
     // Update material
     uniforms.time.value = elapsedTime
-    // const moonAngle = elapsedTime * 0.5;
-    // moon.position.x = Math.cos(moonAngle) * 0.4;
-    // moon.position.z = Math.sin(moonAngle) * 0.4;
-    // moon.position.y = Math.sin(elapsedTime * 0.3);
     curves.map(c => {
         c.rotation.y += Math.sin(0.001);
         c.position.x += xPos;

@@ -1,5 +1,7 @@
-varying vec2 vUv;
 uniform float time;
+
+varying float vElevation;
+varying vec2 vUv;
 
 vec3 palette( in float t, in vec3 a, in vec3 b, in vec3 c, in vec3 d )
 {
@@ -50,10 +52,10 @@ float cnoise(vec2 P)
 }
 void main()
 {
-    float strength = smoothstep(0.9, sin(cnoise(vUv * (sin(time/10.0)*10.0)) * 20.0), 0.02);
+    float strength = smoothstep(0.9, sin(cnoise(vUv * (sin(time/10.0)*10.0)) * 20.0), sin(time));
 
-    vec3 blackColor = palette(time*.001 + (time*.04), vec3(0.608, 0.278, 0.500), vec3(0.550, 0.520, 0.520), vec3(1.948, 2.108, 1.888), vec3(0.528, 0.358, 0.858));
-    vec3 uvColor = vec3(vUv, 1.0);
+    vec3 blackColor = palette(sin(time)*.001 + (sin(time)*.04), vec3(0.608, 0.278+length(vUv.y)+vElevation, 0.500), vec3(0.550+(vElevation*10.0), 0.520-length(vUv.y), 0.520+(vElevation*10.0)), vec3(1.948, 2.108, 1.888+(vElevation*10.0)), vec3(0.528, 0.358, 0.858));
+    vec3 uvColor = vec3(vUv, 1.0+sin(time+vElevation));
     vec3 mixedColor = mix(blackColor, uvColor, strength);
     gl_FragColor = vec4(mixedColor, 1.0);
 }
