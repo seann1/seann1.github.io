@@ -1,5 +1,6 @@
 varying vec2 vUv;
 uniform float time;
+varying float vElevation;
 
 vec3 palette( in float t, in vec3 a, in vec3 b, in vec3 c, in vec3 d )
 {
@@ -29,7 +30,7 @@ void main()
 
         d = pow(0.01 / d, 1.2);
 
-        finalColor += col * d;
+        finalColor += col * d + (vElevation * 2.0);
     }
 
     // Output to screen
