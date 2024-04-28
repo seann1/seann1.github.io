@@ -1,10 +1,10 @@
 import './scss/main.scss';
 import * as THREE from 'three';
-// import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import fragment from './shaders/fragment.glsl';
 import vertex from './shaders/vertex.glsl';
 import fragment2 from './shaders/fragment2.glsl';
 import vertex2 from './shaders/vertex2.glsl';
+import fragment3 from './shaders/fragment3.glsl';
 import Lenis from '@studio-freight/lenis';
 
 const scene = new THREE.Scene();
@@ -41,9 +41,10 @@ for(let i =0; i < 20; i++) {
 const curves = [];
 const capsules = [];
 let position = -6;
+const clock = new THREE.Clock();
 
 const uniforms = {
-    time: { type: "f", value: 1.0 },
+    time: { type: "f", value: 0 },
     resolution: { type: "v2", value: new THREE.Vector2() }
 };
 
@@ -59,6 +60,12 @@ const shaderMat2 = new THREE.ShaderMaterial({
     fragmentShader: fragment2
 });
 
+const shaderMat3 = new THREE.ShaderMaterial({
+    uniforms: uniforms,
+    vertexShader: vertex2,
+    fragmentShader: fragment3
+});
+
 for (let i = 0; i < 30; i++) {
     const curve = new THREE.EllipseCurve(
         position,  position,            // ax, aY
@@ -70,7 +77,7 @@ for (let i = 0; i < 30; i++) {
     const capsuleGeo = new THREE.CapsuleGeometry( 1, 1, 4, 8 );
     
     const capsule = new THREE.Mesh( capsuleGeo, shaderMat);
-    capsule.position.set(Math.pow(position, 2), Math.pow(position,2), (position - 2) *  2);
+    capsule.position.set(Math.pow(position, 2), Math.pow(position,2), (position - 1) *  2);
     scene.add(capsule);
     capsules.push(capsule);
     const points = curve.getPoints( 20 );
@@ -90,7 +97,7 @@ const pointLight = new THREE.PointLight(0xffffff);
 pointLight.position.set(5, 5, 5);
 
 scene.add( light, pointLight );
-const materialsArray = [shaderMat, shaderMat2];
+const materialsArray = [shaderMat, shaderMat2, shaderMat3];
 // Moon
 
 const moon = new THREE.Mesh(
@@ -123,9 +130,9 @@ let xPos = 0.00;
 
 function moveCamera() {
     const t = document.body.getBoundingClientRect().top;
-    moon.rotation.x += 0.05;
-    moon.rotation.y += 0.075;
-    moon.rotation.z += 0.05;
+    moon.rotation.x += 0.005;
+    moon.rotation.y += 0.0075;
+    moon.rotation.z += 0.005;
     
     camera.position.z = t * -0.01;
     camera.position.x = t * -0.0002;
@@ -163,11 +170,13 @@ function raf(time) {
     requestAnimationFrame(raf);
 }
 
-const clock = new THREE.Clock();
 function animate() {
     requestAnimationFrame(raf);
 	requestAnimationFrame( animate );
-    const elapsedTime = clock.getElapsedTime();
+    const elapsedTime = clock.getElapsedTime()
+    
+    // Update material
+    uniforms.time.value = elapsedTime
     // const moonAngle = elapsedTime * 0.5;
     // moon.position.x = Math.cos(moonAngle) * 0.4;
     // moon.position.z = Math.sin(moonAngle) * 0.4;
@@ -187,8 +196,8 @@ function animate() {
         zRot  > 0.01 ? zRot -= 0.0001 : zRot+= 0.0001;
         }
     )
-    camera.rotation.x += 0.001;
-    camera.rotation.y += 0.001;
+    camera.rotation.x += 0.0002;
+    camera.rotation.y += 0.0002;
 	renderer.render( scene, camera );
 }
 

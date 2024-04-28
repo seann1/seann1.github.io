@@ -1,4 +1,11 @@
 varying vec2 vUv;
+uniform float time;
+
+vec3 palette( in float t, in vec3 a, in vec3 b, in vec3 c, in vec3 d )
+{
+    return a + b*cos( 6.28318*(c*t+d) );
+}
+
 vec4 permute(vec4 x)
 {
     return mod(((x*34.0)+1.0)*x, 289.0);
@@ -11,7 +18,7 @@ vec2 fade(vec2 t)
 
 float cnoise(vec2 P)
 {
-    vec4 Pi = floor(P.xyxy) + vec4(0.0, 0.0, 1.0, 1.0);
+    vec4 Pi = floor(P.xyxy) + vec4(0.0, (time/ 5000.0), 1.0, 1.0);
     vec4 Pf = fract(P.xyxy) - vec4(0.0, 0.0, 1.0, 1.0);
     Pi = mod(Pi, 289.0); // To avoid truncation effects in permutation
     vec4 ix = Pi.xzxz;
@@ -19,7 +26,7 @@ float cnoise(vec2 P)
     vec4 fx = Pf.xzxz;
     vec4 fy = Pf.yyww;
     vec4 i = permute(permute(ix) + iy);
-    vec4 gx = 2.0 * fract(i * 0.0243902439) - 1.0; // 1/41 = 0.024...
+    vec4 gx = (sin(time)/2.0) * fract(i * 0.0243902439) - 1.0; // 1/41 = 0.024...
     vec4 gy = abs(gx) - 0.5;
     vec4 tx = floor(gx + 0.5);
     gx = gx - tx;
@@ -43,10 +50,11 @@ float cnoise(vec2 P)
 }
 void main()
 {
-    float strength = step(0.9, sin(cnoise(vUv * 10.0) * 20.0));
+    float strength = step(sin(time) * 0.9, sin(cnoise(vUv * 10.0) * 20.0));
 
-    vec3 blackColor = vec3(1.0);
-    vec3 uvColor = vec3(vUv, 1.0);
+    vec3 blackColor = vec3(1.0, sin(time), -sin(time));
+//    vec3 uvColor = vec3(vUv, 1.0);
+    vec3 uvColor = palette(time*.001 + (time*.04), vec3(0.608, 0.278, 0.500), vec3(0.550, 0.520, 0.520), vec3(1.948, 2.108, 1.888), vec3(0.528, 0.358, 0.858));
     vec3 mixedColor = mix(blackColor, uvColor, strength);
     gl_FragColor = vec4(mixedColor, 1.0);
 }
