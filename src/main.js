@@ -1,9 +1,9 @@
 import './scss/main.scss';
 import * as THREE from 'three';
 import fragment from './shaders/fragment.glsl';
-import vertex from './shaders/vertex.glsl';
 import fragment2 from './shaders/fragment2.glsl';
 import vertex3 from './shaders/vertex3.glsl';
+import vertex4 from './shaders/vertex4.glsl';
 import fragment3 from './shaders/fragment3.glsl';
 import Lenis from '@studio-freight/lenis';
 
@@ -60,7 +60,7 @@ const uniforms = {
 
 const shaderMat = new THREE.ShaderMaterial({
     uniforms: uniforms,
-    vertexShader: vertex3,
+    vertexShader: vertex4,
     fragmentShader: fragment
 });
 
@@ -94,14 +94,15 @@ for (let i = 0; i < 30; i++) {
         false,            // aClockwise
         0                 // aRotation
     );
-    const capsuleGeo = new THREE.SphereGeometry( 1, 30, 30, 8 );
+    const sphereGeo = new THREE.SphereGeometry( 1, 30, 30, 8 );
     
-    const capsule = new THREE.Mesh( capsuleGeo, shaderPicker(i));
-    capsule.position.set((Math.sin(Math.pow(position, 2))*2)+Math.pow(position, 2), Math.pow(position,2), (position - 1) *  2);
-    capsule.scale.set(i*0.05,i*0.05,i*0.05);
-    capsule.rotation.set(Math.PI/2, Math.PI/2, Math.PI/2)
-    scene.add(capsule);
-    capsules.push(capsule);
+    const sphere = new THREE.Mesh( sphereGeo, shaderPicker(i));
+    sphere.position.set((Math.sin(Math.pow(position, 2))*2)+Math.pow(position, 2), Math.pow(position,2), (position - 1) *  2);
+    sphere.scale.set(i*0.05,i*0.05,i*0.05);
+    sphere.rotation.set(Math.PI/2, Math.PI/2, Math.PI/2);
+    sphere.name = `sphere${i}`;
+    scene.add(sphere);
+    capsules.push(sphere);
     const points = curve.getPoints( 20 );
     const geometry = new THREE.BufferGeometry().setFromPoints( points );
     curves.push(new THREE.Line( geometry, new THREE.LineBasicMaterial( { color:  colors[Math.floor(Math.random()*colors.length)]}) ));
@@ -110,8 +111,8 @@ for (let i = 0; i < 30; i++) {
 
 const lines = [];
 lineGeometries.map(l => lines.push(new THREE.Line(l, new THREE.LineBasicMaterial( { color:  colors[Math.floor(Math.random()*colors.length)]}))));
-lines.map(l => scene.add(l));
-curves.map(w => scene.add(w));
+// lines.map(l => scene.add(l));
+// curves.map(w => scene.add(w));
 const light = new THREE.AmbientLight( 0x404040, 30 ); // soft white light
 light.position.set(10,10,3);
 
@@ -149,6 +150,8 @@ let xRot = 0.00;
 let yRot = 0.00;
 let zRot = 0.00;
 let xPos = 0.00;
+
+camera.lookAt(scene.getObjectByName("sphere29").position)
 
 function moveCamera() {
     const t = document.body.getBoundingClientRect().top;
