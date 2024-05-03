@@ -16,29 +16,6 @@ renderer.toneMapping = THREE.LinearToneMapping;
 renderer.toneMappingExposure = 0.3;
 renderer.setSize( window.innerWidth, window.innerHeight );
 
-
-const colors = [];
-for(let col=0x000000; col<=0xFFFFFF; col += 100) {
-  if (col.toString().length === 6) colors.push(col);
-  if (col.toString().length > 6) break;
-}
-
-let lineValue = 0;
-let lineValue2 = 0;
-
-const lineGeometries = [];
-for(let i =0; i < 20; i++) {
-    const points = [];
-    points.push( new THREE.Vector3( -lineValue, -1, -lineValue2 ) );
-    points.push( new THREE.Vector3( 0, -1, 0 ) );
-    points.push( new THREE.Vector3( lineValue, 0, -lineValue2 ) );
-    lineGeometries[i] = new THREE.BufferGeometry().setFromPoints( points );
-
-    lineValue += Math.sin(0.5);
-    lineValue2 += Math.sin(0.3);
-}
-
-const curves = [];
 const capsules = [];
 let position = -6;
 const clock = new THREE.Clock();
@@ -87,13 +64,6 @@ const shaderPicker = (i) => {
 }
 
 for (let i = 0; i < 30; i++) {
-    const curve = new THREE.EllipseCurve(
-        position,  position,            // ax, aY
-        3, 3,           // xRadius, yRadius
-        0,  2 * Math.PI,  // aStartAngle, aEndAngle
-        false,            // aClockwise
-        0                 // aRotation
-    );
     const sphereGeo = new THREE.SphereGeometry( 1, 30, 30, 8 );
     
     const sphere = new THREE.Mesh( sphereGeo, shaderPicker(i));
@@ -103,23 +73,9 @@ for (let i = 0; i < 30; i++) {
     sphere.name = `sphere${i}`;
     scene.add(sphere);
     capsules.push(sphere);
-    const points = curve.getPoints( 20 );
-    const geometry = new THREE.BufferGeometry().setFromPoints( points );
-    curves.push(new THREE.Line( geometry, new THREE.LineBasicMaterial( { color:  colors[Math.floor(Math.random()*colors.length)]}) ));
     position += 0.2;
 };
 
-const lines = [];
-lineGeometries.map(l => lines.push(new THREE.Line(l, new THREE.LineBasicMaterial( { color:  colors[Math.floor(Math.random()*colors.length)]}))));
-// lines.map(l => scene.add(l));
-// curves.map(w => scene.add(w));
-const light = new THREE.AmbientLight( 0x404040, 30 ); // soft white light
-light.position.set(10,10,3);
-
-const pointLight = new THREE.PointLight(0xffffff);
-pointLight.position.set(5, 5, 5);
-
-scene.add( light, pointLight );
 const materialsArray = [shaderMat, shaderMat2, shaderMat3];
 // Moon
 
@@ -128,7 +84,15 @@ const moon = new THREE.Mesh(
     shaderMat2
 );
 
-scene.add(moon);
+const plane = new THREE.Mesh(
+    new THREE.PlaneGeometry(100, 100, 100, 100),
+    shaderMat
+);
+
+plane.position.set(-30,0,-40);
+plane.rotation.y = -Math.PI/32;
+
+scene.add(moon, plane);
 
 moon.position.setX(-10);
 function addStar() {
@@ -145,11 +109,8 @@ function addStar() {
 
 Array(200).fill().forEach(addStar);
 
-camera.position.z = -1;
-let xRot = 0.00;
-let yRot = 0.00;
-let zRot = 0.00;
-let xPos = 0.00;
+camera.position.z = 20;
+camera.position.y = 5;
 
 camera.lookAt(scene.getObjectByName("sphere29").position)
 
@@ -202,23 +163,6 @@ function animate() {
     
     // Update material
     uniforms.time.value = elapsedTime
-    curves.map(c => {
-        c.rotation.y += Math.sin(0.001);
-        c.position.x += xPos;
-        xPos  > 0.001 ? xPos -= 0.0001 : xPos += 0.0001;
-    })
-    lines.map(l => {
-        l.rotation.x -= Math.sin(xRot);
-        l.rotation.y -= Math.sin(yRot);
-        l.rotation.z -= Math.sin(zRot);
-        // xRot += 0.00001
-        xRot  > 0.01 ? xRot -= 0.0001 : xRot+= 0.0001;
-        yRot  > 0.01 ? yRot -= 0.0001 : yRot+= 0.0001;
-        zRot  > 0.01 ? zRot -= 0.0001 : zRot+= 0.0001;
-        }
-    )
-    camera.rotation.x += 0.0002;
-    camera.rotation.y += 0.0002;
 	renderer.render( scene, camera );
 }
 
