@@ -1,10 +1,12 @@
 import './scss/main.scss';
 import * as THREE from 'three';
+import { resolveLygia } from 'resolve-lygia'
 import fragment from './shaders/fragment.glsl';
 import fragment2 from './shaders/fragment2.glsl';
 import vertex3 from './shaders/vertex3.glsl';
 import vertex4 from './shaders/vertex4.glsl';
 import fragment3 from './shaders/fragment3.glsl';
+import lygiaFrag1 from './shaders/lygiaShaderFragment1.glsl';
 import Lenis from '@studio-freight/lenis';
 
 const scene = new THREE.Scene();
@@ -32,7 +34,7 @@ const uniforms = {
     uSmallWavesSpeed: { value: 0.2 },
     uSmallIterations: { value: 4 },
     
-    resolution: { type: "v2", value: new THREE.Vector2() }
+    resolution: { type: "v2", value: new THREE.Vector2(window.innerWidth, window.innerHeight)}
 };
 
 const shaderMat = new THREE.ShaderMaterial({
@@ -52,6 +54,12 @@ const shaderMat3 = new THREE.ShaderMaterial({
     vertexShader: vertex3,
     fragmentShader: fragment3
 });
+
+const shaderMat4 = new THREE.ShaderMaterial({
+    uniforms: uniforms,
+    vertexShader: vertex3,
+    fragmentShader: resolveLygia(lygiaFrag1)
+})
 
 const shaderPicker = (i) => {
     if (i % 3 === 0){
@@ -86,7 +94,7 @@ const moon = new THREE.Mesh(
 
 const plane = new THREE.Mesh(
     new THREE.PlaneGeometry(100, 100, 100, 100),
-    shaderMat
+    shaderMat4
 );
 
 plane.position.set(-30,0,-40);

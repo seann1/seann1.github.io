@@ -70,7 +70,7 @@ const tl2 = gsap.timeline({
 gsap.to(".dev-title", {
   duration: 12,
   text: {
-    value: "Frontend Web Developer",
+    value: "Full Stack Web Developer",
     newClass: "dev-title2",
     oldClass: "dev-title1",
   },
@@ -86,7 +86,7 @@ tl2
     })
     .set(".dev-title", {
       text: {
-        value: "Frontend Web Developer",
+        value: "Full Stack Web Developer",
         newClass: "dev-title2",
         oldClass: "dev-title1",
       },
