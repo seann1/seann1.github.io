@@ -22,6 +22,13 @@ const capsules = [];
 let position = -6;
 const clock = new THREE.Clock();
 
+const mouse = new THREE.Vector2();
+function onDocumentMouseMove(event) {
+    event.preventDefault();
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+}
+
 const uniforms = {
     time: { type: "f", value: 0 },
     
@@ -34,7 +41,8 @@ const uniforms = {
     uSmallWavesSpeed: { value: 0.2 },
     uSmallIterations: { value: 4 },
     
-    resolution: { type: "v2", value: new THREE.Vector2(window.innerWidth, window.innerHeight)}
+    resolution: { type: "v2", value: new THREE.Vector2(window.innerWidth, window.innerHeight)},
+    uMouse: { value: mouse},
 };
 
 const shaderMat = new THREE.ShaderMaterial({
@@ -58,8 +66,8 @@ const shaderMat3 = new THREE.ShaderMaterial({
 const shaderMat4 = new THREE.ShaderMaterial({
     uniforms: uniforms,
     vertexShader: vertex3,
-    fragmentShader: resolveLygia(lygiaFrag1)
-})
+    fragmentShader: lygiaFrag1
+});
 
 const shaderPicker = (i) => {
     if (i % 3 === 0){
@@ -142,6 +150,8 @@ const sizes = {
     width: window.innerWidth,
     height: window.innerHeight
 };
+
+document.addEventListener('mousemove', onDocumentMouseMove, false);
 
 window.addEventListener('resize', () =>
 {
