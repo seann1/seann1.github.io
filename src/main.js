@@ -6,7 +6,7 @@ import fragment2 from './shaders/fragment2.glsl';
 import vertex3 from './shaders/vertex3.glsl';
 import vertex4 from './shaders/vertex4.glsl';
 import fragment3 from './shaders/fragment3.glsl';
-import lygiaFrag1 from './shaders/lygiaShaderFragment1.glsl';
+import lygiaFrag1 from './shaders/lygiaShaderFragment2.glsl';
 import Lenis from '@studio-freight/lenis';
 
 const scene = new THREE.Scene();
