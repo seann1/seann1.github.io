@@ -4,6 +4,7 @@ import path from "path";
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+	base: '/seann1.github.io/',
 	root: path.join(__dirname, "src"),
 	build: {
 		rollupOptions: {
