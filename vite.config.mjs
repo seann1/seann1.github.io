@@ -6,6 +6,12 @@ import { defineConfig } from 'vite';
 export default defineConfig({
 	root: path.join(__dirname, "src"),
 	build: {
+		rollupOptions: {
+			input: {
+				main: path.resolve(__dirname, 'src/main.js'),
+				// 'psd-remake': path.resolve(__dirname, 'src/psd-remake/index.html')
+			}
+		},
 		outDir: path.resolve(__dirname, 'docs')
 	},
 	rollupOptions: {
