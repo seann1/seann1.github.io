@@ -9,7 +9,7 @@ export default defineConfig({
 		rollupOptions: {
 			input: {
 				main: path.resolve(__dirname, 'src/main.js'),
-				// 'psd-remake': path.resolve(__dirname, 'src/psd-remake/index.html')
+				/// 'psd-remake': path.resolve(__dirname, 'src/psd-remake/index.html')
 			},
 			// output: {
 			// 	dir: path.resolve(__dirname, 'docs'),
