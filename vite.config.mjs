@@ -4,16 +4,19 @@ import path from "path";
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-	base: '/seann1.github.io/',
 	root: path.join(__dirname, "src"),
 	build: {
 		rollupOptions: {
 			input: {
 				main: path.resolve(__dirname, 'src/main.js'),
 				// 'psd-remake': path.resolve(__dirname, 'src/psd-remake/index.html')
-			}
+			},
+			// output: {
+			// 	dir: path.resolve(__dirname, 'docs'),
+			// 	entryFileNames: 'main.js',
+			// }
 		},
-		outDir: path.resolve(__dirname, 'docs')
+		// outDir: path.resolve(__dirname, 'docs')
 	},
 	rollupOptions: {
 		input: 'src/main.js', // Explicitly define the entry point
