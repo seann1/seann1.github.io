@@ -1,6 +1,5 @@
 import './scss/main.scss';
 import * as THREE from 'three';
-import { resolveLygia } from 'resolve-lygia'
 import fragment from './shaders/fragment.glsl';
 import fragment2 from './shaders/fragment2.glsl';
 import vertex3 from './shaders/vertex3.glsl';
@@ -9,10 +8,10 @@ import fragment3 from './shaders/fragment3.glsl';
 import lygiaFrag1 from './shaders/lygiaShaderFragment2.glsl';
 import Lenis from '@studio-freight/lenis';
 import { gsap } from 'gsap';
+import { ToneSynth } from './js/Tone.js';
 
 const scene = new THREE.Scene();
 const raycaster = new THREE.Raycaster();
-const pointer = new THREE.Vector2();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / 400, 0.1, 1000 );
 const canvasElm = document.getElementById("threeCan");
 
@@ -20,6 +19,23 @@ const renderer = new THREE.WebGLRenderer({ canvas: canvasElm, alpha: true });
 renderer.toneMapping = THREE.LinearToneMapping;
 renderer.toneMappingExposure = 0.3;
 renderer.setSize( window.innerWidth, window.innerHeight );
+
+const synth = new ToneSynth(3, 4);
+
+document.getElementById("play-sound").addEventListener("click", async () => {
+    await synth.start();
+    console.log("audio is ready");
+});
+
+const volumeSlider = document.getElementById('volume-slider');
+
+volumeSlider.addEventListener('input', (event) => {
+    // Get the current value of the slider
+    const volume = event.target.value;
+    
+    // Set the volume of the synth
+    synth.setVolume(volume);
+});
 
 const capsules = [];
 let position = -6;
@@ -193,11 +209,6 @@ function animateScale(obj, up = true) {
     
 }
 
-// Store original positions of spheres
-for (let i = 0; i < stars.length; i++) {
-    stars[i].originalPosition = stars[i].position.clone();
-}
-
 function animate() {
     requestAnimationFrame(raf);
 	requestAnimationFrame( animate );
@@ -211,6 +222,12 @@ function animate() {
         if (lastIntersected && lastIntersected !== intersects[0].object) {
             // Reset scale of last intersected object
             animateScale(lastIntersected, false);
+            synth.setHarmonicity(Math.abs(lastIntersected.position.z));
+            synth.setModulationIndex(Math.abs(lastIntersected.position.z));
+            const synthFreq = Math.abs(lastIntersected.position.y)*100;
+            const mappedFreq = synth.mapRange(synthFreq, 0, 10000, 200, 800);
+            console.log(mappedFreq);
+            synth.play(mappedFreq, "8n");
         }
         
         // Increase scale of current intersected object
@@ -221,21 +238,6 @@ function animate() {
         // Reset scale of last intersected object
         animateScale(lastIntersected, false);
         lastIntersected = null;
-    }
-    
-    // Move spheres towards or away from cursor
-    for (let i = 0; i < stars.length; i++) {
-        const sphere = stars[i];
-        const distanceToCursor = sphere.position.distanceTo(new THREE.Vector3(mouse.x, mouse.y, sphere.position.z));
-        console.log(distanceToCursor);
-        if (distanceToCursor < 30) { // Change this value to your preferred threshold
-            // Move sphere towards cursor
-            // console.log("here");
-            sphere.position.lerp(new THREE.Vector3(mouse.x, mouse.y, sphere.position.z), 0.5); // Change 0.05 to control the speed of movement
-        } else {
-            // Move sphere back to original position
-            sphere.position.lerp(sphere.originalPosition, 0.5); // Change 0.05 to control the speed of movement
-        }
     }
     
     // Update material
