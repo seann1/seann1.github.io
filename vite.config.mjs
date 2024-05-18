@@ -12,7 +12,6 @@ export default defineConfig({
 				entryFileNames: 'main.js',
 			}
 		},
-		// outDir: path.resolve(__dirname, 'docs')
 	},
 	plugins: [
 		glsl(),

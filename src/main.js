@@ -8,8 +8,11 @@ import vertex4 from './shaders/vertex4.glsl';
 import fragment3 from './shaders/fragment3.glsl';
 import lygiaFrag1 from './shaders/lygiaShaderFragment2.glsl';
 import Lenis from '@studio-freight/lenis';
+import { gsap } from 'gsap';
 
 const scene = new THREE.Scene();
+const raycaster = new THREE.Raycaster();
+const pointer = new THREE.Vector2();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / 400, 0.1, 1000 );
 const canvasElm = document.getElementById("threeCan");
 
@@ -105,12 +108,16 @@ const plane = new THREE.Mesh(
     shaderMat4
 );
 
+plane.name = "plane";
+
 plane.position.set(-30,0,-40);
 plane.rotation.y = -Math.PI/32;
 
 scene.add(moon, plane);
 
 moon.position.setX(-10);
+
+const stars = [];
 function addStar() {
     const geometry = new THREE.SphereGeometry(1, 24, 24);
     const star = new THREE.Mesh(geometry, materialsArray[Math.floor(Math.random()*materialsArray.length)]);
@@ -121,6 +128,7 @@ function addStar() {
     
     star.position.set(x, y, z);
     scene.add(star);
+    stars.push(star);
 }
 
 Array(200).fill().forEach(addStar);
@@ -173,11 +181,62 @@ function raf(time) {
     lenis.raf(time);
     requestAnimationFrame(raf);
 }
+let lastIntersected;
+
+function animateScale(obj, up = true) {
+    if (obj.name === "plane") return null
+    if (up) {
+        return gsap.to(obj.scale, { x: 2, y: 2, z: 2, duration: 0.5 });
+    } else {
+        return gsap.to(obj.scale, { x: 1, y: 1, z: 1, duration: 0.5 });
+    }
+    
+}
+
+// Store original positions of spheres
+for (let i = 0; i < stars.length; i++) {
+    stars[i].originalPosition = stars[i].position.clone();
+}
 
 function animate() {
     requestAnimationFrame(raf);
 	requestAnimationFrame( animate );
-    const elapsedTime = clock.getElapsedTime()
+    const elapsedTime = clock.getElapsedTime();
+    
+    raycaster.setFromCamera( mouse, camera );
+    
+    const intersects = raycaster.intersectObjects( scene.children );
+    
+    if (intersects.length > 0) {
+        if (lastIntersected && lastIntersected !== intersects[0].object) {
+            // Reset scale of last intersected object
+            animateScale(lastIntersected, false);
+        }
+        
+        // Increase scale of current intersected object
+        animateScale(intersects[0].object, true);
+        // Update last intersected object
+        lastIntersected = intersects[0].object;
+    } else if (lastIntersected) {
+        // Reset scale of last intersected object
+        animateScale(lastIntersected, false);
+        lastIntersected = null;
+    }
+    
+    // Move spheres towards or away from cursor
+    for (let i = 0; i < stars.length; i++) {
+        const sphere = stars[i];
+        const distanceToCursor = sphere.position.distanceTo(new THREE.Vector3(mouse.x, mouse.y, sphere.position.z));
+        console.log(distanceToCursor);
+        if (distanceToCursor < 30) { // Change this value to your preferred threshold
+            // Move sphere towards cursor
+            // console.log("here");
+            sphere.position.lerp(new THREE.Vector3(mouse.x, mouse.y, sphere.position.z), 0.5); // Change 0.05 to control the speed of movement
+        } else {
+            // Move sphere back to original position
+            sphere.position.lerp(sphere.originalPosition, 0.5); // Change 0.05 to control the speed of movement
+        }
+    }
     
     // Update material
     uniforms.time.value = elapsedTime
