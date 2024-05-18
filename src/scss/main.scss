@@ -814,8 +814,8 @@ html.lenis {
   bottom: 0px;
   left: 0px;
   padding: 1.5rem;
-  background: linear-gradient(-45deg, #6e00ff, #0068ff, #00aee1, #00b994);
-  z-index: 2;
+  background-color: black;
+  z-index: 1000;
   button {
     cursor: pointer;
   }

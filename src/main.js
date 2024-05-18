@@ -22,9 +22,11 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 
 const synth = new ToneSynth(3, 4, 50);
 
-document.getElementById("play-sound").addEventListener("click", async () => {
-    await synth.start();
-    console.log("audio is ready");
+const soundButton = document.getElementById("play-sound");
+soundButton.addEventListener("click", async () => {
+        await synth.start();
+        soundButton.innerText = "Sound is ready";
+        console.log("audio is ready");
 });
 
 const volumeSlider = document.getElementById('volume-slider');

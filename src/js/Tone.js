@@ -23,7 +23,7 @@ export class ToneSynth {
 				sustain: 1,
 				release: 50
 			}
-		});
+		}).toDestination();
 		this.freeverb = new Tone.Freeverb({roomSize: 0.7});
 		this.volume = new Tone.Volume(0).chain(this.freeverb, Tone.getDestination());
 		this.synth.connect(this.volume);
