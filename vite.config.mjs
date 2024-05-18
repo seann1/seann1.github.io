@@ -7,18 +7,12 @@ export default defineConfig({
 	root: path.join(__dirname, "src"),
 	build: {
 		rollupOptions: {
-			input: {
-				main: path.resolve(__dirname, 'src/main.js'),
-			},
-			// output: {
-			// 	dir: path.resolve(__dirname, 'docs'),
-			// 	entryFileNames: 'main.js',
-			// }
+			output: {
+				dir: path.resolve(__dirname, 'docs'),
+				entryFileNames: 'main.js',
+			}
 		},
 		// outDir: path.resolve(__dirname, 'docs')
-	},
-	rollupOptions: {
-		input: 'src/main.js',
 	},
 	plugins: [
 		glsl(),

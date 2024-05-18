@@ -9,7 +9,7 @@
     "start": "vite serve",
     "build": "vite build --emptyOutDir",
     "preview": "vite preview",
-    "deploy" : "gh-pages -d src/dist"
+    "deploy" : "gh-pages -d docs"
   },
   "author": "",
   "license": "MIT",
