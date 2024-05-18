@@ -20,7 +20,7 @@ renderer.toneMapping = THREE.LinearToneMapping;
 renderer.toneMappingExposure = 0.3;
 renderer.setSize( window.innerWidth, window.innerHeight );
 
-const synth = new ToneSynth(3, 4);
+const synth = new ToneSynth(3, 4, 50);
 
 document.getElementById("play-sound").addEventListener("click", async () => {
     await synth.start();
@@ -28,11 +28,10 @@ document.getElementById("play-sound").addEventListener("click", async () => {
 });
 
 const volumeSlider = document.getElementById('volume-slider');
-
+synth.setVolume(0.2);
 volumeSlider.addEventListener('input', (event) => {
     // Get the current value of the slider
     const volume = event.target.value;
-    
     // Set the volume of the synth
     synth.setVolume(volume);
 });
@@ -209,6 +208,18 @@ function animateScale(obj, up = true) {
     
 }
 
+const setupNote = () => {
+    synth.setHarmonicity(Math.abs(lastIntersected.position.z));
+    synth.setModulationIndex(Math.abs(lastIntersected.position.z));
+    const synthFreq = Math.abs(lastIntersected.position.y)*1000;
+    const mappedFreq = synth.mapRange(synthFreq, 0, 10000, 200, 800);
+    console.log(Math.abs(synth.mapRange(Math.abs(lastIntersected.position.x), 0, 30, 1, 0)));
+    synth.setRoomSize(Math.abs(synth.mapRange(Math.abs(lastIntersected.position.x), 0, 30, 1, 0)));
+
+    synth.setRelease(Math.abs(synth.mapRange(Math.abs(lastIntersected.position.x), 0, 30, 1, 0)) * 2);
+    synth.play(mappedFreq, "8n");
+}
+
 function animate() {
     requestAnimationFrame(raf);
 	requestAnimationFrame( animate );
@@ -222,12 +233,7 @@ function animate() {
         if (lastIntersected && lastIntersected !== intersects[0].object) {
             // Reset scale of last intersected object
             animateScale(lastIntersected, false);
-            synth.setHarmonicity(Math.abs(lastIntersected.position.z));
-            synth.setModulationIndex(Math.abs(lastIntersected.position.z));
-            const synthFreq = Math.abs(lastIntersected.position.y)*100;
-            const mappedFreq = synth.mapRange(synthFreq, 0, 10000, 200, 800);
-            console.log(mappedFreq);
-            synth.play(mappedFreq, "8n");
+            setupNote();
         }
         
         // Increase scale of current intersected object
@@ -237,6 +243,7 @@ function animate() {
     } else if (lastIntersected) {
         // Reset scale of last intersected object
         animateScale(lastIntersected, false);
+        setupNote();
         lastIntersected = null;
     }
     
