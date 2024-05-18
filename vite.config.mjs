@@ -1,5 +1,5 @@
 import glsl from 'vite-plugin-glsl';
-// import { createHtmlPlugin } from 'vite-plugin-html';
+import { createHtmlPlugin } from 'vite-plugin-html';
 import path from "path";
 import { defineConfig } from 'vite';
 
@@ -9,7 +9,6 @@ export default defineConfig({
 		rollupOptions: {
 			input: {
 				main: path.resolve(__dirname, 'src/main.js'),
-				/// 'psd-remake': path.resolve(__dirname, 'src/psd-remake/index.html')
 			},
 			// output: {
 			// 	dir: path.resolve(__dirname, 'docs'),
@@ -19,29 +18,10 @@ export default defineConfig({
 		// outDir: path.resolve(__dirname, 'docs')
 	},
 	rollupOptions: {
-		input: 'src/main.js', // Explicitly define the entry point
+		input: 'src/main.js',
 	},
 	plugins: [
 		glsl(),
-		// createHtmlPlugin({
-		// 	pages: [
-		// 		{
-		// 			entry: 'src/main.js',
-		// 			filename: 'src/index.html',
-		// 			// template: 'src/index.html',
-		// 			// injectOptions: {
-		// 			// 	data: {
-		// 			// 		title: 'index',
-		// 			// 		// injectScript: `<script src="./inject.js"></script>`,
-		// 			// 	},
-		// 			// }
-		// 		},
-		// 		{
-		// 			entry: 'src/psd-remake/index.html',
-		// 			filename: 'src/psd-remake.html',
-		// 			template: 'src/psd-remake/index.html',
-		// 		}
-		// 	]
-		// })
+		createHtmlPlugin()
 	]
 });
