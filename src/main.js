@@ -10,6 +10,7 @@ import Lenis from '@studio-freight/lenis';
 import { gsap } from 'gsap';
 import { ToneSynth } from './js/Tone.js';
 import { ToneSynth2 } from "./js/Tone2";
+import "@fortawesome/fontawesome-free/css/all.css";
 
 const scene = new THREE.Scene();
 const raycaster = new THREE.Raycaster();
@@ -41,6 +42,13 @@ volumeSlider.addEventListener('input', (event) => {
     // Set the volume of the synth
     synth.setVolume(volume);
     synth2.setVolume(volume);
+});
+
+const xIcon = document.getElementById("x-icon");
+
+xIcon.addEventListener("click", () => {
+    const modal = document.getElementById("audioPopup");
+    modal.style.display = "none";
 });
 
 const capsules = [];

@@ -1,5 +1,4 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap");
-
 //original main color: #6700ee
 // original accent color: #ff64cb
 $main-color: #6700ee;
@@ -819,4 +818,42 @@ html.lenis {
   button {
     cursor: pointer;
   }
+}
+
+.audioPopup {
+  position: fixed;
+  bottom: 60px;
+  left: 0px;
+  margin: 3rem 1rem;
+  background: white;
+  padding: 1rem;
+  z-index: 1000;
+  width: 200px;
+  border-radius: 10px;
+  background-color: #f5e0d0;
+  border: 6px solid #f0a902;
+  box-shadow: 5px 5px black;
+  i {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 3px;
+    font-size: 1.5rem;
+    color: #f0a902;
+    cursor: pointer;
+  }
+}
+
+.audioPopup:after {
+  content:"";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -30px;
+  margin: 0 auto;
+  width: 0;
+  height: 0;
+  border-top: 25px solid #f0a902;
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
 }

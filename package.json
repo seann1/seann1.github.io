@@ -9,7 +9,7 @@
     "start": "vite serve",
     "build": "vite build --emptyOutDir",
     "preview": "vite preview",
-    "deploy": "gh-pages -d src/dist"
+    "deploy": "gh-pages -d src/dist --cname seanniesen.digital"
   },
   "author": "",
   "license": "MIT",
@@ -34,6 +34,7 @@
     "webpack-merge": "^5.10.0"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.5.2",
     "@studio-freight/lenis": "^1.0.27",
     "copy-webpack-plugin": "^11.0.0",
     "glslify": "^7.1.1",
