@@ -8,8 +8,10 @@ uniform float uSmallWavesFrequency;
 uniform float uSmallWavesSpeed;
 uniform float uSmallIterations;
 
+uniform float uAudioLevel;
 varying float vElevation;
 varying vec2 vUv;
+varying float audioLevelAndElevation;
 
 // Classic Perlin 3D Noise
 // by Stefan Gustavson
@@ -101,7 +103,7 @@ void main()
     vec4 modelPosition = modelMatrix * vec4(position, 1.0);
 
     // Elevation
-    float elevation = atan(sin(modelPosition.x * uBigWavesFrequency.x + time * uBigWavesSpeed) *
+    float elevation = atan(sin(modelPosition.x * uBigWavesFrequency.x + time * uAudioLevel * uBigWavesSpeed) *
     sin(modelPosition.z * uBigWavesFrequency.y + time * uBigWavesSpeed) *
     uBigWavesElevation, 0.0003);
 
@@ -123,7 +125,7 @@ void main()
     vec4 viewPosition = viewMatrix * modelPosition;
     vec4 projectedPosition = projectionMatrix * viewPosition;
     gl_Position = projectedPosition;
-
+    audioLevelAndElevation = uAudioLevel * elevation;
     vElevation = elevation;
     vUv = uv;
 }

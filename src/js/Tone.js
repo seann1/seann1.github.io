@@ -24,8 +24,9 @@ export class ToneSynth {
 				release: 50
 			}
 		}).toDestination();
+		this.meter = new Tone.Meter()
 		this.freeverb = new Tone.Freeverb({roomSize: 0.7});
-		this.volume = new Tone.Volume(0).chain(this.freeverb, Tone.getDestination());
+		this.volume = new Tone.Volume(0).chain(this.freeverb, this.meter, Tone.getDestination());
 		this.synth.connect(this.volume);
 		this.now = Tone.now();
 	}
@@ -54,6 +55,9 @@ export class ToneSynth {
 		this.synth.set({ envelope: { release: value } });
 	}
 	
+	getLevel() {
+		return Tone.dbToGain(this.meter.getValue());
+	}
 	play(note, duration) {
 		this.synth.triggerAttackRelease(note, duration);
 	}

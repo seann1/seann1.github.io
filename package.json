@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "description": "portfolio",
   "main": "src/main.js",
-  "homepage": "https://seann1.github.io/",
+  "homepage": "seanniesen.digital",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "vite serve",
     "build": "vite build --emptyOutDir",
     "preview": "vite preview",
-    "deploy": "gh-pages -d docs"
+    "deploy": "gh-pages -d src/dist"
   },
   "author": "",
   "license": "MIT",

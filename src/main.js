@@ -9,6 +9,7 @@ import lygiaFrag1 from './shaders/lygiaShaderFragment2.glsl';
 import Lenis from '@studio-freight/lenis';
 import { gsap } from 'gsap';
 import { ToneSynth } from './js/Tone.js';
+import { ToneSynth2 } from "./js/Tone2";
 
 const scene = new THREE.Scene();
 const raycaster = new THREE.Raycaster();
@@ -21,21 +22,25 @@ renderer.toneMappingExposure = 0.3;
 renderer.setSize( window.innerWidth, window.innerHeight );
 
 const synth = new ToneSynth(3, 4, 50);
+const synth2 = new ToneSynth2(3, 4, 50);
 
 const soundButton = document.getElementById("play-sound");
 soundButton.addEventListener("click", async () => {
         await synth.start();
+        await synth2.startup();
         soundButton.innerText = "Sound is ready";
         console.log("audio is ready");
 });
 
 const volumeSlider = document.getElementById('volume-slider');
 synth.setVolume(0.2);
+synth2.setVolume(0.2);
 volumeSlider.addEventListener('input', (event) => {
     // Get the current value of the slider
     const volume = event.target.value;
     // Set the volume of the synth
     synth.setVolume(volume);
+    synth2.setVolume(volume);
 });
 
 const capsules = [];
@@ -48,7 +53,7 @@ function onDocumentMouseMove(event) {
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 }
-
+let audioLevel = 0.0;
 const uniforms = {
     time: { type: "f", value: 0 },
     
@@ -63,6 +68,7 @@ const uniforms = {
     
     resolution: { type: "v2", value: new THREE.Vector2(window.innerWidth, window.innerHeight)},
     uMouse: { value: mouse},
+    uAudioLevel: { type: "f", value: audioLevel }
 };
 
 const shaderMat = new THREE.ShaderMaterial({
@@ -203,22 +209,32 @@ let lastIntersected;
 function animateScale(obj, up = true) {
     if (obj.name === "plane") return null
     if (up) {
-        return gsap.to(obj.scale, { x: 2, y: 2, z: 2, duration: 0.5 });
+        return gsap.to(obj.scale, { x: 2+(uniforms.uAudioLevel.value*2), y: 2+(uniforms.uAudioLevel.value*2), z: 2+(uniforms.uAudioLevel.value*2), duration: 0.5 });
     } else {
         return gsap.to(obj.scale, { x: 1, y: 1, z: 1, duration: 0.5 });
     }
     
 }
-
+const synths = [synth];
+const synthsAndPlayers = [synth, synth2];
 const setupNote = () => {
-    synth.setHarmonicity(Math.abs(lastIntersected.position.z));
-    synth.setModulationIndex(Math.abs(lastIntersected.position.z));
-    const synthFreq = Math.abs(lastIntersected.position.y)*1000;
-    const mappedFreq = synth.mapRange(synthFreq, 0, 10000, 200, 800);
-    console.log(Math.abs(synth.mapRange(Math.abs(lastIntersected.position.x), 0, 30, 1, 0)));
-    synth.setRoomSize(Math.abs(synth.mapRange(Math.abs(lastIntersected.position.x), 0, 30, 1, 0)));
-
-    synth.setRelease(Math.abs(synth.mapRange(Math.abs(lastIntersected.position.x), 0, 30, 1, 0)) * 2);
+    let mappedFreq;
+    const randomSynth = synthsAndPlayers[Math.floor(Math.random() * synthsAndPlayers.length)];
+    synths.map((s)=> {
+        s.setHarmonicity(Math.abs(lastIntersected.position.z));
+        s.setModulationIndex(Math.abs(lastIntersected.position.z));
+        const synthFreq = Math.abs(lastIntersected.position.y)*1000;
+        mappedFreq = synth.mapRange(synthFreq, 0, 10000, 200, 800);
+        console.log(Math.abs(synth.mapRange(Math.abs(lastIntersected.position.x), 0, 30, 1, 0)));
+        s.setRoomSize(Math.abs(synth.mapRange(Math.abs(lastIntersected.position.x), 0, 30, 1, 0)));
+        s.setRelease(Math.abs(synth.mapRange(Math.abs(lastIntersected.position.x), 0, 30, 1, 0)) * 2);
+    });
+    
+    synth2.setHarmonicity(Math.abs(lastIntersected.position.z));
+    console.log(Math.abs(lastIntersected.position.z)*100)
+    synth2.setModulationIndex(Math.abs(lastIntersected.position.z));
+    synth2.setRelease(Math.abs(synth.mapRange(Math.abs(lastIntersected.position.x), 0, 30, 1, 0)) * 2);
+    
     synth.play(mappedFreq, "8n");
 }
 
@@ -250,7 +266,8 @@ function animate() {
     }
     
     // Update material
-    uniforms.time.value = elapsedTime
+    uniforms.uAudioLevel.value = synth.getLevel();
+    uniforms.time.value = elapsedTime;
 	renderer.render( scene, camera );
 }
 
