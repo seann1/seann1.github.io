@@ -857,3 +857,44 @@ html.lenis {
   border-left: 50px solid transparent;
   border-right: 50px solid transparent;
 }
+.out-of-order {
+  position: absolute;
+  top: 80px;
+  right: -50px;
+  width: 50%;
+  transform: rotate(30deg);
+  display: flex;
+  padding: 1rem;
+  justify-content: center;
+  align-items: center;
+  background: rgb(255,241,0);
+  background: linear-gradient(90deg, rgba(255,241,0,1) 0%, rgba(255,214,0,1) 100%);
+  z-index: 1000;
+  box-shadow: 10px 10px 3px black;
+  @media only screen and (min-width: 1250px) {
+    right: -80px;
+    transform: rotate(25deg);
+  }
+  @media only screen and (max-width: 800px) {
+    left: 10px;
+    top: 400px;
+    transform: rotate(25deg);
+    width: 600px;
+  }
+  div {
+    justify-content: center;
+    text-transform: uppercase;
+    font-weight: bolder;
+    div:nth-child(1) {
+      font-size: 4rem;
+      color: #03fc35;
+      text-shadow: 5px 5px 3px #02badb;
+      line-height: 0.9;
+    }
+    div:nth-child(2) {
+      text-align: center;
+      font-size: 1.5rem;
+      
+    }
+  }
+}
