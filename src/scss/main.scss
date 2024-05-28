@@ -880,6 +880,7 @@ html.lenis {
     top: 400px;
     transform: rotate(25deg);
     width: 600px;
+    display: none;
   }
   div {
     justify-content: center;
@@ -897,4 +898,33 @@ html.lenis {
       
     }
   }
+}
+
+#loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 1.0);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+.spinner {
+  border: 16px solid #32a852;
+  border-top: 16px solid #6b00d6;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

@@ -12,6 +12,10 @@ import { ToneSynth } from './js/Tone.js';
 import { ToneSynth2 } from "./js/Tone2";
 import "@fortawesome/fontawesome-free/css/all.css";
 
+window.onload = function() {
+    document.getElementById('loading-screen').style.display = 'none';
+};
+
 const scene = new THREE.Scene();
 const raycaster = new THREE.Raycaster();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / 400, 0.1, 1000 );
