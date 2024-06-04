@@ -34,7 +34,6 @@ soundButton.addEventListener("click", async () => {
         await synth.start();
         await synth2.startup();
         soundButton.innerText = "Sound is ready";
-        console.log("audio is ready");
 });
 
 const volumeSlider = document.getElementById('volume-slider');
@@ -80,7 +79,8 @@ const uniforms = {
     
     resolution: { type: "v2", value: new THREE.Vector2(window.innerWidth, window.innerHeight)},
     uMouse: { value: mouse},
-    uAudioLevel: { type: "f", value: audioLevel }
+    uAudioLevel: { type: "f", value: audioLevel },
+    uPosition: { type: "v3", value: new THREE.Vector3() }
 };
 
 const shaderMat = new THREE.ShaderMaterial({
@@ -107,35 +107,53 @@ const shaderMat4 = new THREE.ShaderMaterial({
     fragmentShader: lygiaFrag1
 });
 
-const shaderPicker = (i) => {
+const vertexShaderPicker = (i) => {
     if (i % 3 === 0){
-        return shaderMat3
+        return vertex3
     } else if (i % 2 === 0) {
-        return shaderMat2
+        return vertex3
     } else {
-        return shaderMat
+        return vertex4
+    }
+}
+const fragmentShaderPicker = (i) => {
+    if (i % 3 === 0){
+        return fragment3
+    } else if (i % 2 === 0) {
+        return fragment2
+    } else {
+        return fragment
     }
 }
 
 for (let i = 0; i < 30; i++) {
-    const sphereGeo = new THREE.SphereGeometry( 1, 30, 30, 8 );
     
-    const sphere = new THREE.Mesh( sphereGeo, shaderPicker(i));
+    const sphereGeo = new THREE.SphereGeometry( 1, 30, 30, 8 );
+    const sphere = new THREE.Mesh( sphereGeo, new THREE.MeshBasicMaterial({ color: 0xffffff }));
     sphere.position.set((Math.sin(Math.pow(position, 2))*2)+Math.pow(position, 2), Math.pow(position,2), (position - 1) *  2);
+    sphere.material = new THREE.ShaderMaterial({
+        uniforms: {...uniforms, uPosition: { type: "v3", value: sphere.position }},
+        vertexShader: vertexShaderPicker(i),
+        fragmentShader: fragmentShaderPicker(i)
+    })
     sphere.scale.set(i*0.05,i*0.05,i*0.05);
     sphere.rotation.set(Math.PI/2, Math.PI/2, Math.PI/2);
     sphere.name = `sphere${i}`;
+    sphere.material.uniforms.uPosition = sphere.position;
+
     scene.add(sphere);
     capsules.push(sphere);
     position += 0.2;
 };
-
-const materialsArray = [shaderMat, shaderMat2, shaderMat3];
 // Moon
-
+const materialsArray = [shaderMat, shaderMat2, shaderMat3];
 const moon = new THREE.Mesh(
     new THREE.SphereGeometry(3, 32, 32),
-    shaderMat2
+    new THREE.ShaderMaterial({
+        uniforms: uniforms,
+        vertexShader: vertex3,
+        fragmentShader: fragment2
+    })
 );
 
 const plane = new THREE.Mesh(
@@ -152,16 +170,25 @@ scene.add(moon, plane);
 
 moon.position.setX(-10);
 
+// moon.material.uniforms.uPosition = moon.position;
+
 const stars = [];
 function addStar() {
     const geometry = new THREE.SphereGeometry(1, 24, 24);
-    const star = new THREE.Mesh(geometry, materialsArray[Math.floor(Math.random()*materialsArray.length)]);
+    const star = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ color: 0xffffff }));
     
     const [x, y, z] = Array(3)
         .fill()
         .map(() => THREE.MathUtils.randFloatSpread(100));
     
     star.position.set(x, y, z);
+    console.log(star.position);
+    star.material = new THREE.ShaderMaterial({
+        uniforms: { ...uniforms, uPosition: { type: "v3", value: star.position }},
+        vertexShader: vertexShaderPicker(Math.floor(Math.random() * 30)),
+        fragmentShader: fragmentShaderPicker(Math.floor(Math.random() * 30))
+    })
+    // star.material.uniforms.uPosition = star.position;
     scene.add(star);
     stars.push(star);
 }
@@ -237,13 +264,11 @@ const setupNote = () => {
         s.setModulationIndex(Math.abs(lastIntersected.position.z));
         const synthFreq = Math.abs(lastIntersected.position.y)*1000;
         mappedFreq = synth.mapRange(synthFreq, 0, 10000, 200, 800);
-        console.log(Math.abs(synth.mapRange(Math.abs(lastIntersected.position.x), 0, 30, 1, 0)));
         s.setRoomSize(Math.abs(synth.mapRange(Math.abs(lastIntersected.position.x), 0, 30, 1, 0)));
         s.setRelease(Math.abs(synth.mapRange(Math.abs(lastIntersected.position.x), 0, 30, 1, 0)) * 2);
     });
     
     synth2.setHarmonicity(Math.abs(lastIntersected.position.z));
-    console.log(Math.abs(lastIntersected.position.z)*100)
     synth2.setModulationIndex(Math.abs(lastIntersected.position.z));
     synth2.setRelease(Math.abs(synth.mapRange(Math.abs(lastIntersected.position.x), 0, 30, 1, 0)) * 2);
     
@@ -258,6 +283,11 @@ function animate() {
     raycaster.setFromCamera( mouse, camera );
     
     const intersects = raycaster.intersectObjects( scene.children );
+    
+    capsules.forEach((sphere) => {
+        sphere.material.uniforms.uPosition.value = sphere.position;
+        sphere.material.needsUpdate = true;
+    });
     
     if (intersects.length > 0) {
         if (lastIntersected && lastIntersected !== intersects[0].object) {

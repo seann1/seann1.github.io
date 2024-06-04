@@ -5,14 +5,6 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
 	root: path.join(__dirname, "src"),
-	// build: {
-	// 	rollupOptions: {
-	// 		output: {
-	// 			dir: path.resolve(__dirname, 'docs'),
-	// 			entryFileNames: 'main.js',
-	// 		}
-	// 	},
-	// },
 	plugins: [
 		glsl(),
 		createHtmlPlugin()
