@@ -1,5 +1,6 @@
 varying vec2 vUv;
 uniform float time;
+uniform vec3 uPosition;
 varying float vElevation;
 
 vec3 palette( in float t, in vec3 a, in vec3 b, in vec3 c, in vec3 d )
@@ -24,13 +25,13 @@ void main()
         float d = length(uv) * exp(length(uv0));
 
         vec3 col = palette(length(uv0) + i*.4 + (time*.4), vec3(0.608, 0.278, 0.500), vec3(0.550, 0.520, 0.520), vec3(1.948, 2.108, 1.888), vec3(0.528, 0.358, 0.858));
-
+        col *= abs(uPosition/3.0);
         d = sin(d * (8.0 - i) + time)/8.0;
         d = abs(d);
 
         d = pow(0.01 / d, 1.2);
 
-        finalColor += col * d + (vElevation * 2.0);
+        finalColor += col * d + (vElevation);
     }
 
     // Output to screen

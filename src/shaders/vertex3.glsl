@@ -7,6 +7,7 @@ uniform float uSmallWavesElevation;
 uniform float uSmallWavesFrequency;
 uniform float uSmallWavesSpeed;
 uniform float uSmallIterations;
+uniform float uAudioLevel;
 
 varying float vElevation;
 varying vec2 vUv;
@@ -107,7 +108,7 @@ void main()
 
     for(float i = 1.0; i <= uSmallIterations; i++)
     {
-        elevation -= abs(cnoise(vec3(modelPosition.xz * uSmallWavesFrequency * i, time * uSmallWavesSpeed)) * uSmallWavesElevation / i);
+        elevation -= abs(cnoise(vec3(modelPosition.xz * uSmallWavesFrequency * i, time * (uAudioLevel*40.0) * uSmallWavesSpeed)) * uSmallWavesElevation / i);
     }
 
     modelPosition.y += elevation;
