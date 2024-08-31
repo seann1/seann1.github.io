@@ -4,7 +4,14 @@
 $main-color: #6700ee;
 $accent-color: #cacaca;
 
-canvas {
+#threeCan {
+    position: fixed;
+    z-index: 2;
+    padding: 0;
+    margin: 0;
+}
+
+#threeCanMain {
     position: fixed;
     z-index: -1;
     padding: 0;
