@@ -15,6 +15,7 @@ export default defineConfig({
 				main: path.resolve(__dirname, 'src/index.html'),
 				psdRemake: path.resolve(__dirname, 'src/psd-remake/index.html'),
 				threeJsExperiment: path.resolve(__dirname, 'src/three-js-experiment/index.html'),
+				threeJsExperiment2: path.resolve(__dirname, 'src/three-js-experiment2/index.html'),
 			}
 		}
 	}

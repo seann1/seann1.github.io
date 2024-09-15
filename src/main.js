@@ -145,6 +145,7 @@ function onDocumentMouseMove(event) {
     targetRotationY = (event.clientX - windowHalfX) / windowHalfX;
 }
 
+
 const controls = new OrbitControls(camera, renderer.domElement);
 
 controls.update();
