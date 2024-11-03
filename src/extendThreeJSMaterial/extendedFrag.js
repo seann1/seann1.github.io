@@ -101,7 +101,7 @@ void main() {
     #include <lights_fragment_end>
     #include <aomap_fragment>
     
-    float strength = step(sin(time) * 0.9, sin(cnoise(vUv * 10.0) * 20.0));
+    float strength = step(sin(time) * 0.3, sin(cnoise(vUv * 2.0) * 50.0));
 	vec3 normalizedPosition = (position - vec3(0.0)) / vec3(1.0);
     vec3 outgoingLight = reflectedLight.directDiffuse + diffuse - normalizedPosition + vec3(strength) - vec3(vUv.x, strength, sin(time)/5.0+strength) - reflectedLight.indirectDiffuse + reflectedLight.directSpecular + reflectedLight.indirectSpecular + totalEmissiveRadiance;
 	

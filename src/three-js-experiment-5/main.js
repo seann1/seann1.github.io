@@ -1,8 +1,6 @@
 import * as THREE from 'three';
 import { gsap } from 'gsap';
 import { OrbitControls } from 'three/addons/controls/OrbitControls';
-import phongFrag from '../shaders/Phong/phong.frag';
-import phongVert from '../shaders/Phong/phong.vert';
 import { ExtendedPhongMaterial } from '../extendThreeJSMaterial/ExtendedPhongMaterial';
 
 const canvasElm = document.getElementById('threeCan');
@@ -16,6 +14,7 @@ window.onload = function () {
 };
 
 const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x000000);
 const camera = new THREE.PerspectiveCamera(
     75,
     window.innerWidth / window.innerHeight,
@@ -30,10 +29,10 @@ const sizes = {
 
 const raycaster = new THREE.Raycaster();
 
-const light = new THREE.DirectionalLight(0xffffff, 5, 1000);
-const light2 = new THREE.DirectionalLight(0xffffff, 5, 1000);
-light.position.set(0, -4, 10);
-light2.position.set(0, 4, -10);
+const light = new THREE.DirectionalLight(0xffffff, 1);
+const light2 = new THREE.DirectionalLight(0xffffff, 2);
+light.position.set(4, -4, 10);
+light2.position.set(-1, 4, -10);
 scene.add(light, light2);
 
 const envTexture = new THREE.CubeTextureLoader().load([
@@ -44,9 +43,6 @@ const envTexture = new THREE.CubeTextureLoader().load([
     '../environmentMaps/2/py.png',
     '../environmentMaps/2/pz.png',
 ]);
-
-const ambientLight = new THREE.AmbientLight(0x404040, 5); // soft white light
-scene.add(ambientLight);
 
 const targetObject = new THREE.Object3D();
 targetObject.position.set(0, 0, 0);
@@ -70,17 +66,6 @@ renderer.toneMappingExposure = 0.3;
 
 const cubeSize = 10; // The number of cubes along each edge of the larger cube
 const group = new THREE.Group();
-const colorsArray = [
-    '#B1B1B1',
-    '#B1B1B1',
-    '#B1B1B1',
-    '#B1B1B1',
-    '#B1B1B1',
-    '#00796B',
-    '#FFD54F',
-    '#EB437C',
-    '#4DD0E1',
-];
 
 for (let x = 0; x < 5; x++) {
     for (let y = 0; y < 5; y++) {
@@ -101,7 +86,6 @@ for (let x = 0; x < 5; x++) {
             };
 
             const material = new ExtendedPhongMaterial({}, uniforms);
-
             const cube = new THREE.Mesh(cubeGeometry, material);
             cube.position.set(
                 x - cubeSize / 2,
@@ -156,7 +140,6 @@ boundingBox.getSize(size);
 function animate() {
     requestAnimationFrame(animate);
     const elapsedTime = clock.getElapsedTime();
-    const radius = 20; // Define the radius of the circle
 
     const allObjects = group.children.slice();
     group.children.map((o) => {
