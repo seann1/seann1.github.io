@@ -18,6 +18,7 @@ export default defineConfig({
 				threeJsExperiment2: path.resolve(__dirname, 'src/three-js-experiment-2/index.html'),
 				threeJsExperiment3: path.resolve(__dirname, 'src/three-js-experiment-3/index.html'),
 				threeJsExperiment4: path.resolve(__dirname, 'src/three-js-experiment-4/index.html'),
+				threeJsExperiment5: path.resolve(__dirname, 'src/three-js-experiment-5/index.html'),
 			}
 		}
 	}
