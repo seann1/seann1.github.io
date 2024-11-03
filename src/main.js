@@ -40,7 +40,7 @@ window.onload = function () {
     }, '50');
     renderer.setSize(window.innerWidth, window.innerHeight);
     // Example usages:
-    startMarquee(document.getElementById('marquee'), 16, 0.5); // Customize repeatCount and step
+    startMarquee(document.getElementById('marquee'), 32, 0.5); // Customize repeatCount and step
 };
 
 const scene = new THREE.Scene();

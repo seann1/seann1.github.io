@@ -109,10 +109,19 @@ window.addEventListener('resize', () => {
 	renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 });
 
+const clock = new THREE.Clock();
 let lastIntersected;
 let neighbors = [];
 function animate() {
 	requestAnimationFrame(animate);
+	const elapsedTime = clock.getElapsedTime();
+	const radius = 20; // Define the radius of the circle
+	// light.position.x = radius * Math.cos(elapsedTime);
+	// light.position.z = radius * Math.sin(elapsedTime);
+	//
+	// light2.position.y = radius * Math.sin(elapsedTime);
+	// light2.position.z = radius * Math.cos(elapsedTime);
+	
 	const allObjects = group.children.slice();
 	raycaster.setFromCamera(mouse, camera);
 	const intersects = raycaster.intersectObjects(group.children);
@@ -122,12 +131,12 @@ function animate() {
 		if (intersects[0].object !== lastIntersected) {
 			// Restore previous intersection object (if it exists) to its original scale
 			if (lastIntersected) {
-				gsap.to(lastIntersected.scale, { x: 0.4, y: 0.4, z: 0.4, duration: 10 });
-				gsap.to(lastIntersected.material.color, { r: lastIntersected.originalColor.r, g: lastIntersected.originalColor.g, b: lastIntersected.originalColor.b, duration: 1 });
+				gsap.to(lastIntersected.scale, { x: 0.4, y: 0.4, z: 0.4, duration: 20 });
+				gsap.to(lastIntersected.material.color, { r: lastIntersected.originalColor.r, g: lastIntersected.originalColor.g, b: lastIntersected.originalColor.b, duration: 20 });
 				
 				neighbors.forEach(neighbor => {
-					gsap.to(neighbor.scale, { x: 0.4, y: 0.4, z: 0.4, duration: 10 });
-					gsap.to(neighbor.material.color, { r: neighbor.originalColor.r, g: neighbor.originalColor.g, b: neighbor.originalColor.b, duration: 1 });
+					gsap.to(neighbor.scale, { x: 0.4, y: 0.4, z: 0.4, duration: 20 });
+					gsap.to(neighbor.material.color, { r: neighbor.originalColor.r, g: neighbor.originalColor.g, b: neighbor.originalColor.b, duration: 20 });
 				});
 				neighbors = [];
 			}
@@ -141,7 +150,7 @@ function animate() {
 			// gsap.to(lastIntersected.scale, { x: scaleFactor, y: scaleFactor, z: scaleFactor, duration: 0.1 });
 			if (lastIntersected.scale.x === 0.4 && lastIntersected.scale.y === 0.4 && lastIntersected.scale.z === 0.4) {
 				gsap.to(lastIntersected.scale, { x: scaleFactor, y: scaleFactor, z: scaleFactor, duration: 1 });
-				gsap.to(lastIntersected.material.color, { r: 0, g: 1, b: 0, duration: 1 });
+				gsap.to(lastIntersected.material.color, { r: 1, g: 1, b: 1, duration: 1 });
 			}
 			
 			// Find neighbors
@@ -165,11 +174,11 @@ function animate() {
 		// 	gsap.to(lastIntersected.scale, { x: 0.4, y: 0.4, z: 0.4, duration: 10 });
 		// }
 		if (lastIntersected) {
-			gsap.to(lastIntersected.scale, { x: 0.4, y: 0.4, z: 0.4, duration: 10 });
-			gsap.to(lastIntersected.material.color, { r: lastIntersected.originalColor.r, g: lastIntersected.originalColor.g, b: lastIntersected.originalColor.b, duration: 1 });
+			gsap.to(lastIntersected.scale, { x: 0.4, y: 0.4, z: 0.4, duration: 20 });
+			gsap.to(lastIntersected.material.color, { r: lastIntersected.originalColor.r, g: lastIntersected.originalColor.g, b: lastIntersected.originalColor.b, duration: 20 });
 			neighbors.forEach(neighbor => {
-				gsap.to(neighbor.scale, { x: 0.4, y: 0.4, z: 0.4, duration: 10 });
-				gsap.to(neighbor.material.color, { r: neighbor.originalColor.r, g: neighbor.originalColor.g, b: neighbor.originalColor.b, duration: 1 });
+				gsap.to(neighbor.scale, { x: 0.4, y: 0.4, z: 0.4, duration: 20 });
+				gsap.to(neighbor.material.color, { r: neighbor.originalColor.r, g: neighbor.originalColor.g, b: neighbor.originalColor.b, duration: 20 });
 			});
 			neighbors = [];
 			lastIntersected = undefined;

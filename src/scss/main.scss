@@ -1000,11 +1000,33 @@ html.lenis {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f7f7f7;
+    flex-wrap: wrap;
 }
 
 .threeExperiment {
-    background-color: #3ac978;
-    margin: 0 3px;
+    background-size: 100% 100%; // Stretch the image to fit the button
+    background-position: center;
+    background-repeat: no-repeat;
+    font-weight: bold;
+    margin: 3px;
     padding: 2em;
+    > div {
+        background-color: #fad105;
+        padding: 2px;
+        color: #37f502;
+       text-shadow: 1px 1px black;
+    }
+    
+    &:nth-of-type(1) {
+        background-image: url("../images/three-experiments/experiment-2.png")
+    }
+    &:nth-of-type(2) {
+        background-image: url("../images/three-experiments/experiment-3.png")
+    }
+    &:nth-of-type(3) {
+        background-image: url("../images/three-experiments/experiment-4.png")
+    }
+    &:nth-of-type(4) {
+        background-image: url("../images/three-experiments/experiment-5.png")
+    }
 }
