@@ -1,10 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 //original main color: #6700ee
 // original accent color: #ff64cb
 $main-color: #6700ee;
 $accent-color: #cacaca;
 
-canvas {
+#threeCan {
+    position: fixed;
+    z-index: 2;
+    padding: 0;
+    margin: 0;
+}
+
+#threeCanMain {
     position: fixed;
     z-index: -1;
     padding: 0;
@@ -68,21 +76,11 @@ header {
 }
 
 .hero {
-    background: linear-gradient(-45deg, #6e00ff, #0068ff, #00aee1, #00b994);
     background-size: 400% 400%;
-    //animation: gradient 15s ease infinite;
-    //background: #6e00ff;
     color: white;
     display: grid;
     text-align: center;
-    // padding: 1em 0em 0em 1em;
 }
-
-//.pro-gradient {
-//  background: linear-gradient(-45deg, #a7a7a7, #636363, #96adb5, #b0b6b5);
-//  background-size: 400% 400%;
-//  animation: gradient 15s ease infinite;
-//}
 
 .color-gradient {
     background: linear-gradient(-45deg, #6e00ff, #0068ff, #00aee1, #00b994);
@@ -127,7 +125,7 @@ section {
 }
 
 #myWork {
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0.8);
     padding: 10px;
     border-radius: 5px;
     height: 97%;
@@ -335,6 +333,21 @@ section {
     }
 }
 
+body {
+    //background: linear-gradient(-45deg, #ceb0a7, #b594a0, #79b6cc, #92c9bc);
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+    height: 1vh;
+}
+.hero {
+    background: linear-gradient(
+            180deg,
+            rgba(202, 202, 202, 0.5) 0%,
+            rgba(0, 212, 255, 0) 100%
+    );
+}
+
 @media only screen and (min-width: 1050px) {
     .hero {
         height: 90vh;
@@ -396,14 +409,6 @@ section {
                 line-height: 1.2em;
             }
         }
-    }
-
-    body {
-        background: linear-gradient(-45deg, #ceb0a7, #b594a0, #79b6cc, #92c9bc);
-        //background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-        background-size: 400% 400%;
-        animation: gradient 15s ease infinite;
-        height: 1vh;
     }
 
     .meet {
@@ -946,4 +951,82 @@ html.lenis {
 
 .scrollDiv {
     height: 3000px;
+}
+
+.marquee-wrapper {
+    overflow: hidden;
+    width: 100%;
+    margin: 0 auto;
+    top: 0;
+   #marquee {
+        background-color: #453b37;
+        color: #9c9e7b;
+        font-weight: bolder;
+        font-size: 1rem;
+       font-style: italic;
+        font-family: 'Bebas Neue', sans-serif;
+       position: sticky;
+       line-height: 11px;
+       animation-name: colorAnimate;
+       animation-duration:40s;
+       animation-direction: alternate-reverse;
+       animation-iteration-count: infinite;
+    }
+}
+
+.navContainerWrapper {
+    position: fixed;
+}
+
+@keyframes colorAnimate {
+    0% {
+        background-color: #dbfc00;
+        color: #c9c36b;
+    }
+    25% {
+        background-color: #3e3f40;
+        color: #42adf5;
+    }
+    50% {
+        background-color: #b884b8;
+        color: #bfd0e0;
+    }
+    75% {
+        background-color: #7abf75;
+        color: #eddbff;
+    }
+}
+.threeExperimentContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.threeExperiment {
+    background-size: 100% 100%; // Stretch the image to fit the button
+    background-position: center;
+    background-repeat: no-repeat;
+    font-weight: bold;
+    margin: 3px;
+    padding: 2em;
+    > div {
+        background-color: #fad105;
+        padding: 2px;
+        color: #37f502;
+       text-shadow: 1px 1px black;
+    }
+    
+    &:nth-of-type(1) {
+        background-image: url("../images/three-experiments/experiment-2.png")
+    }
+    &:nth-of-type(2) {
+        background-image: url("../images/three-experiments/experiment-3.png")
+    }
+    &:nth-of-type(3) {
+        background-image: url("../images/three-experiments/experiment-4.png")
+    }
+    &:nth-of-type(4) {
+        background-image: url("../images/three-experiments/experiment-5.png")
+    }
 }

@@ -24,6 +24,8 @@ const camera = new THREE.PerspectiveCamera(
     0.1,
     1000
 );
+
+
 const canvasElm = document.getElementById('threeCan');
 
 const renderer = new THREE.WebGLRenderer({ canvas: canvasElm, alpha: true });
