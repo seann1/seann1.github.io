@@ -326,6 +326,15 @@ const setupNote = () => {
     synth.play(mappedFreq, '8n');
 };
 
+let smoothedLevel = 0; // Initial smoothed value
+const smoothingFactor = 0.3; // Smoothing factor
+
+function updateEMA(rawLevel) {
+    smoothedLevel =
+        smoothingFactor * rawLevel + (1 - smoothingFactor) * smoothedLevel;
+    return smoothedLevel;
+}
+
 function animate() {
     requestAnimationFrame(raf);
     requestAnimationFrame(animate);
@@ -359,7 +368,7 @@ function animate() {
     }
 
     // Update material
-    uniforms.uAudioLevel.value = synth.getLevel();
+    uniforms.uAudioLevel.value = updateEMA(synth.getLevel());
     uniforms.time.value = elapsedTime;
     renderer.render(scene, camera);
 }
