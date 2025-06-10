@@ -419,6 +419,7 @@ body {
         margin-left: -50%;
         margin-top: 15%;
         width: 100%;
+        z-index:0;
     }
 
     .portfolio img {
@@ -1010,6 +1011,7 @@ html.lenis {
     font-weight: bold;
     margin: 3px;
     padding: 2em;
+    z-index: 10;
     > div {
         background-color: #fad105;
         padding: 2px;
