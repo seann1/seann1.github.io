@@ -2,7 +2,7 @@ import p5 from 'p5';
 let webcam;
 let webcamScaled;
 let photo;
-let maximum;
+let maximum = 10;
 let zoff = 0.0;
 let previousFrames = [];
 let currentFrameIndex = 0;
@@ -45,7 +45,7 @@ new p5((p) => {
 	}
 	
 	p.draw = () => {
-		let oscillator = p.int(p.map(p.sin(p.frameCount * 0.005) * 500, -500, 500, 1, 500));
+		// let oscillator = p.int(p.map(p.sin(p.frameCount * 0.005) * 500, -500, 500, 1, 500));
 		let oscillator2 = p.int(p.map(p.sin(p.frameCount * 0.07) * 255, -255, 255, 1, 255));
 		let oscillator3 = p.int(p.map(p.sin(p.frameCount * 0.08) * 255, -255, 255, 1, 255));
 		// console.log(webcam);
@@ -93,7 +93,7 @@ new p5((p) => {
 			// );
 
 			let webcamColor = p.color(webcamScaled.pixels[i], webcamScaled.pixels[i + 1], webcamScaled.pixels[i + 2]);
-			console.log(webcamBufffer.pixels[i]);
+			console.log(webcamScaled.pixels[i]);
 			if (
 				p.blue(webcamColor) > 100
 				// p.blue(webcamColor) > p.map(oscillator, 1, 500, 0, 200) &&
@@ -102,9 +102,9 @@ new p5((p) => {
 				// noiseValue *
 				for (let j = 1; j < (1.0 / oscillator2 + 1.0) * (200.0); j++) {
 					const indexA = Math.max(i - 800 * j * 4, 0);
-					const indexB = Math.max((i % (800 * j * 4)), 0);
-					const indexC = Math.max(i - ((800 % j) * 4), 0);
-					const indexD = Math.max(i - ((300 % j) * 4), 0);
+					// const indexB = Math.max((i % (800 * j * 4)), 0);
+					// const indexC = Math.max(i - ((800 % j) * 4), 0);
+					// const indexD = Math.max(i - ((300 % j) * 4), 0);
 
 					const c = chooseColor(
 						p.color(webcamScaled.pixels[i], webcamScaled.pixels[i + 1], webcamScaled.pixels[i + 2]),

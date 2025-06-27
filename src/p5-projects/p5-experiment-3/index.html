@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Processing.js Example</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/processing.js/1.6.0/processing.min.js"></script>
+</head>
+<body>
+<h1>My Processing Sketch</h1>
+<canvas id="sketch"></canvas>
+<script type="application/processing" data-processing-target="sketch">
+	import processing.video.*;
+
+Capture webcam;
+PImage webcamScaled; // This will hold the scaled version of the webcam
+
+PImage photo;
+int max;
+color original;
+color currentPixel;
+float zoff = 0.0; // Time counter for noise evolution
+PImage[] previousFrames = new PImage[10];
+int currentFrameIndex = 0;
+int fallSpeed = 1; // Pixels to shift per frame (adjust for speed)
+
+
+void setup () {
+  //fullScreen();
+  frameRate(30);
+  size(800, 800);
+  photo = loadImage("example.png");
+  photo.resize(width, height); // Match canvas size
+  max = width * height;
+
+  for (int i = 0; i < previousFrames.length; i++) {
+    previousFrames[i] = createImage(width, height, RGB);
+  }
+
+  // look for a webcam
+ String[] cameras = Capture.list();
+  if (cameras.length == 0) {
+      println("No cameras available!");
+      exit();
+  } else {
+      println("Available cameras:");
+      for (int i = 0; i < cameras.length; i++) {
+          println(cameras[i]);
+      }
+
+      // Try to create capture at 600x600
+      webcam = new Capture(this, 800, 800);
+      webcam.start();
+  }
+    // Create a PImage to hold the scaled version
+    webcamScaled = createImage(800, 800, RGB);
+}
+
+color chooseColor(int inputColor, int inputDecider, color output1, color output2, color output3) {
+  if (blue(inputColor) > inputDecider) {
+    return output1;
+  } else if (green(inputColor) > inputDecider) {
+    return output2;
+  } else if (red(inputColor) > inputDecider) {
+    return output3;
+  } else {
+  return color(red(output1), green(output2), blue(output3));
+  }
+}
+
+void draw() {
+  int oscillator = (int)map(sin(frameCount * .005)* 500, -500, 500, 1, 500);
+  int oscillator2 = (int)map(sin(frameCount * .07)* 255, -255, 255, 1, 255);
+  int oscillator3 = (int)map(sin(frameCount * .08)* 255, -255, 255, 1, 255);
+
+  webcamScaled.copy(webcam, 0, 0, webcam.width, webcam.height, 0, 0, 800, 800);
+  loadPixels();
+   arrayCopy(webcamScaled.pixels, pixels);
+  for (int i = 0; i < max; i++) {
+    float x = (i % width) * 0.01;  // Scale down x coordinate
+    float y = (i / width) * 0.01;  // Scale down y coordinate
+    float noiseValue = noise(x, y, zoff);
+    //float noiseCalc = (noise((float)1/ (i % width)*60.0, (float)1/ (i / width)*60.0));
+    original = pixels[i];
+    pixels[i] = color(0);
+    color inverted = color(255-red(original), 255-green(original), 255-blue(original));
+    color pinkGreen = lerpColor(
+    color(
+    constrain(red(oscillator2) + red(inverted) / 3, 1, 255),
+    constrain(blue(oscillator2) + blue(inverted) / 4, 1, 255),
+    constrain(green(oscillator2) + green(inverted) / 2, 1, 255)),
+    webcamScaled.pixels[i],
+    map(sin(frameCount * .05*(i*.1000)), -1, 1, 0.0, 1.0)
+    );
+
+    previousFrames[0].loadPixels();
+    if ((blue(webcamScaled.pixels[i]) > map(oscillator, 1, 500, 0, 200) && (green(webcamScaled.pixels[i])- 100) < map(oscillator, 1, 500, 50, 255))) {
+
+      // (oscillator2*5)/
+      for(int j = 1; j < int((1.0/float(oscillator2)+1.0)*(noiseValue*200.0)); j++) {
+
+        pixels[constrain(i - (800 * j), 0, max)] = chooseColor(webcamScaled.pixels[j], oscillator3, inverted, pinkGreen, webcamScaled.pixels[i]);
+        pixels[constrain(i % (800 * j), 0, max)] = chooseColor(webcamScaled.pixels[j], oscillator2, color(red(webcamScaled.pixels[i]), blue(inverted), green(pinkGreen)), inverted, pinkGreen);
+        pixels[constrain(i - (800 % j), 0, max)] = chooseColor(webcamScaled.pixels[j], oscillator3, inverted, pinkGreen, color(red(webcamScaled.pixels[i]), blue(inverted), green(pinkGreen)));
+        pixels[constrain(i - (300 % j), 0, max)] = previousFrames[0].pixels[i];
+    }
+    } else {
+      if (random(100) > 97.0) {
+        pixels[i] = color(0);
+      }
+      pixels[i] = previousFrames[0].pixels[i];
+    }
+  }
+  updatePixels();
+  previousFrames[currentFrameIndex].copy(get(), 0, 0, width, height, 0, 0, width, height);
+  currentFrameIndex = (currentFrameIndex + 1) % previousFrames.length;
+  if (frameCount < 300) {
+    saveFrame("frames1/export_####.png");
+  }
+  //applyVerticalPixelFall();
+  if(webcam.available()) {
+    webcam.read();
+  }
+  zoff += 0.02;
+}
+
+//void applyVerticalPixelFall() {
+//  loadPixels();
+//  println(blue(pixels[0]));
+//  // Create a temporary copy of the current pixel array
+//  color[] tempPixels = new color[pixels.length];
+//  arrayCopy(pixels, tempPixels);
+
+//  // Process each vertical column (x)
+//  for (int x = 0; x < width; x++) {
+//    // Extract the column (all y-values for this x)
+//    color[] column = new color[height];
+//    for (int y = 0; y < height; y++) {
+//      column[y] = tempPixels[x + y * width];
+//    }
+
+//    // Shift the column downward and wrap the bottom pixel
+//    for (int i = 0; i < fallSpeed; i++) {
+//      color lastPixel = column[height - 1];
+//      for (int y = height - 1; y > 0; y--) {
+//        column[y] = column[y - 1]; // Shift down
+//      }
+//      column[0] = lastPixel; // Wrap bottom to top
+//    }
+
+//    // Write the modified column back to the pixel array
+//    for (int y = 0; y < height; y++) {
+//      pixels[x + y * width] = column[y];
+//    }
+//  }
+
+//  updatePixels();
+//}
+</script>
+</body>
+</html>
