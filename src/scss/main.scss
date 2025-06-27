@@ -997,14 +997,14 @@ html.lenis {
         color: #eddbff;
     }
 }
-.threeExperimentContainer {
+.experimentContainer {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
 }
 
-.threeExperiment {
+.threeExperiment, .p5Experiment {
     background-size: 100% 100%; // Stretch the image to fit the button
     background-position: center;
     background-repeat: no-repeat;
@@ -1012,6 +1012,9 @@ html.lenis {
     margin: 3px;
     padding: 2em;
     z-index: 10;
+}
+
+.threeExperiment {
     > div {
         background-color: #fad105;
         padding: 2px;
@@ -1030,5 +1033,21 @@ html.lenis {
     }
     &:nth-of-type(4) {
         background-image: url("../images/three-experiments/experiment-5.png")
+    }
+}
+
+.p5Experiment {
+    > div {
+        background-color: #fad105;
+        padding: 2px;
+        color: #37f502;
+        text-shadow: 1px 1px black;
+    }
+    
+    &:nth-of-type(1) {
+        background-image: url("../images/p5-experiments/p5-experiment-1.png")
+    }
+    &:nth-of-type(2) {
+        background-image: url("../images/p5-experiments/p5-experiment-1.png")
     }
 }
