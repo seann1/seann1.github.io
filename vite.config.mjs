@@ -20,6 +20,7 @@ export default defineConfig({
 				threeJsExperiment4: path.resolve(__dirname, 'src/three-js-experiment-4/index.html'),
 				threeJsExperiment5: path.resolve(__dirname, 'src/three-js-experiment-5/index.html'),
 				p5Experiment1: path.resolve(__dirname, 'src/p5-projects/p5-experiment-1/index.html'),
+				p5Experiment2: path.resolve(__dirname, 'src/p5-projects/p5-experiment-2/index.html'),
 			}
 		}
 	}

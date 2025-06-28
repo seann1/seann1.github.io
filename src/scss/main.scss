@@ -405,6 +405,8 @@ body {
             }
             text-align: left;
             h1 {
+                white-space: nowrap;
+                display: inline-block;
                 font-size: 3em;
                 line-height: 1.2em;
             }
