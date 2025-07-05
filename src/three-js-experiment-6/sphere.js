@@ -58,30 +58,13 @@ export class AnimatedSphere {
 
 			// Perlin noise based on direction and time
 			const noiseVal = noise.perlin3(nx * 2, ny * 2, nz * 2 + (time*5) * 0.5);
-			// console.log(noiseVal);
-			// function noiseStep(noiseVal) {
-			// 	if (noiseVal > 0.9) {
-			// 		noiseVal = 0.1;
-			// 	} else if (noiseVal > 0.7) {
-			// 		noiseVal = 0;
-			// 	} else if (noiseVal > 0.5) {
-			// 		noiseVal = 1
-			// 	} else if (noiseVal > 0.4) {
-			// 		noiseVal = 0
-			// 	} else if (noiseVal < 0) {
-			// 		noiseVal = -0.5;
-			// 	}
-			// 	return noiseVal
-			// }
 			
 			function zigZagStep(noiseVal, stepInterval, values = [1, 0, 1, 0, 1, 0, 1]) {
 				// Map noiseVal from [-1, 1] to [0, 1] if needed
 				const norm = (noiseVal + 1) / 2;
 				// Choose interval size (e.g., 0.2)
-				// const interval = 0.15;
 				// Find which interval we're in
 				const idx = Math.floor(norm / stepInterval);
-				// console.log(idx % 5);
 				// Alternate between high (1) and low (0)
 				return values[idx % 5];
 			}

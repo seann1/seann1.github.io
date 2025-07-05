@@ -1,0 +1,31 @@
+#threeCan {
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	height: 100vh;
+	margin: 0;
+	font-family: 'Poppins', arial;
+	.ySlider {
+		position: absolute;
+		right: 20px;
+		top: 50%;
+		transform: translateY(-50%) rotate(-90deg);
+		width: 200px; // Adjust as needed
+		height: 30px;
+	}
+	
+	.slider-label {
+		position: absolute;
+		right: 20px;
+		top: 50%;
+		transform: translateY(-50%) rotate(-90deg);
+		font-size: 1rem;
+		color: #fff;
+		pointer-events: none;
+		background-color: pink;
+		color: black;
+		padding: 10px;
+	}
+}
