@@ -342,9 +342,9 @@ body {
 }
 .hero {
     background: linear-gradient(
-            180deg,
-            rgba(202, 202, 202, 0.5) 0%,
-            rgba(0, 212, 255, 0) 100%
+        180deg,
+        rgba(202, 202, 202, 0.5) 0%,
+        rgba(0, 212, 255, 0) 100%
     );
 }
 
@@ -421,7 +421,7 @@ body {
         margin-left: -50%;
         margin-top: 15%;
         width: 100%;
-        z-index:0;
+        z-index: 0;
     }
 
     .portfolio img {
@@ -961,19 +961,19 @@ html.lenis {
     width: 100%;
     margin: 0 auto;
     top: 0;
-   #marquee {
+    #marquee {
         background-color: #453b37;
         color: #9c9e7b;
         font-weight: bolder;
         font-size: 1rem;
-       font-style: italic;
+        font-style: italic;
         font-family: 'Bebas Neue', sans-serif;
-       position: sticky;
-       line-height: 11px;
-       animation-name: colorAnimate;
-       animation-duration:40s;
-       animation-direction: alternate-reverse;
-       animation-iteration-count: infinite;
+        position: sticky;
+        line-height: 11px;
+        animation-name: colorAnimate;
+        animation-duration: 40s;
+        animation-direction: alternate-reverse;
+        animation-iteration-count: infinite;
     }
 }
 
@@ -1006,7 +1006,8 @@ html.lenis {
     flex-wrap: wrap;
 }
 
-.threeExperiment, .p5Experiment {
+.threeExperiment,
+.p5Experiment {
     background-size: 100% 100%; // Stretch the image to fit the button
     background-position: center;
     background-repeat: no-repeat;
@@ -1021,26 +1022,26 @@ html.lenis {
         background-color: #fad105;
         padding: 2px;
         color: #37f502;
-       text-shadow: 1px 1px black;
+        text-shadow: 1px 1px black;
     }
-    
+
     &:nth-of-type(1) {
-        background-image: url("../images/three-experiments/experiment-6.png")
+        background-image: url('../images/three-experiments/experiment-7.png');
     }
     &:nth-of-type(2) {
-        background-image: url("../images/three-experiments/experiment-2.png")
+        background-image: url('../images/three-experiments/experiment-2.png');
     }
     &:nth-of-type(3) {
-        background-image: url("../images/three-experiments/experiment-3.png")
+        background-image: url('../images/three-experiments/experiment-3.png');
     }
     &:nth-of-type(4) {
-        background-image: url("../images/three-experiments/experiment-4.png")
+        background-image: url('../images/three-experiments/experiment-4.png');
     }
     &:nth-of-type(5) {
-        background-image: url("../images/three-experiments/experiment-5.png")
+        background-image: url('../images/three-experiments/experiment-5.png');
     }
     &:nth-of-type(6) {
-        background-image: url("../images/three-experiments/experiment-6.png")
+        background-image: url('../images/three-experiments/experiment-6.png');
     }
 }
 
@@ -1051,11 +1052,11 @@ html.lenis {
         color: #37f502;
         text-shadow: 1px 1px black;
     }
-    
+
     &:nth-of-type(1) {
-        background-image: url("../images/p5-experiments/p5-experiment-1.png")
+        background-image: url('../images/p5-experiments/p5-experiment-1.png');
     }
     &:nth-of-type(2) {
-        background-image: url("../images/p5-experiments/p5-experiment-2.png")
+        background-image: url('../images/p5-experiments/p5-experiment-2.png');
     }
 }
