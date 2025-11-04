@@ -4,12 +4,14 @@ import path from "path";
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+	base: '/',
 	root: path.join(__dirname, "src"),
 	plugins: [
 		glsl(),
 		createHtmlPlugin()
 	],
 	build: {
+		outDir: path.resolve(__dirname, 'dist'),
 		rollupOptions: {
 			input: {
 				main: path.resolve(__dirname, 'src/index.html'),
@@ -21,8 +23,8 @@ export default defineConfig({
 				threeJsExperiment5: path.resolve(__dirname, 'src/three-js-experiment-5/index.html'),
 				threeJsExperiment6: path.resolve(__dirname, 'src/three-js-experiment-6/index.html'),
 				threeJsExperiment7: path.resolve(__dirname, 'src/three-js-experiment-7/index.html'),
-				p5Experiment1: path.resolve(__dirname, 'src/p5-projects/p5-experiment-1/index.html'),
-				p5Experiment2: path.resolve(__dirname, 'src/p5-projects/p5-experiment-2/index.html'),
+				p5Experiment1: path.resolve(__dirname, 'src/p5-experiment-1/index.html'),
+				p5Experiment2: path.resolve(__dirname, 'src/p5-experiment-2/index.html'),
 				cocaCola: path.resolve(__dirname, 'src/cocaColaProject/index.html'),
 			}
 		}
