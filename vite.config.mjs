@@ -10,7 +10,6 @@ export default defineConfig({
 	plugins: [
 		glsl(),
 		createHtmlPlugin(),
-		commonjs(),
 	],
 	build: {
 		outDir: path.resolve(__dirname, 'src/dist'),
