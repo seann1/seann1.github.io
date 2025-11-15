@@ -44,7 +44,6 @@ export default class ExperimentItem extends HTMLElement {
                 <div class="experiment">
                     <div>
                         ${name}
-                        >
                     </div>
                 </div>
             </a>`;
