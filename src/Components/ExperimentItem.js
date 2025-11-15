@@ -47,12 +47,6 @@ export default class ExperimentItem extends HTMLElement {
                     </div>
                 </div>
             </a>`;
-
-        // shadow.innerHTML = `<div>test</div>`;
-
-        // const template = document.createElement('template');
-        // template.innerHTML = ``;
-        // this.appendChild(template.content.cloneNode(true));
     }
 
     // Lifecycle callbacks (optional)
