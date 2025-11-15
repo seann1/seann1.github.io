@@ -1,6 +1,5 @@
 import glsl from 'vite-plugin-glsl';
 import { createHtmlPlugin } from 'vite-plugin-html';
-import commonjs from '@rollup/plugin-commonjs'
 import path from "path";
 import { defineConfig } from 'vite';
 
