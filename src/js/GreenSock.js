@@ -87,22 +87,27 @@ gsap.from('.transition3', {
 const navLinks = document.querySelectorAll('nav ul li div');
 
 navLinks.forEach((link) => {
+    let hoverTween = null;
     const letters = link.querySelectorAll('.nav-link span');
     link.addEventListener('mouseenter', () => {
-        gsap.to(letters, {
+        if (hoverTween) hoverTween.kill();
+        hoverTween = gsap.to(letters, {
             y: -26,
             duration: 0.3,
             stagger: 0.05,
             ease: 'back.out(1.7)',
+            overwrite: 'auto',
         });
     });
 
     link.addEventListener('mouseleave', () => {
-        gsap.to(letters, {
+        if (hoverTween) hoverTween.kill();
+        hoverTween = gsap.to(letters, {
             y: 0,
             duration: 0.3,
             stagger: -0.05,
             ease: 'back.out(1.7)',
+            overwrite: 'auto',
         });
     });
 });

@@ -10,18 +10,17 @@
     --tertiary-color: #{$tertiary-color};
 }
 
-#threeCan {
-    position: fixed;
-    z-index: 2;
-    padding: 0;
-    margin: 0;
+#threeCanWrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 }
 
 #threeCanMain {
-    position: fixed;
-    z-index: -1;
-    padding: 0;
-    margin: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
 }
 
 body {
