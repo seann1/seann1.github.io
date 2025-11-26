@@ -1,6 +1,7 @@
 @import 'fonts';
 @import 'variables';
 @import 'skills';
+@import 'horizontalSection';
 //original main color: #6700ee
 // original accent color: #ff64cb
 
@@ -10,17 +11,31 @@
     --tertiary-color: #{$tertiary-color};
 }
 
-#threeCanWrapper {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
+body {
+    overflow-x: hidden;
 }
 
-#threeCanMain {
-    width: 100%;
-    height: 100%;
+portfolio-item,
+experiment-item,
+skill-item {
     display: block;
+}
+
+//#threeCanWrapper {
+//    position: relative;
+//    width: 100%;
+//    height: 100%;
+//    overflow: hidden;
+//}
+
+#threeCanMain {
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    //display: block;
 }
 
 body {

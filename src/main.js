@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { AsciiEffect } from 'three/examples/jsm/effects/AsciiEffect.js';
+import Lenis from '@studio-freight/lenis';
 const canvasElm = document.getElementById('threeCanMain');
 const wrapper = canvasElm.parentElement;
 const renderer = new THREE.WebGLRenderer({ canvas: canvasElm, alpha: true });
@@ -42,6 +43,19 @@ const startMarquee = (element, repeatCount = 7, step = 1) => {
     animateMarquee();
 };
 
+const lenis = new Lenis({
+    duration: 1.7, // Adjust the duration for smoothness
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Custom easing function
+    smooth: true,
+});
+
+function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+}
+
+requestAnimationFrame(raf);
+
 const camera = new THREE.PerspectiveCamera(
     60, // fov
     canvasElm.getBoundingClientRect().width /
@@ -66,14 +80,14 @@ const asciiChars = ' .:-=+*#%@';
 
 const effect = new AsciiEffect(renderer, asciiChars, {
     invert: false, // false = dark chars on light background (good for your grey)
-    resolution: 0.3,
+    resolution: 0.1,
 });
 
 // Brand colors (from your SCSS)
 // $main-color: #bfbdbd;
 // $secondary-color: #a6034f;
 const asciiEl = effect.domElement;
-asciiEl.style.color = '#a6034f'; // text color: maroon
+asciiEl.style.color = '#6b6b6b'; // text color: maroon
 asciiEl.style.backgroundColor = '#bfbdbd'; // background: grey
 asciiEl.style.position = 'absolute';
 asciiEl.style.top = '0';
@@ -84,7 +98,8 @@ asciiEl.style.width = '100%';
 asciiEl.style.height = '100%';
 asciiEl.style.margin = '0';
 asciiEl.style.pointerEvents = 'none'; // behind content like your canvas
-asciiEl.style.fontSize = '6px';
+asciiEl.style.fontSize = '12px';
+asciiEl.style.zIndex = '-1';
 
 // IMPORTANT: AsciiEffect uses its own DOM element instead of the canvas
 // So append it to the document (instead of using the canvas directly)
@@ -103,22 +118,30 @@ function updateSize() {
     camera.updateProjectionMatrix();
 
     effect.setSize(width, height);
+
+    // Update asciiEl dimensions
+    asciiEl.style.width = `${width}px`;
+    asciiEl.style.height = `${height}px`;
 }
 
 // Initial sizing
 updateSize();
 
 const loader = new GLTFLoader();
-const modelUrl = new URL('./models/sn-logo-8.glb', import.meta.url);
+const modelUrl = new URL('./models/sn-logo-9.glb', import.meta.url);
 let mixer; // <-- animation mixer
 const target = new THREE.Vector3(0, 0, 0);
-const baseCamPos = new THREE.Vector3(0, 0.1, 0.2);
+const baseCamPos = new THREE.Vector3(0.05, 0, 1.2);
 loader.load(
     modelUrl.href,
     (gltf) => {
         const model = gltf.scene;
         scene.add(model);
-
+        model.traverse((child) => {
+            if (child.isDirectionalLight) {
+                child.intensity = 10; // Reduce intensity by 50%
+            }
+        });
         // --- SETUP ANIMATION ---
         if (gltf.animations && gltf.animations.length > 0) {
             mixer = new THREE.AnimationMixer(model);
@@ -138,6 +161,9 @@ loader.load(
         model.position.x += model.position.x - center.x;
         model.position.y += model.position.y - center.y;
         model.position.z += model.position.z - center.z;
+
+        model.rotation.y = Math.PI / 8; // Turn left/right
+        model.rotation.x = Math.PI / 4; // Tilt forward/back
 
         // Compute ideal camera distance based on model size
         const maxDim = Math.max(size.x, size.y, size.z);
@@ -166,14 +192,6 @@ const sizes = {
 };
 
 window.addEventListener('resize', () => {
-    // Update camera
-    camera.aspect = sizes.width / sizes.height;
-    camera.updateProjectionMatrix();
-
-    // Update renderer
-    renderer.setSize(sizes.width, sizes.height);
-    effect.setSize(sizes.width, sizes.height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     updateSize();
 });
 
@@ -193,11 +211,11 @@ function updateCameraFromScroll() {
     const offsetY = maxOffsetY * s;
 
     camera.position.set(
-        baseCamPos.x + offsetX,
-        baseCamPos.y + offsetY,
+        baseCamPos.x - offsetX,
+        baseCamPos.y - offsetY,
         baseCamPos.z
     );
-    camera.lookAt(target);
+    // camera.lookAt(target);
 }
 updateCameraFromScroll();
 window.addEventListener('scroll', () => {

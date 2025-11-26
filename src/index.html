@@ -39,7 +39,12 @@
     </head>
     <body>
         <!--        <canvas id="threeCanMain"></canvas>-->
-        <div class="background"></div>
+        <canvas id="threeCanMain"></canvas>
+        <div class="fullscreen-overlay">
+            <video class="overlay-video" autoplay muted loop playsinline>
+                <source src="/videos/Perlin-Plane-1.mp4" type="video/mp4" />
+            </video>
+        </div>
         <div class="marquee-wrapper" id="marqueeWrapper">
             <div id="marquee">
                 <span>Sean Niesen Software Developer&nbsp;</span>
@@ -55,16 +60,18 @@
                         <li>
                             <div class="nav-link-container">
                                 <a href="#myWork" class="nav-link"
-                                    ><span>M</span><span>y</span><span> </span
-                                    ><span>W</span><span>o</span><span>r</span
+                                    ><span>M</span><span>y</span
+                                    ><span>&nbsp;</span><span>W</span
+                                    ><span>o</span><span>r</span
                                     ><span>k</span></a
                                 >
 
                                 <a
                                     href="#myWork"
                                     class="nav-link nav-link-hidden"
-                                    ><span>M</span><span>y</span><span> </span
-                                    ><span>W</span><span>o</span><span>r</span
+                                    ><span>M</span><span>y</span
+                                    ><span>&nbsp;</span><span>W</span
+                                    ><span>o</span><span>r</span
                                     ><span>k</span></a
                                 >
                             </div>
@@ -72,17 +79,17 @@
                         <li>
                             <div class="nav-link-container">
                                 <a href="#mySkills" class="nav-link"
-                                    ><span>M</span><span>y</span><span> </span
-                                    ><span>S</span><span>k</span><span>i</span
-                                    ><span>l</span><span>l</span
-                                    ><span>s</span></a
+                                    ><span>M</span><span>y</span
+                                    ><span>&nbsp;</span><span>S</span
+                                    ><span>k</span><span>i</span><span>l</span
+                                    ><span>l</span><span>s</span></a
                                 >
 
                                 <a href="#mySkills" class="nav-link"
-                                    ><span>M</span><span>y</span><span> </span
-                                    ><span>S</span><span>k</span><span>i</span
-                                    ><span>l</span><span>l</span
-                                    ><span>s</span></a
+                                    ><span>M</span><span>y</span
+                                    ><span>&nbsp;</span><span>S</span
+                                    ><span>k</span><span>i</span><span>l</span
+                                    ><span>l</span><span>s</span></a
                                 >
                             </div>
                         </li>
@@ -177,7 +184,6 @@
                         <span class="transition5">e</span>
                         <span class="transition5">s</span>
                         <span class="transition5">e</span>
-                        <span class="transition5">e</span>
                         <span class="transition5">n</span>
                     </h1>
                     <div class="meet stagger1">
@@ -185,11 +191,82 @@
                     </div>
                 </div>
             </div>
-            <div id="threeCanWrapper">
-                <canvas id="threeCanMain"></canvas>
-            </div>
+            <!--            <div id="threeCanWrapper">-->
+            <!--                &lt;!&ndash;                <canvas id="threeCanMain"></canvas>&ndash;&gt;-->
+            <!--            </div>-->
             <div class="resume-link">
                 <a href="/Resume.pdf" target="_blank">Résumé</a>
+            </div>
+        </div>
+        <div class="horizontal-section">
+            <div class="cards-wrapper">
+                <div class="card">
+                    <video
+                        class="card-bg-video"
+                        autoplay
+                        muted
+                        loop
+                        playsinline
+                    >
+                        <source
+                            src="/videos/Displacedrips.0.mp4"
+                            type="video/mp4"
+                        />
+                    </video>
+                    <!-- The Content (Text) -->
+                    <div class="card-content">I am a software developer</div>
+                </div>
+                <div class="card">
+                    <video
+                        class="card-bg-video"
+                        autoplay
+                        muted
+                        loop
+                        playsinline
+                    >
+                        <source
+                            src="/videos/Reactiondiffusion-web.mp4"
+                            type="video/mp4"
+                        />
+                    </video>
+                    <div class="card-content">
+                        I work with motion graphics, 3d animation, interactive
+                        design and web technologies
+                    </div>
+                </div>
+                <div class="card">
+                    <video
+                        class="card-bg-video"
+                        autoplay
+                        muted
+                        loop
+                        playsinline
+                    >
+                        <source
+                            src="/videos/instancing-4.mp4"
+                            type="video/mp4"
+                        />
+                    </video>
+                    <div class="card-content">
+                        I have three years of experience at a health insurance
+                        startup
+                    </div>
+                </div>
+                <div class="card">
+                    <video
+                        class="card-bg-video"
+                        autoplay
+                        muted
+                        loop
+                        playsinline
+                    >
+                        <source src="/videos/Pop-1.mp4" type="video/mp4" />
+                    </video>
+                    <div class="card-content">
+                        Please take a look at some examples of my work
+                    </div>
+                </div>
+                <!-- etc -->
             </div>
         </div>
         <section class="experimentContainer">
