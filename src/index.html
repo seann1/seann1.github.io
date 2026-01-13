@@ -41,8 +41,24 @@
         <!--        <canvas id="threeCanMain"></canvas>-->
         <canvas id="threeCanMain"></canvas>
         <div class="fullscreen-overlay">
-            <video class="overlay-video" autoplay muted loop playsinline>
-                <source src="/videos/Perlin-Plane-1.mp4" type="video/mp4" />
+            <!--            <video class="overlay-video" autoplay muted loop playsinline>-->
+            <!--                <source src="/videos/Perlin-Plane-1.mp4" type="video/mp4" />-->
+            <!--            </video>-->
+            <video
+                id="heroVideo"
+                class="overlay-video"
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="none"
+                data-priority="high"
+            >
+                <!--                <source data-src="/videos/Perlin-Plane-1.webm" type="video/webm" />-->
+                <source
+                    data-src="/videos/Perlin-Plane-1.mp4"
+                    type="video/mp4"
+                />
             </video>
         </div>
         <div class="marquee-wrapper" id="marqueeWrapper">
@@ -207,9 +223,11 @@
                         muted
                         loop
                         playsinline
+                        preload="none"
+                        poster="/images/video-posters/displaceDrips.png"
                     >
                         <source
-                            src="/videos/displaceDrips.mp4"
+                            data-src="/videos/displaceDrips.mp4"
                             type="video/mp4"
                         />
                     </video>
@@ -223,9 +241,11 @@
                         muted
                         loop
                         playsinline
+                        preload="none"
+                        poster="/images/video-posters/reactionDiffusion.png"
                     >
                         <source
-                            src="/videos/reactionDiffusion.mp4"
+                            data-src="/videos/reactionDiffusion.mp4"
                             type="video/mp4"
                         />
                     </video>
@@ -241,8 +261,13 @@
                         muted
                         loop
                         playsinline
+                        preload="none"
+                        poster="/images/video-posters/instancing.png"
                     >
-                        <source src="/videos/instancing.mp4" type="video/mp4" />
+                        <source
+                            data-src="/videos/instancing.mp4"
+                            type="video/mp4"
+                        />
                     </video>
                     <div class="card-content">
                         I have three years of experience at a health insurance
@@ -256,8 +281,10 @@
                         muted
                         loop
                         playsinline
+                        preload="none"
+                        poster="/images/video-posters/pops.png"
                     >
-                        <source src="/videos/pops.mp4" type="video/mp4" />
+                        <source data-src="/videos/pops.mp4" type="video/mp4" />
                     </video>
                     <div class="card-content">
                         Please take a look at some examples of my work
@@ -544,6 +571,7 @@
         <div id="loading-screen">
             <div class="spinner"></div>
         </div>
+        <script src="js/videoLoad.js" type="module"></script>
         <script src="main.js" type="module"></script>
         <script src="js/GreenSock.js" type="module"></script>
     </body>
