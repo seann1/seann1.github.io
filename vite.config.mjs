@@ -10,6 +10,11 @@ export default defineConfig({
 		glsl(),
 		createHtmlPlugin(),
 	],
+	server: {
+		watch: {
+			usePolling: true
+		}
+	},
 	build: {
 		outDir: path.resolve(__dirname, 'src/dist'),
 		rollupOptions: {

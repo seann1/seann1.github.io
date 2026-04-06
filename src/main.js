@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { AsciiEffect } from 'three/examples/jsm/effects/AsciiEffect.js';
 import Lenis from '@studio-freight/lenis';
+
 const canvasElm = document.getElementById('threeCanMain');
 const wrapper = canvasElm.parentElement;
 const renderer = new THREE.WebGLRenderer({ canvas: canvasElm, alpha: true });
@@ -10,6 +11,10 @@ import PortfolioItem from './Components/PortfolioItem';
 import ExperimentItem from './Components/ExperimentItem';
 import SkillItem from './Components/SkillItem';
 
+import vertexShader from './shaders/snLogo/vertex.glsl?raw';
+import fragmentShader from './shaders/snLogo/fragment.glsl?raw';
+
+let model;
 /**
  * Initialize a marquee effect for an HTML element.
  *
@@ -64,6 +69,16 @@ const camera = new THREE.PerspectiveCamera(
     1000 // far
 );
 
+// Add this near the top, after your scene/camera setup
+let mouse = { x: 0, y: 0 };
+let targetRotation = { x: 0, y: 0 };
+
+window.addEventListener('mousemove', (e) => {
+    // Normalize to -1 .. 1
+    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = (e.clientY / window.innerHeight) * 2 - 1;
+});
+
 window.onload = function () {
     setTimeout(() => {
         document.getElementById('loading-screen').style.display = 'none';
@@ -79,32 +94,16 @@ window.onload = function () {
 const asciiChars = ' .:-=+*#%@';
 
 const effect = new AsciiEffect(renderer, asciiChars, {
-    invert: false, // false = dark chars on light background (good for your grey)
+    // invert: true, // false = dark chars on light background (good for your grey)
+    // color: true,
+    // alpha: true,
     resolution: 0.1,
 });
-
-// Brand colors (from your SCSS)
-// $main-color: #bfbdbd;
-// $secondary-color: #a6034f;
-const asciiEl = effect.domElement;
-asciiEl.style.color = '#6b6b6b'; // text color: maroon
-asciiEl.style.backgroundColor = '#bfbdbd'; // background: grey
-asciiEl.style.position = 'absolute';
-asciiEl.style.top = '0';
-asciiEl.style.left = '0';
-asciiEl.style.right = '0';
-asciiEl.style.bottom = '0';
-asciiEl.style.width = '100%';
-asciiEl.style.height = '100%';
-asciiEl.style.margin = '0';
-asciiEl.style.pointerEvents = 'none'; // behind content like your canvas
-asciiEl.style.fontSize = '12px';
-asciiEl.style.zIndex = '-1';
 
 // IMPORTANT: AsciiEffect uses its own DOM element instead of the canvas
 // So append it to the document (instead of using the canvas directly)
 // document.body.appendChild(effect.domElement);
-wrapper.appendChild(effect.domElement);
+// wrapper.appendChild(effect.domElement);
 
 function updateSize() {
     const rect = canvasElm.getBoundingClientRect();
@@ -118,52 +117,54 @@ function updateSize() {
     camera.updateProjectionMatrix();
 
     effect.setSize(width, height);
-
-    // Update asciiEl dimensions
-    asciiEl.style.width = `${width}px`;
-    asciiEl.style.height = `${height}px`;
 }
 
 // Initial sizing
 updateSize();
 
+const shaderMaterial = new THREE.ShaderMaterial({
+    vertexShader,
+    fragmentShader,
+    uniforms: {
+        // 0xa6034f
+        uBaseColor: { value: new THREE.Color(0xa6034f) },
+        uLightDir: { value: new THREE.Vector3(5, 5, 5).normalize() },
+        uLightColor: { value: new THREE.Color(1, 1, 1) },
+        uRimStrength: { value: 1.5 },
+        uTime: { value: 0 },
+        uNoiseStrength: { value: 0.05 }, // small Z displacement
+        uNoiseFrequency: { value: 20.0 },
+        uNoiseFrequency2: { value: 5.0 },
+    },
+});
+
 const loader = new GLTFLoader();
-const modelUrl = new URL('./models/sn-logo-9.glb', import.meta.url);
+const modelUrl = new URL('./models/sn-logo-remesh-7.glb', import.meta.url);
 let mixer; // <-- animation mixer
 const target = new THREE.Vector3(0, 0, 0);
 const baseCamPos = new THREE.Vector3(0.05, 0, 1.2);
+
 loader.load(
     modelUrl.href,
     (gltf) => {
-        const model = gltf.scene;
+        model = gltf.scene;
         scene.add(model);
+
+        mixer = new THREE.AnimationMixer(model);
         model.traverse((child) => {
-            if (child.isDirectionalLight) {
-                child.intensity = 10; // Reduce intensity by 50%
+            console.log(child);
+            if (child.isMesh) {
+                console.log(child);
+                child.material = shaderMaterial;
+                child.rotation.x = 0;
             }
         });
-        // --- SETUP ANIMATION ---
-        if (gltf.animations && gltf.animations.length > 0) {
-            mixer = new THREE.AnimationMixer(model);
-            // Play the first animation clip
-            const action = mixer.clipAction(gltf.animations[0]);
-            action.play();
-        }
-
         // --- Frame the model automatically ---
         const box = new THREE.Box3().setFromObject(model);
         const size = new THREE.Vector3();
         const center = new THREE.Vector3();
         box.getSize(size);
         box.getCenter(center);
-
-        // Move model so its center is at the origin
-        model.position.x += model.position.x - center.x;
-        model.position.y += model.position.y - center.y;
-        model.position.z += model.position.z - center.z;
-
-        model.rotation.y = Math.PI / 8; // Turn left/right
-        model.rotation.x = Math.PI / 4; // Tilt forward/back
 
         // Compute ideal camera distance based on model size
         const maxDim = Math.max(size.x, size.y, size.z);
@@ -181,6 +182,25 @@ loader.load(
 
 // const canvas = document.getElementById('threeCan');
 const scene = new THREE.Scene();
+
+// Ambient light - base illumination so nothing is pitch black
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+scene.add(ambientLight);
+
+// Directional light - main light source (like the sun)
+const dirLight = new THREE.DirectionalLight(0xffffff, 2);
+dirLight.position.set(5, 5, 5);
+scene.add(dirLight);
+
+// Optional: fill light from the opposite side to soften shadows
+const fillLight = new THREE.DirectionalLight(0xffffff, 0.5);
+fillLight.position.set(-5, -2, -5);
+scene.add(fillLight);
+
+// Optional: point light for a localized glow effect
+const pointLight = new THREE.PointLight(0xa6034f, 2, 10); // using your brand color
+pointLight.position.set(0, 2, 2);
+scene.add(pointLight);
 
 camera.position.set(baseCamPos); // Basic starting position
 scene.add(camera);
@@ -215,24 +235,58 @@ function updateCameraFromScroll() {
         baseCamPos.y - offsetY,
         baseCamPos.z
     );
-    // camera.lookAt(target);
+    // Rotate model based on scroll
+    if (model) {
+        const maxSpin = Math.PI * 2; // full 360° spin over the full scroll range
+        model.userData.scrollRotationY = s * maxSpin;
+    }
 }
 updateCameraFromScroll();
 window.addEventListener('scroll', () => {
     updateCameraFromScroll();
 });
 
+// const clock = new THREE.Clock();
+
 function animate() {
     requestAnimationFrame(animate);
+    const elapsedTime = clock.getElapsedTime();
+    shaderMaterial.uniforms.uTime.value = elapsedTime;
 
-    // Optional: small rotation to show movement
-    // scene.rotation.y += 0.003;
+    // Oscillate between 10 and 30
+    shaderMaterial.uniforms.uNoiseFrequency.value =
+        20.0 + Math.sin(elapsedTime * 0.1) * 20.0;
+
     const delta = clock.getDelta();
     if (mixer) {
         mixer.update(delta);
     }
 
-    // renderer.render(scene, camera);
-    effect.render(scene, camera);
+    // Smoothly lerp toward mouse position
+    if (model) {
+        const tiltStrength = 0.9; // max radians of tilt
+        const lerpSpeed = 0.05; // 0 = no movement, 1 = instant
+
+        targetRotation.x = mouse.y * tiltStrength;
+        targetRotation.y = mouse.x * tiltStrength;
+
+        const scrollY = model.userData.scrollRotationY || 0;
+
+        // Lerp current rotation toward target
+        // Keep your existing Math.PI / 2 X offset by adding to it
+        model.rotation.x = THREE.MathUtils.lerp(
+            model.rotation.x,
+            Math.PI / 2 + targetRotation.x,
+            lerpSpeed
+        );
+        model.rotation.y = THREE.MathUtils.lerp(
+            model.rotation.y,
+            targetRotation.y,
+            lerpSpeed
+        );
+        model.rotation.z = scrollY * 5;
+    }
+    renderer.render(scene, camera);
+    // effect.render(scene, camera);
 }
 animate();
