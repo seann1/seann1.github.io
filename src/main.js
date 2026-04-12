@@ -3,6 +3,8 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { AsciiEffect } from 'three/examples/jsm/effects/AsciiEffect.js';
 import Lenis from '@studio-freight/lenis';
 
+import { initVimeoSketch } from './js/videoSketch.js';
+
 const canvasElm = document.getElementById('threeCanMain');
 const wrapper = canvasElm.parentElement;
 const renderer = new THREE.WebGLRenderer({ canvas: canvasElm, alpha: true });
@@ -13,6 +15,10 @@ import SkillItem from './Components/SkillItem';
 
 import vertexShader from './shaders/snLogo/vertex.glsl?raw';
 import fragmentShader from './shaders/snLogo/fragment.glsl?raw';
+import particleVertexShader from './shaders/snParticles/vertex.glsl?raw';
+import particleFragmentShader from './shaders/snParticles/fragment.glsl?raw';
+
+initVimeoSketch();
 
 let model;
 /**
@@ -206,6 +212,59 @@ camera.position.set(baseCamPos); // Basic starting position
 scene.add(camera);
 const clock = new THREE.Clock();
 
+// --- Firefly Particle System ---
+const FIREFLY_COUNT = 150;
+
+const fireflyGeo = new THREE.BufferGeometry();
+const fireflyPositions = new Float32Array(FIREFLY_COUNT * 3);
+const fireflySeeds = new Float32Array(FIREFLY_COUNT * 3); // random offsets per particle
+
+for (let i = 0; i < FIREFLY_COUNT; i++) {
+    // Spread particles in a volume slightly in front of the logo (z ~ 0.2 to 0.6)
+    fireflyPositions[i * 3 + 0] = (Math.random() - 0.5) * 0.6; // x: ±0.4
+    fireflyPositions[i * 3 + 1] = (Math.random() - 0.5) * 0.6 + 0.2; // y: ±0.3
+    fireflyPositions[i * 3 + 2] = Math.random() * 0.4 + 0.15; // z: 0.15 – 0.55
+
+    // Unique seed per particle for staggered animation
+    fireflySeeds[i * 3 + 0] = Math.random() * Math.PI * 2; // phase offset
+    fireflySeeds[i * 3 + 1] = 0.4 + Math.random() * 0.5; // rise speed multiplier
+    fireflySeeds[i * 3 + 2] = Math.random() * Math.PI * 2; // drift phase
+}
+
+fireflyGeo.setAttribute(
+    'position',
+    new THREE.BufferAttribute(fireflyPositions, 3)
+);
+fireflyGeo.setAttribute('aSeed', new THREE.BufferAttribute(fireflySeeds, 3));
+
+const fireflyMaterial = new THREE.ShaderMaterial({
+    transparent: true,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+    uniforms: {
+        uTime: { value: 0 },
+        uSize: { value: 18.0 * window.devicePixelRatio },
+        uMouse: { value: new THREE.Vector2(0, 0) },
+    },
+    vertexShader: particleVertexShader,
+    fragmentShader: particleFragmentShader,
+});
+
+// Track mouse only on non-touch devices
+const smoothMouse = new THREE.Vector2(0, 0);
+const targetMouse = new THREE.Vector2(0, 0);
+
+if (window.matchMedia('(pointer: fine)').matches) {
+    window.addEventListener('mousemove', (e) => {
+        // Convert screen coords to world-space XZ plane coords
+        targetMouse.x = (e.clientX / window.innerWidth - 0.5) * 2.0;
+        targetMouse.y = (e.clientY / window.innerHeight - 0.5) * -2.0;
+    });
+}
+
+const fireflies = new THREE.Points(fireflyGeo, fireflyMaterial);
+scene.add(fireflies);
+/// END FIREFLIES
 const sizes = {
     width: canvasElm.getBoundingClientRect().width,
     height: canvasElm.getBoundingClientRect().height,
@@ -252,6 +311,11 @@ function animate() {
     requestAnimationFrame(animate);
     const elapsedTime = clock.getElapsedTime();
     shaderMaterial.uniforms.uTime.value = elapsedTime;
+    fireflyMaterial.uniforms.uTime.value = elapsedTime;
+
+    // Lerp for smooth lag effect
+    smoothMouse.lerp(targetMouse, 0.005);
+    fireflyMaterial.uniforms.uMouse.value.copy(smoothMouse);
 
     // Oscillate between 10 and 30
     shaderMaterial.uniforms.uNoiseFrequency.value =

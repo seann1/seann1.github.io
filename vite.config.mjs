@@ -7,7 +7,10 @@ export default defineConfig({
 	base: '/',
 	root: path.join(__dirname, "src"),
 	plugins: [
-		glsl(),
+		glsl({
+			include: ['**/*.glsl', '**/*.vert', '**/*.frag'],
+			root: '/',  // or try: defaultExtension: 'glsl'
+		}),
 		createHtmlPlugin(),
 	],
 	server: {
