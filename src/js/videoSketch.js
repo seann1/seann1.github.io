@@ -7,6 +7,8 @@ const sketch = (p) => {
 
     let influenceGrid = [];
     let cols, rows;
+    let touchX = -1000;
+    let touchY = -1000;
 
     const RAINBOW2 = [
         [148, 0, 211], // violet  @ 0.0
@@ -60,11 +62,38 @@ const sketch = (p) => {
         canvas.style('position', 'fixed');
         canvas.style('top', '0');
         canvas.style('left', '0');
-        // canvas.style('width', '100vw');
-        // canvas.style('height', '100vh');
         canvas.style('z-index', '-100');
         canvas.style('pointer-events', 'none');
         initGrid();
+
+        // Listen on document so pointer-events:none doesn't block us
+        // passive:true lets the browser still handle scrolling natively
+        document.addEventListener(
+            'touchmove',
+            (e) => {
+                touchX = e.touches[0].clientX;
+                touchY = e.touches[0].clientY;
+            },
+            { passive: true }
+        );
+
+        document.addEventListener(
+            'touchstart',
+            (e) => {
+                touchX = e.touches[0].clientX;
+                touchY = e.touches[0].clientY;
+            },
+            { passive: true }
+        );
+
+        document.addEventListener(
+            'touchend',
+            () => {
+                touchX = -1000;
+                touchY = -1000;
+            },
+            { passive: true }
+        );
     };
 
     p.draw = () => {
@@ -73,8 +102,12 @@ const sketch = (p) => {
         cols = Math.ceil(p.width / GRID_SIZE) + 1;
         rows = Math.ceil(p.height / GRID_SIZE) + 1;
 
-        const mx = p.mouseX ?? 0;
-        const my = p.mouseY ?? 0;
+        // Use stored touch coords, fall back to mouse
+        const mx = touchX !== -1000 ? touchX : p.mouseX;
+        const my = touchY !== -1000 ? touchY : p.mouseY;
+
+        // const mx = p.mouseX ?? 0;
+        // const my = p.mouseY ?? 0;
         const maxInfluenceRadius = 200;
 
         for (let row = 0; row < rows; row++) {
@@ -117,12 +150,6 @@ const sketch = (p) => {
                 const lx = cx - r,
                     ly = cy;
 
-                // p.noStroke();
-                // p.fill(
-                //     p.lerp(191, 40, influence),
-                //     p.lerp(189, 40, influence),
-                //     p.lerp(189, 40, influence)
-                // );
                 p.beginShape();
                 p.vertex(tx, ty);
                 p.bezierVertex(tx + c, ty, rx, ry - c, rx, ry);
