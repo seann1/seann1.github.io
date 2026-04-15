@@ -79,11 +79,59 @@ const camera = new THREE.PerspectiveCamera(
 let mouse = { x: 0, y: 0 };
 let targetRotation = { x: 0, y: 0 };
 
-window.addEventListener('mousemove', (e) => {
-    // Normalize to -1 .. 1
-    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = (e.clientY / window.innerHeight) * 2 - 1;
-});
+const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+
+if (!isTouchDevice) {
+    // Desktop: drive tilt with mouse
+    window.addEventListener('mousemove', (e) => {
+        // Normalize to -1 .. 1
+        mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = (e.clientY / window.innerHeight) * 2 - 1;
+    });
+} else {
+    // Mobile: drive tilt with gyroscope
+    const TILT_RANGE = 30; // degrees of device tilt that map to full ±1
+
+    const attachGyroscope = () => {
+        window.addEventListener('deviceorientation', (e) => {
+            // gamma = left/right tilt (-90 to 90), beta = front/back tilt (-180 to 180)
+            const gamma = e.gamma ?? 0; // left/right → X axis
+            const beta = e.beta ?? 0; // front/back → Y axis
+
+            mouse.x = Math.max(-1, Math.min(1, gamma / TILT_RANGE));
+            mouse.y = Math.max(-1, Math.min(1, (beta - 45) / TILT_RANGE)); // offset by 45° for natural hold angle
+        });
+    };
+
+    // iOS 13+ requires a user-gesture permission request
+    if (
+        typeof DeviceOrientationEvent !== 'undefined' &&
+        typeof DeviceOrientationEvent.requestPermission === 'function'
+    ) {
+        // Create a small tap-to-enable button that auto-dismisses
+        const btn = document.createElement('button');
+        btn.textContent = 'Enable Motion';
+        btn.style.cssText = `
+            position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+            z-index: 9999; padding: 10px 22px; border-radius: 999px;
+            background: rgba(0,0,0,0.7); color: #fff; border: none;
+            font-size: 14px; cursor: pointer;
+        `;
+        document.body.appendChild(btn);
+
+        btn.addEventListener('click', () => {
+            DeviceOrientationEvent.requestPermission()
+                .then((state) => {
+                    if (state === 'granted') attachGyroscope();
+                })
+                .catch(console.error)
+                .finally(() => btn.remove());
+        });
+    } else {
+        // Android / older iOS — no permission needed
+        attachGyroscope();
+    }
+}
 
 window.onload = function () {
     setTimeout(() => {

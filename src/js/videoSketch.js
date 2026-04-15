@@ -7,17 +7,9 @@ const sketch = (p) => {
 
     let influenceGrid = [];
     let cols, rows;
-    let touchX = -1000;
-    let touchY = -1000;
-
-    const RAINBOW2 = [
-        [148, 0, 211], // violet  @ 0.0
-        [0, 0, 255], // blue    @ 0.2
-        [0, 255, 255], // cyan    @ 0.4
-        [0, 255, 0], // green   @ 0.6
-        [255, 255, 0], // yellow  @ 0.8
-        [255, 0, 0], // red     @ 1.0
-    ];
+    let touchX = 0;
+    let touchY = 0;
+    let isTouching = false;
 
     const RAINBOW = [
         [68, 1, 84], // darkest purple @ 0.00
@@ -25,11 +17,6 @@ const sketch = (p) => {
         [33, 145, 140], // teal           @ 0.50
         [94, 201, 98], // light green    @ 0.75
         [253, 231, 37], // yellow         @ 1.00
-    ];
-
-    const RAINBOW3 = [
-        [166, 3, 79], // $secondary-color @ 0.0 (low influence)
-        [183, 255, 0], // $tertiary-color  @ 1.0 (high influence)
     ];
 
     const rainbowColor = (t) => {
@@ -73,6 +60,7 @@ const sketch = (p) => {
             (e) => {
                 touchX = e.touches[0].clientX;
                 touchY = e.touches[0].clientY;
+                isTouching = true;
             },
             { passive: true }
         );
@@ -82,6 +70,7 @@ const sketch = (p) => {
             (e) => {
                 touchX = e.touches[0].clientX;
                 touchY = e.touches[0].clientY;
+                isTouching = true;
             },
             { passive: true }
         );
@@ -89,8 +78,7 @@ const sketch = (p) => {
         document.addEventListener(
             'touchend',
             () => {
-                touchX = -1000;
-                touchY = -1000;
+                isTouching = false;
             },
             { passive: true }
         );
@@ -103,11 +91,9 @@ const sketch = (p) => {
         rows = Math.ceil(p.height / GRID_SIZE) + 1;
 
         // Use stored touch coords, fall back to mouse
-        const mx = touchX !== -1000 ? touchX : p.mouseX;
-        const my = touchY !== -1000 ? touchY : p.mouseY;
+        const mx = isTouching ? touchX : p.mouseX;
+        const my = isTouching ? touchY : p.mouseY;
 
-        // const mx = p.mouseX ?? 0;
-        // const my = p.mouseY ?? 0;
         const maxInfluenceRadius = 200;
 
         for (let row = 0; row < rows; row++) {

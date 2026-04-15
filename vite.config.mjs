@@ -1,5 +1,6 @@
 import glsl from 'vite-plugin-glsl';
 import { createHtmlPlugin } from 'vite-plugin-html';
+import {qrcode} from 'vite-plugin-qrcode'
 import path from "path";
 import { defineConfig } from 'vite';
 
@@ -12,8 +13,10 @@ export default defineConfig({
 			root: '/',  // or try: defaultExtension: 'glsl'
 		}),
 		createHtmlPlugin(),
+		qrcode()
 	],
 	server: {
+		host: '0.0.0.0',
 		watch: {
 			usePolling: true
 		}
