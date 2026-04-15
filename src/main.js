@@ -1,12 +1,10 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { AsciiEffect } from 'three/examples/jsm/effects/AsciiEffect.js';
 import Lenis from '@studio-freight/lenis';
 
 import { initVimeoSketch } from './js/videoSketch.js';
 
 const canvasElm = document.getElementById('threeCanMain');
-const wrapper = canvasElm.parentElement;
 const renderer = new THREE.WebGLRenderer({ canvas: canvasElm, alpha: true });
 import SVGComponent from './Components/SVGComponent';
 import PortfolioItem from './Components/PortfolioItem';
@@ -108,6 +106,7 @@ if (!isTouchDevice) {
         typeof DeviceOrientationEvent !== 'undefined' &&
         typeof DeviceOrientationEvent.requestPermission === 'function'
     ) {
+        console.log('button');
         // Create a small tap-to-enable button that auto-dismisses
         const btn = document.createElement('button');
         btn.textContent = 'Enable Motion';
@@ -145,20 +144,6 @@ window.onload = function () {
 
 // ASCII --------------------------------------------------------
 
-const asciiChars = ' .:-=+*#%@';
-
-const effect = new AsciiEffect(renderer, asciiChars, {
-    // invert: true, // false = dark chars on light background (good for your grey)
-    // color: true,
-    // alpha: true,
-    resolution: 0.1,
-});
-
-// IMPORTANT: AsciiEffect uses its own DOM element instead of the canvas
-// So append it to the document (instead of using the canvas directly)
-// document.body.appendChild(effect.domElement);
-// wrapper.appendChild(effect.domElement);
-
 function updateSize() {
     const rect = canvasElm.getBoundingClientRect();
     const width = rect.width;
@@ -169,8 +154,6 @@ function updateSize() {
 
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
-
-    effect.setSize(width, height);
 }
 
 // Initial sizing
@@ -206,9 +189,7 @@ loader.load(
 
         mixer = new THREE.AnimationMixer(model);
         model.traverse((child) => {
-            console.log(child);
             if (child.isMesh) {
-                console.log(child);
                 child.material = shaderMaterial;
                 child.rotation.x = 0;
             }

@@ -11,6 +11,10 @@ const sketch = (p) => {
     let touchY = 0;
     let isTouching = false;
 
+    let pointerX = 0;
+    let pointerY = 0;
+    let pointerActive = false;
+
     const RAINBOW = [
         [68, 1, 84], // darkest purple @ 0.00
         [59, 82, 139], // dark blue      @ 0.25
@@ -58,9 +62,9 @@ const sketch = (p) => {
         document.addEventListener(
             'touchmove',
             (e) => {
-                touchX = e.touches[0].clientX;
-                touchY = e.touches[0].clientY;
-                isTouching = true;
+                pointerX = e.touches[0].clientX;
+                pointerY = e.touches[0].clientY;
+                pointerActive = true;
             },
             { passive: true }
         );
@@ -68,9 +72,9 @@ const sketch = (p) => {
         document.addEventListener(
             'touchstart',
             (e) => {
-                touchX = e.touches[0].clientX;
-                touchY = e.touches[0].clientY;
-                isTouching = true;
+                pointerX = e.touches[0].clientX;
+                pointerY = e.touches[0].clientY;
+                pointerActive = true;
             },
             { passive: true }
         );
@@ -78,10 +82,31 @@ const sketch = (p) => {
         document.addEventListener(
             'touchend',
             () => {
-                isTouching = false;
+                pointerActive = false;
             },
             { passive: true }
         );
+        // Mouse listeners on document so pointer-events:none doesn't block them
+        document.addEventListener('mousemove', (e) => {
+            pointerX = e.clientX;
+            pointerY = e.clientY;
+            pointerActive = true;
+        });
+
+        document.addEventListener('mousedown', (e) => {
+            pointerX = e.clientX;
+            pointerY = e.clientY;
+            pointerActive = true;
+        });
+
+        document.addEventListener('mouseup', () => {
+            pointerActive = false;
+        });
+
+        // Optional: clear when leaving the window
+        window.addEventListener('blur', () => {
+            pointerActive = false;
+        });
     };
 
     p.draw = () => {
@@ -90,11 +115,15 @@ const sketch = (p) => {
         cols = Math.ceil(p.width / GRID_SIZE) + 1;
         rows = Math.ceil(p.height / GRID_SIZE) + 1;
 
-        // Use stored touch coords, fall back to mouse
-        const mx = isTouching ? touchX : p.mouseX;
-        const my = isTouching ? touchY : p.mouseY;
+        // Use stored pointer coords when active, fall back to p5 mouse coords
+        const mx = pointerActive ? pointerX : p.mouseX;
+        const my = pointerActive ? pointerY : p.mouseY;
 
         const maxInfluenceRadius = 200;
+
+        // Parameters for circle sizing
+        const MIN_RADIUS = 1; // smallest circle when far
+        const MAX_RADIUS = GRID_SIZE * 0.6;
 
         for (let row = 0; row < rows; row++) {
             for (let col = 0; col < cols; col++) {
@@ -123,26 +152,10 @@ const sketch = (p) => {
                     p.lerp(189, bb, influence)
                 );
 
-                const bow = p.lerp(-0.4, 1, influence);
-                const r = GRID_SIZE * 0.5;
-                const c = bow * r;
+                // radius gets smaller as distance increases (influence 0 -> MIN_RADIUS)
+                const radius = p.lerp(MIN_RADIUS, MAX_RADIUS, influence);
 
-                const tx = cx,
-                    ty = cy - r;
-                const rx = cx + r,
-                    ry = cy;
-                const bx = cx,
-                    by = cy + r;
-                const lx = cx - r,
-                    ly = cy;
-
-                p.beginShape();
-                p.vertex(tx, ty);
-                p.bezierVertex(tx + c, ty, rx, ry - c, rx, ry);
-                p.bezierVertex(rx, ry + c, bx + c, by, bx, by);
-                p.bezierVertex(bx - c, by, lx, ly + c, lx, ly);
-                p.bezierVertex(lx, ly - c, tx - c, ty, tx, ty);
-                p.endShape(p.CLOSE);
+                p.ellipse(cx, cy, radius * 2, radius * 2);
             }
         }
     };
