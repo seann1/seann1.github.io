@@ -16,7 +16,14 @@ import fragmentShader from './shaders/snLogo/fragment.glsl?raw';
 import particleVertexShader from './shaders/snParticles/vertex.glsl?raw';
 import particleFragmentShader from './shaders/snParticles/fragment.glsl?raw';
 
-initVimeoSketch();
+let threeFraction = 0;
+let videoFraction = 0;
+
+initVimeoSketch().then(() => {
+    videoFraction = 1;
+    updateCombinedProgress();
+    console.log('sketchLoaded');
+});
 
 let model;
 /**
@@ -174,8 +181,47 @@ const shaderMaterial = new THREE.ShaderMaterial({
         uNoiseFrequency2: { value: 5.0 },
     },
 });
+const ui = document.getElementById('loader-ui');
+const loaderPercent = document.getElementById('loader-percent');
+///////////////
+function setProgress(pct) {
+    ui.style.width = pct + '%';
+    loaderPercent.innerText = pct + '%';
+    // ui.percent.textContent = pct + '%';
+}
 
-const loader = new GLTFLoader();
+function updateCombinedProgress() {
+    const pct = Math.round(threeFraction * 50 + videoFraction * 50);
+    setProgress(pct);
+    if (pct >= 100) {
+        setTimeout(() => {
+            document.getElementById('loading-screen').style.display = 'none';
+        }, 300);
+    }
+}
+// Create a LoadingManager and wire it to the UI
+const manager = new THREE.LoadingManager();
+manager.onStart = (url, itemsLoaded, itemsTotal) => {
+    console.log(itemsLoaded, itemsTotal);
+    threeFraction = itemsTotal ? itemsLoaded / itemsTotal : 0;
+    updateCombinedProgress();
+};
+manager.onProgress = (url, itemsLoaded, itemsTotal) => {
+    threeFraction = itemsTotal ? itemsLoaded / itemsTotal : 0;
+    updateCombinedProgress();
+};
+manager.onLoad = () => {
+    threeFraction = 1;
+    updateCombinedProgress();
+};
+manager.onError = (url) => {
+    console.error('Loading error:', url);
+    // hide UI on fatal error to avoid blocking the app
+    // hideProgressUI();
+};
+///////////////////
+
+const loader = new GLTFLoader(manager);
 const modelUrl = new URL('./models/sn-logo-remesh-7.glb', import.meta.url);
 let mixer; // <-- animation mixer
 const target = new THREE.Vector3(0, 0, 0);
@@ -294,10 +340,6 @@ if (window.matchMedia('(pointer: fine)').matches) {
 const fireflies = new THREE.Points(fireflyGeo, fireflyMaterial);
 scene.add(fireflies);
 /// END FIREFLIES
-const sizes = {
-    width: canvasElm.getBoundingClientRect().width,
-    height: canvasElm.getBoundingClientRect().height,
-};
 
 window.addEventListener('resize', () => {
     updateSize();

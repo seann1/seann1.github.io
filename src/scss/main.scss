@@ -633,3 +633,35 @@ html.lenis {
     justify-content: center;
     flex-wrap: wrap;
 }
+
+.loaderContainer {
+    position: fixed;
+    top: calc(50% - 5px);
+    left: calc(50% - 100px);
+    width: 200px;
+    z-index: 9999;
+}
+#loader-track {
+    height: 10px;
+    background: rgba(183, 255, 0, 0.1);
+    border-radius: 999px;
+    overflow: hidden;
+}
+#loader-ui {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(
+        90deg,
+        rgb(68, 1, 84),
+        rgb(59, 82, 139),
+        rgb(33, 145, 140),
+        rgb(94, 201, 98),
+        rgb(253, 231, 37)
+    );
+    transition: width 0.2s ease;
+}
+#loader-percent {
+    color: $tertiary-color;
+    text-align: center;
+    margin-top: 8px;
+}
