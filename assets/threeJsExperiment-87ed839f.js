@@ -1,386 +1,386 @@
-import{ac as yo,ah as xo,z as wo,a9 as To,ai as So,V as fs,g as bo,aa as Nt,aj as bs,u as jn,M as $i,ak as Co,A as Ao,ag as No}from"./three.module-873ba857.js";import{L as ko}from"./lenis-2321d860.js";import{g as xi}from"./index-134cb283.js";var Xi=`uniform float time;
-uniform float uAudioLevel;
-uniform vec3 uPosition;
-varying float vElevation;
-varying float audioLevelAndElevation;
+import{ac as yo,ah as xo,z as wo,a9 as To,ai as So,V as fs,g as bo,aa as Nt,aj as bs,u as jn,M as $i,ak as Co,A as Ao,ag as No}from"./three.module-873ba857.js";import{L as ko}from"./lenis-2321d860.js";import{g as xi}from"./index-134cb283.js";var Xi=`uniform float time;\r
+uniform float uAudioLevel;\r
+uniform vec3 uPosition;\r
+varying float vElevation;\r
+varying float audioLevelAndElevation;\r
 varying vec2 vUv;
 
-vec3 palette( in float t, in vec3 a, in vec3 b, in vec3 c, in vec3 d )
-{
-    return a + b*cos( 6.28318*(c*t+d) );
+vec3 palette( in float t, in vec3 a, in vec3 b, in vec3 c, in vec3 d )\r
+{\r
+    return a + b*cos( 6.28318*(c*t+d) );\r
 }
 
-vec4 permute(vec4 x)
-{
-    return mod(((x*34.0)+1.0)*x, 289.0);
+vec4 permute(vec4 x)\r
+{\r
+    return mod(((x*34.0)+1.0)*x, 289.0);\r
 }
 
-vec2 fade(vec2 t)
-{
-    return t*t*t*(t*(t*6.0-15.0)+10.0);
+vec2 fade(vec2 t)\r
+{\r
+    return t*t*t*(t*(t*6.0-15.0)+10.0);\r
 }
 
-float cnoise(vec2 P)
-{
-    vec4 Pi = floor(P.xyxy) + vec4(0.0, 0.0, 1.0, 1.0);
-    vec4 Pf = fract(P.xyxy) - vec4(0.0, 0.0, 1.0, 1.0);
+float cnoise(vec2 P)\r
+{\r
+    vec4 Pi = floor(P.xyxy) + vec4(0.0, 0.0, 1.0, 1.0);\r
+    vec4 Pf = fract(P.xyxy) - vec4(0.0, 0.0, 1.0, 1.0);\r
     Pi = mod(Pi, 289.0); 
-    vec4 ix = Pi.xzxz;
-    vec4 iy = Pi.yyww;
-    vec4 fx = Pf.xzxz;
-    vec4 fy = Pf.yyww;
-    vec4 i = permute(permute(ix) + iy);
+    vec4 ix = Pi.xzxz;\r
+    vec4 iy = Pi.yyww;\r
+    vec4 fx = Pf.xzxz;\r
+    vec4 fy = Pf.yyww;\r
+    vec4 i = permute(permute(ix) + iy);\r
     vec4 gx = 2.0 * fract(i * 0.0243902439) - 1.0; 
-    vec4 gy = abs(gx) - 0.5;
-    vec4 tx = floor(gx + 0.5);
-    gx = gx - tx;
-    vec2 g00 = vec2(gx.x,gy.x);
-    vec2 g10 = vec2(gx.y,gy.y);
-    vec2 g01 = vec2(gx.z,gy.z);
-    vec2 g11 = vec2(gx.w,gy.w);
-    vec4 norm = 1.79284291400159 - 0.85373472095314 * vec4(dot(g00, g00), dot(g01, g01), dot(g10, g10), dot(g11, g11));
-    g00 *= norm.x;
-    g01 *= norm.y;
-    g10 *= norm.z;
-    g11 *= norm.w;
-    float n00 = dot(g00, vec2(fx.x, fy.x));
-    float n10 = dot(g10, vec2(fx.y, fy.y));
-    float n01 = dot(g01, vec2(fx.z, fy.z));
-    float n11 = dot(g11, vec2(fx.w, fy.w));
-    vec2 fade_xy = fade(Pf.xy);
-    vec2 n_x = mix(vec2(n00, n01), vec2(n10, n11), fade_xy.x);
-    float n_xy = mix(n_x.x, n_x.y, fade_xy.y);
-    return 2.3 * n_xy;
-}
-void main()
-{
+    vec4 gy = abs(gx) - 0.5;\r
+    vec4 tx = floor(gx + 0.5);\r
+    gx = gx - tx;\r
+    vec2 g00 = vec2(gx.x,gy.x);\r
+    vec2 g10 = vec2(gx.y,gy.y);\r
+    vec2 g01 = vec2(gx.z,gy.z);\r
+    vec2 g11 = vec2(gx.w,gy.w);\r
+    vec4 norm = 1.79284291400159 - 0.85373472095314 * vec4(dot(g00, g00), dot(g01, g01), dot(g10, g10), dot(g11, g11));\r
+    g00 *= norm.x;\r
+    g01 *= norm.y;\r
+    g10 *= norm.z;\r
+    g11 *= norm.w;\r
+    float n00 = dot(g00, vec2(fx.x, fy.x));\r
+    float n10 = dot(g10, vec2(fx.y, fy.y));\r
+    float n01 = dot(g01, vec2(fx.z, fy.z));\r
+    float n11 = dot(g11, vec2(fx.w, fy.w));\r
+    vec2 fade_xy = fade(Pf.xy);\r
+    vec2 n_x = mix(vec2(n00, n01), vec2(n10, n11), fade_xy.x);\r
+    float n_xy = mix(n_x.x, n_x.y, fade_xy.y);\r
+    return 2.3 * n_xy;\r
+}\r
+void main()\r
+{\r
     float strength = smoothstep(0.9, sin(cnoise(vUv * (sin(time/10.0)*10.0)) * 20.0), sin(time*audioLevelAndElevation+10.0));
 
-    vec3 blackColor = palette(sin(time)*.001 + (sin(time)*.04), vec3(fract(audioLevelAndElevation), 0.278+length(vUv.y)+vElevation, 0.500), vec3(fract(audioLevelAndElevation*10.0), 0.520-length(vUv.y), 0.520+(audioLevelAndElevation*10.0)), vec3(1.948, uAudioLevel*10.0, 1.888+(vElevation*10.0)), vec3(uAudioLevel*sin(time), audioLevelAndElevation, 0.858));
-    vec3 uvColor = vec3(vUv, 1.0+sin(time+vElevation));
-    uvColor *= abs(uPosition/ vec3(1.5));
+    vec3 blackColor = palette(sin(time)*.001 + (sin(time)*.04), vec3(fract(audioLevelAndElevation), 0.278+length(vUv.y)+vElevation, 0.500), vec3(fract(audioLevelAndElevation*10.0), 0.520-length(vUv.y), 0.520+(audioLevelAndElevation*10.0)), vec3(1.948, uAudioLevel*10.0, 1.888+(vElevation*10.0)), vec3(uAudioLevel*sin(time), audioLevelAndElevation, 0.858));\r
+    vec3 uvColor = vec3(vUv, 1.0+sin(time+vElevation));\r
+    uvColor *= abs(uPosition/ vec3(1.5));\r
     vec3 mixedColor = mix(blackColor, uvColor, strength);
 
-    gl_FragColor = vec4(mixedColor, 1.0);
-}`,Cs=`uniform float time;
-uniform vec3 uPosition;
-varying vec2 vUv;
+    gl_FragColor = vec4(mixedColor, 1.0);\r
+}`,Cs=`uniform float time;\r
+uniform vec3 uPosition;\r
+varying vec2 vUv;\r
 varying float vElevation;
 
-vec3 palette( in float t, in vec3 a, in vec3 b, in vec3 c, in vec3 d )
-{
-    return a + b*cos( 6.28318*(c*t+d) );
+vec3 palette( in float t, in vec3 a, in vec3 b, in vec3 c, in vec3 d )\r
+{\r
+    return a + b*cos( 6.28318*(c*t+d) );\r
 }
 
-vec4 permute(vec4 x)
-{
-    return mod(((x*34.0)+1.0)*x, 289.0);
+vec4 permute(vec4 x)\r
+{\r
+    return mod(((x*34.0)+1.0)*x, 289.0);\r
 }
 
-vec2 fade(vec2 t)
-{
-    return t*t*t*(t*(t*6.0-15.0)+10.0);
+vec2 fade(vec2 t)\r
+{\r
+    return t*t*t*(t*(t*6.0-15.0)+10.0);\r
 }
 
-float cnoise(vec2 P)
-{
-    vec4 Pi = floor(P.xyxy) + vec4(0.0, (time/ 5000.0), 1.0, 1.0);
-    vec4 Pf = fract(P.xyxy) - vec4(0.0, 0.0, 1.0, 1.0);
+float cnoise(vec2 P)\r
+{\r
+    vec4 Pi = floor(P.xyxy) + vec4(0.0, (time/ 5000.0), 1.0, 1.0);\r
+    vec4 Pf = fract(P.xyxy) - vec4(0.0, 0.0, 1.0, 1.0);\r
     Pi = mod(Pi, 289.0); 
-    vec4 ix = Pi.xzxz;
-    vec4 iy = Pi.yyww;
-    vec4 fx = Pf.xzxz;
-    vec4 fy = Pf.yyww;
-    vec4 i = permute(permute(ix) + iy);
+    vec4 ix = Pi.xzxz;\r
+    vec4 iy = Pi.yyww;\r
+    vec4 fx = Pf.xzxz;\r
+    vec4 fy = Pf.yyww;\r
+    vec4 i = permute(permute(ix) + iy);\r
     vec4 gx = (sin(time)/2.0) * fract(i * 0.0243902439) - 1.0; 
-    vec4 gy = abs(gx) - 0.5;
-    vec4 tx = floor(gx + 0.5);
-    gx = gx - tx;
-    vec2 g00 = vec2(gx.x,gy.x);
-    vec2 g10 = vec2(gx.y,gy.y);
-    vec2 g01 = vec2(gx.z,gy.z);
-    vec2 g11 = vec2(gx.w,gy.w);
-    vec4 norm = 1.79284291400159 - 0.85373472095314 * vec4(dot(g00, g00), dot(g01, g01), dot(g10, g10), dot(g11, g11));
-    g00 *= norm.x;
-    g01 *= norm.y;
-    g10 *= norm.z;
-    g11 *= norm.w;
-    float n00 = dot(g00, vec2(fx.x, fy.x));
-    float n10 = dot(g10, vec2(fx.y, fy.y));
-    float n01 = dot(g01, vec2(fx.z, fy.z));
-    float n11 = dot(g11, vec2(fx.w, fy.w));
-    vec2 fade_xy = fade(Pf.xy);
-    vec2 n_x = mix(vec2(n00, n01), vec2(n10, n11), fade_xy.x);
-    float n_xy = mix(n_x.x, n_x.y, fade_xy.y);
-    return 2.3 * n_xy;
-}
-void main()
-{
-    float strength = step(sin(time) * 0.9, sin(cnoise(vUv * 10.0) * 20.0));
-    vec3 blackColor = vec3(1.0+(vElevation*8.0), sin(time)+vUv.x+(vElevation*2.0), -sin(time)+(vElevation*8.0));
-    vec3 uvColor = palette(sin(time)*.001 + (sin(time)*.04)+vUv.x, vec3(0.608+(vElevation*8.0), 0.278+vUv.y, 0.500), vec3(0.550, 0.520, 0.520), vec3(1.948, 2.108, 1.888), vec3(0.528, 0.358, 0.858+vUv.y));
-    uvColor *= abs(uPosition/ vec3(3.0));
-    vec3 mixedColor = mix(blackColor, uvColor, strength);
-    gl_FragColor = vec4(mixedColor, 1.0);
-}`,Lt=`uniform float time;
-uniform float uBigWavesElevation;
-uniform vec2 uBigWavesFrequency;
+    vec4 gy = abs(gx) - 0.5;\r
+    vec4 tx = floor(gx + 0.5);\r
+    gx = gx - tx;\r
+    vec2 g00 = vec2(gx.x,gy.x);\r
+    vec2 g10 = vec2(gx.y,gy.y);\r
+    vec2 g01 = vec2(gx.z,gy.z);\r
+    vec2 g11 = vec2(gx.w,gy.w);\r
+    vec4 norm = 1.79284291400159 - 0.85373472095314 * vec4(dot(g00, g00), dot(g01, g01), dot(g10, g10), dot(g11, g11));\r
+    g00 *= norm.x;\r
+    g01 *= norm.y;\r
+    g10 *= norm.z;\r
+    g11 *= norm.w;\r
+    float n00 = dot(g00, vec2(fx.x, fy.x));\r
+    float n10 = dot(g10, vec2(fx.y, fy.y));\r
+    float n01 = dot(g01, vec2(fx.z, fy.z));\r
+    float n11 = dot(g11, vec2(fx.w, fy.w));\r
+    vec2 fade_xy = fade(Pf.xy);\r
+    vec2 n_x = mix(vec2(n00, n01), vec2(n10, n11), fade_xy.x);\r
+    float n_xy = mix(n_x.x, n_x.y, fade_xy.y);\r
+    return 2.3 * n_xy;\r
+}\r
+void main()\r
+{\r
+    float strength = step(sin(time) * 0.9, sin(cnoise(vUv * 10.0) * 20.0));\r
+    vec3 blackColor = vec3(1.0+(vElevation*8.0), sin(time)+vUv.x+(vElevation*2.0), -sin(time)+(vElevation*8.0));\r
+    vec3 uvColor = palette(sin(time)*.001 + (sin(time)*.04)+vUv.x, vec3(0.608+(vElevation*8.0), 0.278+vUv.y, 0.500), vec3(0.550, 0.520, 0.520), vec3(1.948, 2.108, 1.888), vec3(0.528, 0.358, 0.858+vUv.y));\r
+    uvColor *= abs(uPosition/ vec3(3.0));\r
+    vec3 mixedColor = mix(blackColor, uvColor, strength);\r
+    gl_FragColor = vec4(mixedColor, 1.0);\r
+}`,Lt=`uniform float time;\r
+uniform float uBigWavesElevation;\r
+uniform vec2 uBigWavesFrequency;\r
 uniform float uBigWavesSpeed;
 
-uniform float uSmallWavesElevation;
-uniform float uSmallWavesFrequency;
-uniform float uSmallWavesSpeed;
-uniform float uSmallIterations;
+uniform float uSmallWavesElevation;\r
+uniform float uSmallWavesFrequency;\r
+uniform float uSmallWavesSpeed;\r
+uniform float uSmallIterations;\r
 uniform float uAudioLevel;
 
-varying float vElevation;
+varying float vElevation;\r
 varying vec2 vUv;
 
-vec4 permute(vec4 x)
-{
-    return mod(((x*34.0)+1.0)*x, 289.0);
-}
-vec4 taylorInvSqrt(vec4 r)
-{
-    return 1.79284291400159 - 0.85373472095314 * r;
-}
-vec3 fade(vec3 t)
-{
-    return t*t*t*(t*(t*6.0-15.0)+10.0);
+vec4 permute(vec4 x)\r
+{\r
+    return mod(((x*34.0)+1.0)*x, 289.0);\r
+}\r
+vec4 taylorInvSqrt(vec4 r)\r
+{\r
+    return 1.79284291400159 - 0.85373472095314 * r;\r
+}\r
+vec3 fade(vec3 t)\r
+{\r
+    return t*t*t*(t*(t*6.0-15.0)+10.0);\r
 }
 
-float cnoise(vec3 P)
-{
+float cnoise(vec3 P)\r
+{\r
     vec3 Pi0 = floor(P); 
     vec3 Pi1 = Pi0 + vec3(1.0); 
-    Pi0 = mod(Pi0, 289.0);
-    Pi1 = mod(Pi1, 289.0);
+    Pi0 = mod(Pi0, 289.0);\r
+    Pi1 = mod(Pi1, 289.0);\r
     vec3 Pf0 = fract(P); 
     vec3 Pf1 = Pf0 - vec3(1.0); 
-    vec4 ix = vec4(Pi0.x, Pi1.x, Pi0.x, Pi1.x);
-    vec4 iy = vec4(Pi0.yy, Pi1.yy);
-    vec4 iz0 = Pi0.zzzz;
+    vec4 ix = vec4(Pi0.x, Pi1.x, Pi0.x, Pi1.x);\r
+    vec4 iy = vec4(Pi0.yy, Pi1.yy);\r
+    vec4 iz0 = Pi0.zzzz;\r
     vec4 iz1 = Pi1.zzzz;
 
-    vec4 ixy = permute(permute(ix) + iy);
-    vec4 ixy0 = permute(ixy + iz0);
+    vec4 ixy = permute(permute(ix) + iy);\r
+    vec4 ixy0 = permute(ixy + iz0);\r
     vec4 ixy1 = permute(ixy + iz1);
 
-    vec4 gx0 = ixy0 / 7.0;
-    vec4 gy0 = fract(floor(gx0) / 7.0) - 0.5;
-    gx0 = fract(gx0);
-    vec4 gz0 = vec4(0.5) - abs(gx0) - abs(gy0);
-    vec4 sz0 = step(gz0, vec4(0.0));
-    gx0 -= sz0 * (step(0.0, gx0) - 0.5);
+    vec4 gx0 = ixy0 / 7.0;\r
+    vec4 gy0 = fract(floor(gx0) / 7.0) - 0.5;\r
+    gx0 = fract(gx0);\r
+    vec4 gz0 = vec4(0.5) - abs(gx0) - abs(gy0);\r
+    vec4 sz0 = step(gz0, vec4(0.0));\r
+    gx0 -= sz0 * (step(0.0, gx0) - 0.5);\r
     gy0 -= sz0 * (step(0.0, gy0) - 0.5);
 
-    vec4 gx1 = ixy1 / 7.0;
-    vec4 gy1 = fract(floor(gx1) / 7.0) - 0.5;
-    gx1 = fract(gx1);
-    vec4 gz1 = vec4(0.5) - abs(gx1) - abs(gy1);
-    vec4 sz1 = step(gz1, vec4(0.0));
-    gx1 -= sz1 * (step(0.0, gx1) - 0.5);
+    vec4 gx1 = ixy1 / 7.0;\r
+    vec4 gy1 = fract(floor(gx1) / 7.0) - 0.5;\r
+    gx1 = fract(gx1);\r
+    vec4 gz1 = vec4(0.5) - abs(gx1) - abs(gy1);\r
+    vec4 sz1 = step(gz1, vec4(0.0));\r
+    gx1 -= sz1 * (step(0.0, gx1) - 0.5);\r
     gy1 -= sz1 * (step(0.0, gy1) - 0.5);
 
-    vec3 g000 = vec3(gx0.x,gy0.x,gz0.x);
-    vec3 g100 = vec3(gx0.y,gy0.y,gz0.y);
-    vec3 g010 = vec3(gx0.z,gy0.z,gz0.z);
-    vec3 g110 = vec3(gx0.w,gy0.w,gz0.w);
-    vec3 g001 = vec3(gx1.x,gy1.x,gz1.x);
-    vec3 g101 = vec3(gx1.y,gy1.y,gz1.y);
-    vec3 g011 = vec3(gx1.z,gy1.z,gz1.z);
+    vec3 g000 = vec3(gx0.x,gy0.x,gz0.x);\r
+    vec3 g100 = vec3(gx0.y,gy0.y,gz0.y);\r
+    vec3 g010 = vec3(gx0.z,gy0.z,gz0.z);\r
+    vec3 g110 = vec3(gx0.w,gy0.w,gz0.w);\r
+    vec3 g001 = vec3(gx1.x,gy1.x,gz1.x);\r
+    vec3 g101 = vec3(gx1.y,gy1.y,gz1.y);\r
+    vec3 g011 = vec3(gx1.z,gy1.z,gz1.z);\r
     vec3 g111 = vec3(gx1.w,gy1.w,gz1.w);
 
-    vec4 norm0 = taylorInvSqrt(vec4(dot(g000, g000), dot(g010, g010), dot(g100, g100), dot(g110, g110)));
-    g000 *= norm0.x;
-    g010 *= norm0.y;
-    g100 *= norm0.z;
-    g110 *= norm0.w;
-    vec4 norm1 = taylorInvSqrt(vec4(dot(g001, g001), dot(g011, g011), dot(g101, g101), dot(g111, g111)));
-    g001 *= norm1.x;
-    g011 *= norm1.y;
-    g101 *= norm1.z;
+    vec4 norm0 = taylorInvSqrt(vec4(dot(g000, g000), dot(g010, g010), dot(g100, g100), dot(g110, g110)));\r
+    g000 *= norm0.x;\r
+    g010 *= norm0.y;\r
+    g100 *= norm0.z;\r
+    g110 *= norm0.w;\r
+    vec4 norm1 = taylorInvSqrt(vec4(dot(g001, g001), dot(g011, g011), dot(g101, g101), dot(g111, g111)));\r
+    g001 *= norm1.x;\r
+    g011 *= norm1.y;\r
+    g101 *= norm1.z;\r
     g111 *= norm1.w;
 
-    float n000 = dot(g000, Pf0);
-    float n100 = dot(g100, vec3(Pf1.x, Pf0.yz));
-    float n010 = dot(g010, vec3(Pf0.x, Pf1.y, Pf0.z));
-    float n110 = dot(g110, vec3(Pf1.xy, Pf0.z));
-    float n001 = dot(g001, vec3(Pf0.xy, Pf1.z));
-    float n101 = dot(g101, vec3(Pf1.x, Pf0.y, Pf1.z));
-    float n011 = dot(g011, vec3(Pf0.x, Pf1.yz));
+    float n000 = dot(g000, Pf0);\r
+    float n100 = dot(g100, vec3(Pf1.x, Pf0.yz));\r
+    float n010 = dot(g010, vec3(Pf0.x, Pf1.y, Pf0.z));\r
+    float n110 = dot(g110, vec3(Pf1.xy, Pf0.z));\r
+    float n001 = dot(g001, vec3(Pf0.xy, Pf1.z));\r
+    float n101 = dot(g101, vec3(Pf1.x, Pf0.y, Pf1.z));\r
+    float n011 = dot(g011, vec3(Pf0.x, Pf1.yz));\r
     float n111 = dot(g111, Pf1);
 
-    vec3 fade_xyz = fade(Pf0);
-    vec4 n_z = mix(vec4(n000, n100, n010, n110), vec4(n001, n101, n011, n111), fade_xyz.z);
-    vec2 n_yz = mix(n_z.xy, n_z.zw, fade_xyz.y);
-    float n_xyz = mix(n_yz.x, n_yz.y, fade_xyz.x);
-    return 2.2 * n_xyz;
+    vec3 fade_xyz = fade(Pf0);\r
+    vec4 n_z = mix(vec4(n000, n100, n010, n110), vec4(n001, n101, n011, n111), fade_xyz.z);\r
+    vec2 n_yz = mix(n_z.xy, n_z.zw, fade_xyz.y);\r
+    float n_xyz = mix(n_yz.x, n_yz.y, fade_xyz.x);\r
+    return 2.2 * n_xyz;\r
 }
 
-void main()
-{
+void main()\r
+{\r
     vec4 modelPosition = modelMatrix * vec4(position, 1.0);
 
     
-    float elevation = sin(modelPosition.x * uBigWavesFrequency.x + time * uBigWavesSpeed) *
-                      sin(modelPosition.z * uBigWavesFrequency.y + time * uBigWavesSpeed) *
+    float elevation = sin(modelPosition.x * uBigWavesFrequency.x + time * uBigWavesSpeed) *\r
+                      sin(modelPosition.z * uBigWavesFrequency.y + time * uBigWavesSpeed) *\r
                       uBigWavesElevation;
 
-    for(float i = 1.0; i <= uSmallIterations; i++)
-    {
-        elevation -= abs(cnoise(vec3(modelPosition.xz * uSmallWavesFrequency * i, time * (uAudioLevel*40.0) * uSmallWavesSpeed)) * uSmallWavesElevation / i);
+    for(float i = 1.0; i <= uSmallIterations; i++)\r
+    {\r
+        elevation -= abs(cnoise(vec3(modelPosition.xz * uSmallWavesFrequency * i, time * (uAudioLevel*40.0) * uSmallWavesSpeed)) * uSmallWavesElevation / i);\r
     }
 
     modelPosition.y += elevation;
 
-    vec4 viewPosition = viewMatrix * modelPosition;
-    vec4 projectedPosition = projectionMatrix * viewPosition;
+    vec4 viewPosition = viewMatrix * modelPosition;\r
+    vec4 projectedPosition = projectionMatrix * viewPosition;\r
     gl_Position = projectedPosition;
 
-    vElevation = elevation;
-    vUv = uv;
-}`,Yi=`uniform float time;
-uniform float uBigWavesElevation;
-uniform vec2 uBigWavesFrequency;
+    vElevation = elevation;\r
+    vUv = uv;\r
+}`,Yi=`uniform float time;\r
+uniform float uBigWavesElevation;\r
+uniform vec2 uBigWavesFrequency;\r
 uniform float uBigWavesSpeed;
 
-uniform float uSmallWavesElevation;
-uniform float uSmallWavesFrequency;
-uniform float uSmallWavesSpeed;
+uniform float uSmallWavesElevation;\r
+uniform float uSmallWavesFrequency;\r
+uniform float uSmallWavesSpeed;\r
 uniform float uSmallIterations;
 
-uniform float uAudioLevel;
-varying float vElevation;
-varying vec2 vUv;
+uniform float uAudioLevel;\r
+varying float vElevation;\r
+varying vec2 vUv;\r
 varying float audioLevelAndElevation;
 
-vec4 permute(vec4 x)
-{
-    return mod(((x*34.0)+1.0)*x, 289.0);
-}
-vec4 taylorInvSqrt(vec4 r)
-{
-    return 1.79284291400159 - 0.85373472095314 * r;
-}
-vec3 fade(vec3 t)
-{
-    return t*t*t*(t*(t*6.0-15.0)+10.0);
+vec4 permute(vec4 x)\r
+{\r
+    return mod(((x*34.0)+1.0)*x, 289.0);\r
+}\r
+vec4 taylorInvSqrt(vec4 r)\r
+{\r
+    return 1.79284291400159 - 0.85373472095314 * r;\r
+}\r
+vec3 fade(vec3 t)\r
+{\r
+    return t*t*t*(t*(t*6.0-15.0)+10.0);\r
 }
 
-float cnoise(vec3 P)
-{
+float cnoise(vec3 P)\r
+{\r
     vec3 Pi0 = floor(P); 
     vec3 Pi1 = Pi0 + vec3(1.0); 
-    Pi0 = mod(Pi0, 289.0);
-    Pi1 = mod(Pi1, 289.0);
+    Pi0 = mod(Pi0, 289.0);\r
+    Pi1 = mod(Pi1, 289.0);\r
     vec3 Pf0 = fract(P); 
     vec3 Pf1 = Pf0 - vec3(1.0); 
-    vec4 ix = vec4(Pi0.x, Pi1.x, Pi0.x, Pi1.x);
-    vec4 iy = vec4(Pi0.yy, Pi1.yy);
-    vec4 iz0 = Pi0.zzzz;
+    vec4 ix = vec4(Pi0.x, Pi1.x, Pi0.x, Pi1.x);\r
+    vec4 iy = vec4(Pi0.yy, Pi1.yy);\r
+    vec4 iz0 = Pi0.zzzz;\r
     vec4 iz1 = Pi1.zzzz;
 
-    vec4 ixy = permute(permute(ix) + iy);
-    vec4 ixy0 = permute(ixy + iz0);
+    vec4 ixy = permute(permute(ix) + iy);\r
+    vec4 ixy0 = permute(ixy + iz0);\r
     vec4 ixy1 = permute(ixy + iz1);
 
-    vec4 gx0 = ixy0 / 7.0;
-    vec4 gy0 = fract(floor(gx0) / 7.0) - 0.5;
-    gx0 = fract(gx0);
-    vec4 gz0 = vec4(0.5) - abs(gx0) - abs(gy0);
-    vec4 sz0 = step(gz0, vec4(0.0));
-    gx0 -= sz0 * (step(0.0, gx0) - 0.5);
+    vec4 gx0 = ixy0 / 7.0;\r
+    vec4 gy0 = fract(floor(gx0) / 7.0) - 0.5;\r
+    gx0 = fract(gx0);\r
+    vec4 gz0 = vec4(0.5) - abs(gx0) - abs(gy0);\r
+    vec4 sz0 = step(gz0, vec4(0.0));\r
+    gx0 -= sz0 * (step(0.0, gx0) - 0.5);\r
     gy0 -= sz0 * (step(0.0, gy0) - 0.5);
 
-    vec4 gx1 = ixy1 / 7.0;
-    vec4 gy1 = fract(floor(gx1) / 7.0) - 0.5;
-    gx1 = fract(gx1);
-    vec4 gz1 = vec4(0.5) - abs(gx1) - abs(gy1);
-    vec4 sz1 = step(gz1, vec4(0.0));
-    gx1 -= sz1 * (step(0.0, gx1) - 0.5);
+    vec4 gx1 = ixy1 / 7.0;\r
+    vec4 gy1 = fract(floor(gx1) / 7.0) - 0.5;\r
+    gx1 = fract(gx1);\r
+    vec4 gz1 = vec4(0.5) - abs(gx1) - abs(gy1);\r
+    vec4 sz1 = step(gz1, vec4(0.0));\r
+    gx1 -= sz1 * (step(0.0, gx1) - 0.5);\r
     gy1 -= sz1 * (step(0.0, gy1) - 0.5);
 
-    vec3 g000 = vec3(gx0.x,gy0.x,gz0.x);
-    vec3 g100 = vec3(gx0.y,gy0.y,gz0.y);
-    vec3 g010 = vec3(gx0.z,gy0.z,gz0.z);
-    vec3 g110 = vec3(gx0.w,gy0.w,gz0.w);
-    vec3 g001 = vec3(gx1.x,gy1.x,gz1.x);
-    vec3 g101 = vec3(gx1.y,gy1.y,gz1.y);
-    vec3 g011 = vec3(gx1.z,gy1.z,gz1.z);
+    vec3 g000 = vec3(gx0.x,gy0.x,gz0.x);\r
+    vec3 g100 = vec3(gx0.y,gy0.y,gz0.y);\r
+    vec3 g010 = vec3(gx0.z,gy0.z,gz0.z);\r
+    vec3 g110 = vec3(gx0.w,gy0.w,gz0.w);\r
+    vec3 g001 = vec3(gx1.x,gy1.x,gz1.x);\r
+    vec3 g101 = vec3(gx1.y,gy1.y,gz1.y);\r
+    vec3 g011 = vec3(gx1.z,gy1.z,gz1.z);\r
     vec3 g111 = vec3(gx1.w,gy1.w,gz1.w);
 
-    vec4 norm0 = taylorInvSqrt(vec4(dot(g000, g000), dot(g010, g010), dot(g100, g100), dot(g110, g110)));
-    g000 *= norm0.x;
-    g010 *= norm0.y;
-    g100 *= norm0.z;
-    g110 *= norm0.w;
-    vec4 norm1 = taylorInvSqrt(vec4(dot(g001, g001), dot(g011, g011), dot(g101, g101), dot(g111, g111)));
-    g001 *= norm1.x;
-    g011 *= norm1.y;
-    g101 *= norm1.z;
+    vec4 norm0 = taylorInvSqrt(vec4(dot(g000, g000), dot(g010, g010), dot(g100, g100), dot(g110, g110)));\r
+    g000 *= norm0.x;\r
+    g010 *= norm0.y;\r
+    g100 *= norm0.z;\r
+    g110 *= norm0.w;\r
+    vec4 norm1 = taylorInvSqrt(vec4(dot(g001, g001), dot(g011, g011), dot(g101, g101), dot(g111, g111)));\r
+    g001 *= norm1.x;\r
+    g011 *= norm1.y;\r
+    g101 *= norm1.z;\r
     g111 *= norm1.w;
 
-    float n000 = dot(g000, Pf0);
-    float n100 = dot(g100, vec3(Pf1.x, Pf0.yz));
-    float n010 = dot(g010, vec3(Pf0.x, Pf1.y, Pf0.z));
-    float n110 = dot(g110, vec3(Pf1.xy, Pf0.z));
-    float n001 = dot(g001, vec3(Pf0.xy, Pf1.z));
-    float n101 = dot(g101, vec3(Pf1.x, Pf0.y, Pf1.z));
-    float n011 = dot(g011, vec3(Pf0.x, Pf1.yz));
+    float n000 = dot(g000, Pf0);\r
+    float n100 = dot(g100, vec3(Pf1.x, Pf0.yz));\r
+    float n010 = dot(g010, vec3(Pf0.x, Pf1.y, Pf0.z));\r
+    float n110 = dot(g110, vec3(Pf1.xy, Pf0.z));\r
+    float n001 = dot(g001, vec3(Pf0.xy, Pf1.z));\r
+    float n101 = dot(g101, vec3(Pf1.x, Pf0.y, Pf1.z));\r
+    float n011 = dot(g011, vec3(Pf0.x, Pf1.yz));\r
     float n111 = dot(g111, Pf1);
 
-    vec3 fade_xyz = fade(Pf0);
-    vec4 n_z = mix(vec4(n000, n100, n010, n110), vec4(n001, n101, n011, n111), fade_xyz.z);
-    vec2 n_yz = mix(n_z.xy, n_z.zw, fade_xyz.y);
-    float n_xyz = mix(n_yz.x, n_yz.y, fade_xyz.x);
-    return 2.2 * n_xyz;
+    vec3 fade_xyz = fade(Pf0);\r
+    vec4 n_z = mix(vec4(n000, n100, n010, n110), vec4(n001, n101, n011, n111), fade_xyz.z);\r
+    vec2 n_yz = mix(n_z.xy, n_z.zw, fade_xyz.y);\r
+    float n_xyz = mix(n_yz.x, n_yz.y, fade_xyz.x);\r
+    return 2.2 * n_xyz;\r
 }
 
-void main()
-{
+void main()\r
+{\r
     vec4 modelPosition = modelMatrix * vec4(position, 1.0);
 
     
-    float elevation = atan(sin(modelPosition.x * uBigWavesFrequency.x + time * uAudioLevel * uBigWavesSpeed) *
-    sin(modelPosition.z * uBigWavesFrequency.y + time * uBigWavesSpeed) *
+    float elevation = atan(sin(modelPosition.x * uBigWavesFrequency.x + time * uAudioLevel * uBigWavesSpeed) *\r
+    sin(modelPosition.z * uBigWavesFrequency.y + time * uBigWavesSpeed) *\r
     uBigWavesElevation, 0.0003);
 
-    for(float i = 1.0; i <= uSmallIterations; i++)
-    {
-        if (mod(elevation, 2.0) == 0.0) {
-            elevation -= atan(cnoise(vec3(modelPosition.xz * uSmallWavesFrequency * i, time * uSmallWavesSpeed)) * uSmallWavesElevation / i, 0.002);
-        } else {
-            elevation += atan(cnoise(vec3(modelPosition.xz * uSmallWavesFrequency * i, time * uSmallWavesSpeed)) * uSmallWavesElevation / i);
-        }
+    for(float i = 1.0; i <= uSmallIterations; i++)\r
+    {\r
+        if (mod(elevation, 2.0) == 0.0) {\r
+            elevation -= atan(cnoise(vec3(modelPosition.xz * uSmallWavesFrequency * i, time * uSmallWavesSpeed)) * uSmallWavesElevation / i, 0.002);\r
+        } else {\r
+            elevation += atan(cnoise(vec3(modelPosition.xz * uSmallWavesFrequency * i, time * uSmallWavesSpeed)) * uSmallWavesElevation / i);\r
+        }\r
     }
 
-    if (mod(elevation, 2.0) == 0.0) {
-        modelPosition.y += elevation * (sin(time)*8.0);
-    } else {
-        modelPosition.x += elevation/4.0* (sin(time/4.0)*3.0);
+    if (mod(elevation, 2.0) == 0.0) {\r
+        modelPosition.y += elevation * (sin(time)*8.0);\r
+    } else {\r
+        modelPosition.x += elevation/4.0* (sin(time/4.0)*3.0);\r
     }
 
-    vec4 viewPosition = viewMatrix * modelPosition;
-    vec4 projectedPosition = projectionMatrix * viewPosition;
-    gl_Position = projectedPosition;
-    audioLevelAndElevation = uAudioLevel * elevation;
-    vElevation = elevation;
-    vUv = uv;
-}`,Qi=`varying vec2 vUv;
-uniform float time;
-uniform vec3 uPosition;
+    vec4 viewPosition = viewMatrix * modelPosition;\r
+    vec4 projectedPosition = projectionMatrix * viewPosition;\r
+    gl_Position = projectedPosition;\r
+    audioLevelAndElevation = uAudioLevel * elevation;\r
+    vElevation = elevation;\r
+    vUv = uv;\r
+}`,Qi=`varying vec2 vUv;\r
+uniform float time;\r
+uniform vec3 uPosition;\r
 varying float vElevation;
 
-vec3 palette( in float t, in vec3 a, in vec3 b, in vec3 c, in vec3 d )
-{
+vec3 palette( in float t, in vec3 a, in vec3 b, in vec3 c, in vec3 d )\r
+{\r
 
-    return a + b*cos( 6.28318*(c*t+d) );
-}
+    return a + b*cos( 6.28318*(c*t+d) );\r
+}\r
 
-void main()
-{
-    vec2 uv = vUv;
+void main()\r
+{\r
+    vec2 uv = vUv;\r
     vec2 uv0 = uv;
 
     vec3 finalColor = vec3(0.0);
@@ -391,25 +391,25 @@ void main()
 
         float d = length(uv) * exp(length(uv0));
 
-        vec3 col = palette(length(uv0) + i*.4 + (time*.4), vec3(0.608, 0.278, 0.500), vec3(0.550, 0.520, 0.520), vec3(1.948, 2.108, 1.888), vec3(0.528, 0.358, 0.858));
-        col *= abs(uPosition/3.0);
-        d = sin(d * (8.0 - i) + time)/8.0;
+        vec3 col = palette(length(uv0) + i*.4 + (time*.4), vec3(0.608, 0.278, 0.500), vec3(0.550, 0.520, 0.520), vec3(1.948, 2.108, 1.888), vec3(0.528, 0.358, 0.858));\r
+        col *= abs(uPosition/3.0);\r
+        d = sin(d * (8.0 - i) + time)/8.0;\r
         d = abs(d);
 
         d = pow(0.01 / d, 1.2);
 
-        finalColor += col * d + (vElevation);
+        finalColor += col * d + (vElevation);\r
     }
 
     
-    gl_FragColor = vec4(finalColor, 1.0);
-}`,Oo=`#ifdef GL_ES
-precision highp float;
+    gl_FragColor = vec4(finalColor, 1.0);\r
+}`,Oo=`#ifdef GL_ES\r
+precision highp float;\r
 #endif
 
-uniform float time;
-uniform vec2 resolution;
-uniform vec2 uMouse;
+uniform float time;\r
+uniform vec2 resolution;\r
+uniform vec2 uMouse;\r
 uniform float uAudioLevel;
 
 #ifndef QTR_PI
@@ -590,7 +590,7 @@ vec3 voronoi(vec2 uv, float time) {
 
 vec3 voronoi(vec2 p)  { return voronoi(p, 0.0); }
 vec3 voronoi(vec3 p)  { return voronoi(p.xy, p.z); }
-#endif
+#endif\r
 #ifndef FNC_MOD289
 #define FNC_MOD289
 
@@ -925,7 +925,7 @@ vec3 curl( vec4 p ){
     return normalize( vec3( x , y , z ) * divisor );
 }
 
-#endif
+#endif\r
 #ifndef RANDOM_SCALE
 #if defined(RANDOM_HIGHER_RANGE)
 #define RANDOM_SCALE vec4(.1031, .1030, .0973, .1099)
@@ -1078,13 +1078,13 @@ float worley(vec3 p) {
     return 1.0-dis;
 }
 
-#endif
+#endif\r
 #ifndef FNC_HIGHPASS
 #define FNC_HIGHPASS
 
 float highPass(in float value, in float bias) { return max(value - bias, 0.0) / (1.0 - bias); }
 
-#endif
+#endif\r
 #ifndef QTR_PI
 #define QTR_PI 0.78539816339
 #endif
@@ -1133,23 +1133,23 @@ vec4 palette (in float t, in vec4 a, in vec4 b, in vec4 c, in vec4 d) {
 }
 #endif
 
-void main() {
+void main() {\r
     vec4 final = vec4(1.0, 0.0, 0.0, 1.0);
 
-    vec2 uv = gl_FragCoord.xy / resolution * vec2(resolution.x / resolution.y, 1.0);
+    vec2 uv = gl_FragCoord.xy / resolution * vec2(resolution.x / resolution.y, 1.0);\r
     float t = time * 0.025 ;
 
-    vec3 c = curl(vec3(uv * 2.0, time * ((uAudioLevel/7.0)+0.5) *0.05));
-    float w = worley(vec3(uv * 20.0 * c.yz + c.x, c.x));
-    vec3 v = voronoi(uv * 2.0, w * length(c) * c.r + t);
-    vec3 p = palette(v.b * 2.0,
-    vec3(0.7, sin(t * 1.1) * 0.02, sin(clamp(t * 0.002, 0.0, 1.0))),
-    vec3(cos(t*0.02), cos(clamp(t * 0.07 * abs(clamp(uMouse.x, 0.0, 1.0) * uAudioLevel), 0.0, 1.0)), cos(t * 1.2)),
-    vec3(sin(t), sin(clamp(t * 0.7, 0.0, 1.0)), 0.3),
-    vec3(sin(t*abs(uMouse.x * 0.5)*0.2), cos(clamp(t * abs(clamp(uMouse.y, 0.0, 1.0) * 0.5) * 0.7, 0.0, 1.0)), cos(t * 0.9)));
-    final.r = smoothstep(0.9, 0.91, length(v));
-    final.rgb = mix(vec3(0.2) - p, p, final.r);
-    gl_FragColor = final;
+    vec3 c = curl(vec3(uv * 2.0, time * ((uAudioLevel/7.0)+0.5) *0.05));\r
+    float w = worley(vec3(uv * 20.0 * c.yz + c.x, c.x));\r
+    vec3 v = voronoi(uv * 2.0, w * length(c) * c.r + t);\r
+    vec3 p = palette(v.b * 2.0,\r
+    vec3(0.7, sin(t * 1.1) * 0.02, sin(clamp(t * 0.002, 0.0, 1.0))),\r
+    vec3(cos(t*0.02), cos(clamp(t * 0.07 * abs(clamp(uMouse.x, 0.0, 1.0) * uAudioLevel), 0.0, 1.0)), cos(t * 1.2)),\r
+    vec3(sin(t), sin(clamp(t * 0.7, 0.0, 1.0)), 0.3),\r
+    vec3(sin(t*abs(uMouse.x * 0.5)*0.2), cos(clamp(t * abs(clamp(uMouse.y, 0.0, 1.0) * 0.5) * 0.7, 0.0, 1.0)), cos(t * 0.9)));\r
+    final.r = smoothstep(0.9, 0.91, length(v));\r
+    final.rgb = mix(vec3(0.2) - p, p, final.r);\r
+    gl_FragColor = final;\r
 }`;const Ji="15.0.4",wi=(s,e,t)=>({endTime:e,insertTime:t,type:"exponentialRampToValue",value:s}),Ti=(s,e,t)=>({endTime:e,insertTime:t,type:"linearRampToValue",value:s}),ms=(s,e)=>({startTime:e,type:"setValue",value:s}),Ki=(s,e,t)=>({duration:t,startTime:e,type:"setValueCurve",values:s}),er=(s,e,{startTime:t,target:n,timeConstant:i})=>n+(e-n)*Math.exp((t-s)/i),Pt=s=>s.type==="exponentialRampToValue",kn=s=>s.type==="linearRampToValue",ot=s=>Pt(s)||kn(s),As=s=>s.type==="setValue",Qe=s=>s.type==="setValueCurve",On=(s,e,t,n)=>{const i=s[e];return i===void 0?n:ot(i)||As(i)?i.value:Qe(i)?i.values[i.values.length-1]:er(t,On(s,e-1,i.startTime,n),i)},Si=(s,e,t,n,i)=>t===void 0?[n.insertTime,i]:ot(t)?[t.endTime,t.value]:As(t)?[t.startTime,t.value]:Qe(t)?[t.startTime+t.duration,t.values[t.values.length-1]]:[t.startTime,On(s,e-1,t.startTime,i)],_s=s=>s.type==="cancelAndHold",gs=s=>s.type==="cancelScheduledValues",rt=s=>_s(s)||gs(s)?s.cancelTime:Pt(s)||kn(s)?s.endTime:s.startTime,bi=(s,e,t,{endTime:n,value:i})=>t===i?i:0<t&&0<i||t<0&&i<0?t*(i/t)**((s-e)/(n-e)):0,Ci=(s,e,t,{endTime:n,value:i})=>t+(s-e)/(n-e)*(i-t),Eo=(s,e)=>{const t=Math.floor(e),n=Math.ceil(e);return t===n?s[t]:(1-(e-t))*s[t]+(1-(n-e))*s[n]},Mo=(s,{duration:e,startTime:t,values:n})=>{const i=(s-t)/e*(n.length-1);return Eo(n,i)},Tn=s=>s.type==="setTarget";class Io{constructor(e){this._automationEvents=[],this._currenTime=0,this._defaultValue=e}[Symbol.iterator](){return this._automationEvents[Symbol.iterator]()}add(e){const t=rt(e);if(_s(e)||gs(e)){const n=this._automationEvents.findIndex(r=>gs(e)&&Qe(r)?r.startTime+r.duration>=t:rt(r)>=t),i=this._automationEvents[n];if(n!==-1&&(this._automationEvents=this._automationEvents.slice(0,n)),_s(e)){const r=this._automationEvents[this._automationEvents.length-1];if(i!==void 0&&ot(i)){if(r!==void 0&&Tn(r))throw new Error("The internal list is malformed.");const o=r===void 0?i.insertTime:Qe(r)?r.startTime+r.duration:rt(r),a=r===void 0?this._defaultValue:Qe(r)?r.values[r.values.length-1]:r.value,c=Pt(i)?bi(t,o,a,i):Ci(t,o,a,i),l=Pt(i)?wi(c,t,this._currenTime):Ti(c,t,this._currenTime);this._automationEvents.push(l)}if(r!==void 0&&Tn(r)&&this._automationEvents.push(ms(this.getValue(t),t)),r!==void 0&&Qe(r)&&r.startTime+r.duration>t){const o=t-r.startTime,a=(r.values.length-1)/r.duration,c=Math.max(2,1+Math.ceil(o*a)),l=o/(c-1)*a,u=r.values.slice(0,c);if(l<1)for(let h=1;h<c;h+=1){const p=l*h%1;u[h]=r.values[h-1]*(1-p)+r.values[h]*p}this._automationEvents[this._automationEvents.length-1]=Ki(u,r.startTime,o)}}}else{const n=this._automationEvents.findIndex(o=>rt(o)>t),i=n===-1?this._automationEvents[this._automationEvents.length-1]:this._automationEvents[n-1];if(i!==void 0&&Qe(i)&&rt(i)+i.duration>t)return!1;const r=Pt(e)?wi(e.value,e.endTime,this._currenTime):kn(e)?Ti(e.value,t,this._currenTime):e;if(n===-1)this._automationEvents.push(r);else{if(Qe(e)&&t+e.duration>rt(this._automationEvents[n]))return!1;this._automationEvents.splice(n,0,r)}}return!0}flush(e){const t=this._automationEvents.findIndex(n=>rt(n)>e);if(t>1){const n=this._automationEvents.slice(t-1),i=n[0];Tn(i)&&n.unshift(ms(On(this._automationEvents,t-2,i.startTime,this._defaultValue),i.startTime)),this._automationEvents=n}}getValue(e){if(this._automationEvents.length===0)return this._defaultValue;const t=this._automationEvents.findIndex(o=>rt(o)>e),n=this._automationEvents[t],i=(t===-1?this._automationEvents.length:t)-1,r=this._automationEvents[i];if(r!==void 0&&Tn(r)&&(n===void 0||!ot(n)||n.insertTime>e))return er(e,On(this._automationEvents,i-1,r.startTime,this._defaultValue),r);if(r!==void 0&&As(r)&&(n===void 0||!ot(n)))return r.value;if(r!==void 0&&Qe(r)&&(n===void 0||!ot(n)||r.startTime+r.duration>e))return e<r.startTime+r.duration?Mo(e,r):r.values[r.values.length-1];if(r!==void 0&&ot(r)&&(n===void 0||!ot(n)))return r.value;if(n!==void 0&&Pt(n)){const[o,a]=Si(this._automationEvents,i,r,n,this._defaultValue);return bi(e,o,a,n)}if(n!==void 0&&kn(n)){const[o,a]=Si(this._automationEvents,i,r,n,this._defaultValue);return Ci(e,o,a,n)}return this._defaultValue}}const Do=s=>({cancelTime:s,type:"cancelAndHold"}),Ro=s=>({cancelTime:s,type:"cancelScheduledValues"}),Po=(s,e)=>({endTime:e,type:"exponentialRampToValue",value:s}),zo=(s,e)=>({endTime:e,type:"linearRampToValue",value:s}),Fo=(s,e,t)=>({startTime:e,target:s,timeConstant:t,type:"setTarget"}),Vo=()=>new DOMException("","AbortError"),Lo=s=>(e,t,[n,i,r],o)=>{s(e[i],[t,n,r],a=>a[0]===t&&a[1]===n,o)},qo=s=>(e,t,n)=>{const i=[];for(let r=0;r<n.numberOfInputs;r+=1)i.push(new Set);s.set(e,{activeInputs:i,outputs:new Set,passiveInputs:new WeakMap,renderer:t})},Wo=s=>(e,t)=>{s.set(e,{activeInputs:new Set,passiveInputs:new WeakMap,renderer:t})},qt=new WeakSet,tr=new WeakMap,Ns=new WeakMap,nr=new WeakMap,ks=new WeakMap,Bn=new WeakMap,sr=new WeakMap,vs=new WeakMap,ys=new WeakMap,xs=new WeakMap,ir={construct(){return ir}},jo=s=>{try{const e=new Proxy(s,ir);new e}catch{return!1}return!0},Ai=/^import(?:(?:[\s]+[\w]+|(?:[\s]+[\w]+[\s]*,)?[\s]*\{[\s]*[\w]+(?:[\s]+as[\s]+[\w]+)?(?:[\s]*,[\s]*[\w]+(?:[\s]+as[\s]+[\w]+)?)*[\s]*}|(?:[\s]+[\w]+[\s]*,)?[\s]*\*[\s]+as[\s]+[\w]+)[\s]+from)?(?:[\s]*)("([^"\\]|\\.)+"|'([^'\\]|\\.)+')(?:[\s]*);?/,Ni=(s,e)=>{const t=[];let n=s.replace(/^[\s]+/,""),i=n.match(Ai);for(;i!==null;){const r=i[1].slice(1,-1),o=i[0].replace(/([\s]+)?;?$/,"").replace(r,new URL(r,e).toString());t.push(o),n=n.slice(i[0].length).replace(/^[\s]+/,""),i=n.match(Ai)}return[t.join(";"),n]},ki=s=>{if(s!==void 0&&!Array.isArray(s))throw new TypeError("The parameterDescriptors property of given value for processorCtor is not an array.")},Oi=s=>{if(!jo(s))throw new TypeError("The given value for processorCtor should be a constructor.");if(s.prototype===null||typeof s.prototype!="object")throw new TypeError("The given value for processorCtor should have a prototype.")},Bo=(s,e,t,n,i,r,o,a,c,l,u,h,p)=>{let f=0;return(d,m,_={credentials:"omit"})=>{const v=u.get(d);if(v!==void 0&&v.has(m))return Promise.resolve();const T=l.get(d);if(T!==void 0){const g=T.get(m);if(g!==void 0)return g}const S=r(d),C=S.audioWorklet===void 0?i(m).then(([g,x])=>{const[w,y]=Ni(g,x),k=`${w};((a,b)=>{(a[b]=a[b]||[]).push((AudioWorkletProcessor,global,registerProcessor,sampleRate,self,window)=>{${y}
 })})(window,'_AWGS')`;return t(k)}).then(()=>{const g=p._AWGS.pop();if(g===void 0)throw new SyntaxError;n(S.currentTime,S.sampleRate,()=>g(class{},void 0,(x,w)=>{if(x.trim()==="")throw e();const y=ys.get(S);if(y!==void 0){if(y.has(x))throw e();Oi(w),ki(w.parameterDescriptors),y.set(x,w)}else Oi(w),ki(w.parameterDescriptors),ys.set(S,new Map([[x,w]]))},S.sampleRate,void 0,void 0))}):Promise.all([i(m),Promise.resolve(s(h,h))]).then(([[g,x],w])=>{const y=f+1;f=y;const[k,N]=Ni(g,x),E=`${k};((AudioWorkletProcessor,registerProcessor)=>{${N}
 })(${w?"AudioWorkletProcessor":"class extends AudioWorkletProcessor {__b=new WeakSet();constructor(){super();(p=>p.postMessage=(q=>(m,t)=>q.call(p,m,t?t.filter(u=>!this.__b.has(u)):t))(p.postMessage))(this.port)}}"},(n,p)=>registerProcessor(n,class extends p{${w?"":"__c = (a) => a.forEach(e=>this.__b.add(e.buffer));"}process(i,o,p){${w?"":"i.forEach(this.__c);o.forEach(this.__c);this.__c(Object.values(p));"}return super.process(i.map(j=>j.some(k=>k.length===0)?[]:j),o,p)}}));registerProcessor('__sac${y}',class extends AudioWorkletProcessor{process(){return !1}})`,F=new Blob([E],{type:"application/javascript; charset=utf-8"}),I=URL.createObjectURL(F);return S.audioWorklet.addModule(I,_).then(()=>{if(a(S))return S;const D=o(S);return D.audioWorklet.addModule(I,_).then(()=>D)}).then(D=>{if(c===null)throw new SyntaxError;try{new c(D,`__sac${y}`)}catch{throw new SyntaxError}}).finally(()=>URL.revokeObjectURL(I))});return T===void 0?l.set(d,new Map([[m,C]])):T.set(m,C),C.then(()=>{const g=u.get(d);g===void 0?u.set(d,new Set([m])):g.add(m)}).finally(()=>{const g=l.get(d);g!==void 0&&g.delete(m)}),C}},Le=(s,e)=>{const t=s.get(e);if(t===void 0)throw new Error("A value with the given key could not be found.");return t},Un=(s,e)=>{const t=Array.from(s).filter(e);if(t.length>1)throw Error("More than one element was found.");if(t.length===0)throw Error("No element was found.");const[n]=t;return s.delete(n),n},rr=(s,e,t,n)=>{const i=Le(s,e),r=Un(i,o=>o[0]===t&&o[1]===n);return i.size===0&&s.delete(e),r},cn=s=>Le(sr,s),Wt=s=>{if(qt.has(s))throw new Error("The AudioNode is already stored.");qt.add(s),cn(s).forEach(e=>e(!0))},or=s=>"port"in s,ln=s=>{if(!qt.has(s))throw new Error("The AudioNode is not stored.");qt.delete(s),cn(s).forEach(e=>e(!1))},ws=(s,e)=>{!or(s)&&e.every(t=>t.size===0)&&ln(s)},Uo=(s,e,t,n,i,r,o,a,c,l,u,h,p)=>{const f=new WeakMap;return(d,m,_,v,T)=>{const{activeInputs:S,passiveInputs:C}=r(m),{outputs:g}=r(d),x=a(d),w=y=>{const k=c(m),N=c(d);if(y){const A=rr(C,d,_,v);s(S,d,A,!1),!T&&!h(d)&&t(N,k,_,v),p(m)&&Wt(m)}else{const A=n(S,d,_,v);e(C,v,A,!1),!T&&!h(d)&&i(N,k,_,v);const b=o(m);if(b===0)u(m)&&ws(m,S);else{const M=f.get(m);M!==void 0&&clearTimeout(M),f.set(m,setTimeout(()=>{u(m)&&ws(m,S)},b*1e3))}}};return l(g,[m,_,v],y=>y[0]===m&&y[1]===_&&y[2]===v,!0)?(x.add(w),u(d)?s(S,d,[_,v,w],!0):e(C,v,[d,_,w],!0),!0):!1}},Go=s=>(e,t,[n,i,r],o)=>{const a=e.get(n);a===void 0?e.set(n,new Set([[i,t,r]])):s(a,[i,t,r],c=>c[0]===i&&c[1]===t,o)},Ho=s=>(e,t)=>{const n=s(e,{channelCount:1,channelCountMode:"explicit",channelInterpretation:"discrete",gain:0});t.connect(n).connect(e.destination);const i=()=>{t.removeEventListener("ended",i),t.disconnect(n),n.disconnect()};t.addEventListener("ended",i)},Zo=s=>(e,t)=>{s(e).add(t)},$o={channelCount:2,channelCountMode:"max",channelInterpretation:"speakers",fftSize:2048,maxDecibels:-30,minDecibels:-100,smoothingTimeConstant:.8},Xo=(s,e,t,n,i,r)=>class extends s{constructor(a,c){const l=i(a),u={...$o,...c},h=n(l,u),p=r(l)?e():null;super(a,!1,h,p),this._nativeAnalyserNode=h}get fftSize(){return this._nativeAnalyserNode.fftSize}set fftSize(a){this._nativeAnalyserNode.fftSize=a}get frequencyBinCount(){return this._nativeAnalyserNode.frequencyBinCount}get maxDecibels(){return this._nativeAnalyserNode.maxDecibels}set maxDecibels(a){const c=this._nativeAnalyserNode.maxDecibels;if(this._nativeAnalyserNode.maxDecibels=a,!(a>this._nativeAnalyserNode.minDecibels))throw this._nativeAnalyserNode.maxDecibels=c,t()}get minDecibels(){return this._nativeAnalyserNode.minDecibels}set minDecibels(a){const c=this._nativeAnalyserNode.minDecibels;if(this._nativeAnalyserNode.minDecibels=a,!(this._nativeAnalyserNode.maxDecibels>a))throw this._nativeAnalyserNode.minDecibels=c,t()}get smoothingTimeConstant(){return this._nativeAnalyserNode.smoothingTimeConstant}set smoothingTimeConstant(a){this._nativeAnalyserNode.smoothingTimeConstant=a}getByteFrequencyData(a){this._nativeAnalyserNode.getByteFrequencyData(a)}getByteTimeDomainData(a){this._nativeAnalyserNode.getByteTimeDomainData(a)}getFloatFrequencyData(a){this._nativeAnalyserNode.getFloatFrequencyData(a)}getFloatTimeDomainData(a){this._nativeAnalyserNode.getFloatTimeDomainData(a)}},ge=(s,e)=>s.context===e,Yo=(s,e,t)=>()=>{const n=new WeakMap,i=async(r,o)=>{let a=e(r);if(!ge(a,o)){const l={channelCount:a.channelCount,channelCountMode:a.channelCountMode,channelInterpretation:a.channelInterpretation,fftSize:a.fftSize,maxDecibels:a.maxDecibels,minDecibels:a.minDecibels,smoothingTimeConstant:a.smoothingTimeConstant};a=s(o,l)}return n.set(o,a),await t(r,o,a),a};return{render(r,o){const a=n.get(o);return a!==void 0?Promise.resolve(a):i(r,o)}}},En=s=>{try{s.copyToChannel(new Float32Array(1),0,-1)}catch{return!1}return!0},$e=()=>new DOMException("","IndexSizeError"),Os=s=>{s.getChannelData=(e=>t=>{try{return e.call(s,t)}catch(n){throw n.code===12?$e():n}})(s.getChannelData)},Qo={numberOfChannels:1},Jo=(s,e,t,n,i,r,o,a)=>{let c=null;return class ar{constructor(u){if(i===null)throw new Error("Missing the native OfflineAudioContext constructor.");const{length:h,numberOfChannels:p,sampleRate:f}={...Qo,...u};c===null&&(c=new i(1,1,44100));const d=n!==null&&e(r,r)?new n({length:h,numberOfChannels:p,sampleRate:f}):c.createBuffer(p,h,f);if(d.numberOfChannels===0)throw t();return typeof d.copyFromChannel!="function"?(o(d),Os(d)):e(En,()=>En(d))||a(d),s.add(d),d}static[Symbol.hasInstance](u){return u!==null&&typeof u=="object"&&Object.getPrototypeOf(u)===ar.prototype||s.has(u)}}},Se=-34028234663852886e22,xe=-Se,Je=s=>qt.has(s),Ko={buffer:null,channelCount:2,channelCountMode:"max",channelInterpretation:"speakers",loop:!1,loopEnd:0,loopStart:0,playbackRate:1},ea=(s,e,t,n,i,r,o,a)=>class extends s{constructor(l,u){const h=r(l),p={...Ko,...u},f=i(h,p),d=o(h),m=d?e():null;super(l,!1,f,m),this._audioBufferSourceNodeRenderer=m,this._isBufferNullified=!1,this._isBufferSet=p.buffer!==null,this._nativeAudioBufferSourceNode=f,this._onended=null,this._playbackRate=t(this,d,f.playbackRate,xe,Se)}get buffer(){return this._isBufferNullified?null:this._nativeAudioBufferSourceNode.buffer}set buffer(l){if(this._nativeAudioBufferSourceNode.buffer=l,l!==null){if(this._isBufferSet)throw n();this._isBufferSet=!0}}get loop(){return this._nativeAudioBufferSourceNode.loop}set loop(l){this._nativeAudioBufferSourceNode.loop=l}get loopEnd(){return this._nativeAudioBufferSourceNode.loopEnd}set loopEnd(l){this._nativeAudioBufferSourceNode.loopEnd=l}get loopStart(){return this._nativeAudioBufferSourceNode.loopStart}set loopStart(l){this._nativeAudioBufferSourceNode.loopStart=l}get onended(){return this._onended}set onended(l){const u=typeof l=="function"?a(this,l):null;this._nativeAudioBufferSourceNode.onended=u;const h=this._nativeAudioBufferSourceNode.onended;this._onended=h!==null&&h===u?l:h}get playbackRate(){return this._playbackRate}start(l=0,u=0,h){if(this._nativeAudioBufferSourceNode.start(l,u,h),this._audioBufferSourceNodeRenderer!==null&&(this._audioBufferSourceNodeRenderer.start=h===void 0?[l,u]:[l,u,h]),this.context.state!=="closed"){Wt(this);const p=()=>{this._nativeAudioBufferSourceNode.removeEventListener("ended",p),Je(this)&&ln(this)};this._nativeAudioBufferSourceNode.addEventListener("ended",p)}}stop(l=0){this._nativeAudioBufferSourceNode.stop(l),this._audioBufferSourceNodeRenderer!==null&&(this._audioBufferSourceNodeRenderer.stop=l)}},ta=(s,e,t,n,i)=>()=>{const r=new WeakMap;let o=null,a=null;const c=async(l,u)=>{let h=t(l);const p=ge(h,u);if(!p){const f={buffer:h.buffer,channelCount:h.channelCount,channelCountMode:h.channelCountMode,channelInterpretation:h.channelInterpretation,loop:h.loop,loopEnd:h.loopEnd,loopStart:h.loopStart,playbackRate:h.playbackRate.value};h=e(u,f),o!==null&&h.start(...o),a!==null&&h.stop(a)}return r.set(u,h),p?await s(u,l.playbackRate,h.playbackRate):await n(u,l.playbackRate,h.playbackRate),await i(l,u,h),h};return{set start(l){o=l},set stop(l){a=l},render(l,u){const h=r.get(u);return h!==void 0?Promise.resolve(h):c(l,u)}}},na=s=>"playbackRate"in s,sa=s=>"frequency"in s&&"gain"in s,ia=s=>"offset"in s,ra=s=>!("frequency"in s)&&"gain"in s,oa=s=>"detune"in s&&"frequency"in s,aa=s=>"pan"in s,we=s=>Le(tr,s),un=s=>Le(nr,s),Ts=(s,e)=>{const{activeInputs:t}=we(s);t.forEach(i=>i.forEach(([r])=>{e.includes(s)||Ts(r,[...e,s])}));const n=na(s)?[s.playbackRate]:or(s)?Array.from(s.parameters.values()):sa(s)?[s.Q,s.detune,s.frequency,s.gain]:ia(s)?[s.offset]:ra(s)?[s.gain]:oa(s)?[s.detune,s.frequency]:aa(s)?[s.pan]:[];for(const i of n){const r=un(i);r!==void 0&&r.activeInputs.forEach(([o])=>Ts(o,e))}Je(s)&&ln(s)},cr=s=>{Ts(s.destination,[])},ca=s=>s===void 0||typeof s=="number"||typeof s=="string"&&(s==="balanced"||s==="interactive"||s==="playback"),la=(s,e,t,n,i,r,o,a,c)=>class extends s{constructor(u={}){if(c===null)throw new Error("Missing the native AudioContext constructor.");let h;try{h=new c(u)}catch(d){throw d.code===12&&d.message==="sampleRate is not in range"?t():d}if(h===null)throw n();if(!ca(u.latencyHint))throw new TypeError(`The provided value '${u.latencyHint}' is not a valid enum value of type AudioContextLatencyCategory.`);if(u.sampleRate!==void 0&&h.sampleRate!==u.sampleRate)throw t();super(h,2);const{latencyHint:p}=u,{sampleRate:f}=h;if(this._baseLatency=typeof h.baseLatency=="number"?h.baseLatency:p==="balanced"?512/f:p==="interactive"||p===void 0?256/f:p==="playback"?1024/f:Math.max(2,Math.min(128,Math.round(p*f/128)))*128/f,this._nativeAudioContext=h,c.name==="webkitAudioContext"?(this._nativeGainNode=h.createGain(),this._nativeOscillatorNode=h.createOscillator(),this._nativeGainNode.gain.value=1e-37,this._nativeOscillatorNode.connect(this._nativeGainNode).connect(h.destination),this._nativeOscillatorNode.start()):(this._nativeGainNode=null,this._nativeOscillatorNode=null),this._state=null,h.state==="running"){this._state="suspended";const d=()=>{this._state==="suspended"&&(this._state=null),h.removeEventListener("statechange",d)};h.addEventListener("statechange",d)}}get baseLatency(){return this._baseLatency}get state(){return this._state!==null?this._state:this._nativeAudioContext.state}close(){return this.state==="closed"?this._nativeAudioContext.close().then(()=>{throw e()}):(this._state==="suspended"&&(this._state=null),this._nativeAudioContext.close().then(()=>{this._nativeGainNode!==null&&this._nativeOscillatorNode!==null&&(this._nativeOscillatorNode.stop(),this._nativeGainNode.disconnect(),this._nativeOscillatorNode.disconnect()),cr(this)}))}createMediaElementSource(u){return new i(this,{mediaElement:u})}createMediaStreamDestination(){return new r(this)}createMediaStreamSource(u){return new o(this,{mediaStream:u})}createMediaStreamTrackSource(u){return new a(this,{mediaStreamTrack:u})}resume(){return this._state==="suspended"?new Promise((u,h)=>{const p=()=>{this._nativeAudioContext.removeEventListener("statechange",p),this._nativeAudioContext.state==="running"?u():this.resume().then(u,h)};this._nativeAudioContext.addEventListener("statechange",p)}):this._nativeAudioContext.resume().catch(u=>{throw u===void 0||u.code===15?e():u})}suspend(){return this._nativeAudioContext.suspend().catch(u=>{throw u===void 0?e():u})}},ua=(s,e,t,n,i,r,o,a)=>class extends s{constructor(l,u){const h=r(l),p=o(h),f=i(h,u,p),d=p?e(a):null;super(l,!1,f,d),this._isNodeOfNativeOfflineAudioContext=p,this._nativeAudioDestinationNode=f}get channelCount(){return this._nativeAudioDestinationNode.channelCount}set channelCount(l){if(this._isNodeOfNativeOfflineAudioContext)throw n();if(l>this._nativeAudioDestinationNode.maxChannelCount)throw t();this._nativeAudioDestinationNode.channelCount=l}get channelCountMode(){return this._nativeAudioDestinationNode.channelCountMode}set channelCountMode(l){if(this._isNodeOfNativeOfflineAudioContext)throw n();this._nativeAudioDestinationNode.channelCountMode=l}get maxChannelCount(){return this._nativeAudioDestinationNode.maxChannelCount}},ha=s=>{const e=new WeakMap,t=async(n,i)=>{const r=i.destination;return e.set(i,r),await s(n,i,r),r};return{render(n,i){const r=e.get(i);return r!==void 0?Promise.resolve(r):t(n,i)}}},da=(s,e,t,n,i,r,o,a)=>(c,l)=>{const u=l.listener,h=()=>{const g=new Float32Array(1),x=e(l,{channelCount:1,channelCountMode:"explicit",channelInterpretation:"speakers",numberOfInputs:9}),w=o(l);let y=!1,k=[0,0,-1,0,1,0],N=[0,0,0];const A=()=>{if(y)return;y=!0;const F=n(l,256,9,0);F.onaudioprocess=({inputBuffer:I})=>{const D=[r(I,g,0),r(I,g,1),r(I,g,2),r(I,g,3),r(I,g,4),r(I,g,5)];D.some((V,j)=>V!==k[j])&&(u.setOrientation(...D),k=D);const B=[r(I,g,6),r(I,g,7),r(I,g,8)];B.some((V,j)=>V!==N[j])&&(u.setPosition(...B),N=B)},x.connect(F)},b=F=>I=>{I!==k[F]&&(k[F]=I,u.setOrientation(...k))},M=F=>I=>{I!==N[F]&&(N[F]=I,u.setPosition(...N))},E=(F,I,D)=>{const B=t(l,{channelCount:1,channelCountMode:"explicit",channelInterpretation:"discrete",offset:I});B.connect(x,0,F),B.start(),Object.defineProperty(B.offset,"defaultValue",{get(){return I}});const V=s({context:c},w,B.offset,xe,Se);return a(V,"value",j=>()=>j.call(V),j=>W=>{try{j.call(V,W)}catch($){if($.code!==9)throw $}A(),w&&D(W)}),V.cancelAndHoldAtTime=(j=>w?()=>{throw i()}:(...W)=>{const $=j.apply(V,W);return A(),$})(V.cancelAndHoldAtTime),V.cancelScheduledValues=(j=>w?()=>{throw i()}:(...W)=>{const $=j.apply(V,W);return A(),$})(V.cancelScheduledValues),V.exponentialRampToValueAtTime=(j=>w?()=>{throw i()}:(...W)=>{const $=j.apply(V,W);return A(),$})(V.exponentialRampToValueAtTime),V.linearRampToValueAtTime=(j=>w?()=>{throw i()}:(...W)=>{const $=j.apply(V,W);return A(),$})(V.linearRampToValueAtTime),V.setTargetAtTime=(j=>w?()=>{throw i()}:(...W)=>{const $=j.apply(V,W);return A(),$})(V.setTargetAtTime),V.setValueAtTime=(j=>w?()=>{throw i()}:(...W)=>{const $=j.apply(V,W);return A(),$})(V.setValueAtTime),V.setValueCurveAtTime=(j=>w?()=>{throw i()}:(...W)=>{const $=j.apply(V,W);return A(),$})(V.setValueCurveAtTime),V};return{forwardX:E(0,0,b(0)),forwardY:E(1,0,b(1)),forwardZ:E(2,-1,b(2)),positionX:E(6,0,M(0)),positionY:E(7,0,M(1)),positionZ:E(8,0,M(2)),upX:E(3,0,b(3)),upY:E(4,1,b(4)),upZ:E(5,0,b(5))}},{forwardX:p,forwardY:f,forwardZ:d,positionX:m,positionY:_,positionZ:v,upX:T,upY:S,upZ:C}=u.forwardX===void 0?h():u;return{get forwardX(){return p},get forwardY(){return f},get forwardZ(){return d},get positionX(){return m},get positionY(){return _},get positionZ(){return v},get upX(){return T},get upY(){return S},get upZ(){return C}}},Mn=s=>"context"in s,hn=s=>Mn(s[0]),kt=(s,e,t,n)=>{for(const i of s)if(t(i)){if(n)return!1;throw Error("The set contains at least one similar element.")}return s.add(e),!0},Ei=(s,e,[t,n],i)=>{kt(s,[e,t,n],r=>r[0]===e&&r[1]===t,i)},Mi=(s,[e,t,n],i)=>{const r=s.get(e);r===void 0?s.set(e,new Set([[t,n]])):kt(r,[t,n],o=>o[0]===t,i)},$t=s=>"inputs"in s,In=(s,e,t,n)=>{if($t(e)){const i=e.inputs[n];return s.connect(i,t,0),[i,t,0]}return s.connect(e,t,n),[e,t,n]},lr=(s,e,t)=>{for(const n of s)if(n[0]===e&&n[1]===t)return s.delete(n),n;return null},pa=(s,e,t)=>Un(s,n=>n[0]===e&&n[1]===t),ur=(s,e)=>{if(!cn(s).delete(e))throw new Error("Missing the expected event listener.")},hr=(s,e,t)=>{const n=Le(s,e),i=Un(n,r=>r[0]===t);return n.size===0&&s.delete(e),i},Dn=(s,e,t,n)=>{$t(e)?s.disconnect(e.inputs[n],t,0):s.disconnect(e,t,n)},te=s=>Le(Ns,s),rn=s=>Le(ks,s),St=s=>vs.has(s),An=s=>!qt.has(s),Ii=(s,e)=>new Promise(t=>{if(e!==null)t(!0);else{const n=s.createScriptProcessor(256,1,1),i=s.createGain(),r=s.createBuffer(1,2,44100),o=r.getChannelData(0);o[0]=1,o[1]=1;const a=s.createBufferSource();a.buffer=r,a.loop=!0,a.connect(n).connect(s.destination),a.connect(i),a.disconnect(i),n.onaudioprocess=c=>{const l=c.inputBuffer.getChannelData(0);Array.prototype.some.call(l,u=>u===1)?t(!0):t(!1),a.stop(),n.onaudioprocess=null,a.disconnect(n),n.disconnect(s.destination)},a.start()}}),hs=(s,e)=>{const t=new Map;for(const n of s)for(const i of n){const r=t.get(i);t.set(i,r===void 0?1:r+1)}t.forEach((n,i)=>e(i,n))},Rn=s=>"context"in s,fa=s=>{const e=new Map;s.connect=(t=>(n,i=0,r=0)=>{const o=Rn(n)?t(n,i,r):t(n,i),a=e.get(n);return a===void 0?e.set(n,[{input:r,output:i}]):a.every(c=>c.input!==r||c.output!==i)&&a.push({input:r,output:i}),o})(s.connect.bind(s)),s.disconnect=(t=>(n,i,r)=>{if(t.apply(s),n===void 0)e.clear();else if(typeof n=="number")for(const[o,a]of e){const c=a.filter(l=>l.output!==n);c.length===0?e.delete(o):e.set(o,c)}else if(e.has(n))if(i===void 0)e.delete(n);else{const o=e.get(n);if(o!==void 0){const a=o.filter(c=>c.output!==i&&(c.input!==r||r===void 0));a.length===0?e.delete(n):e.set(n,a)}}for(const[o,a]of e)a.forEach(c=>{Rn(o)?s.connect(o,c.output,c.input):s.connect(o,c.output)})})(s.disconnect)},ma=(s,e,t,n)=>{const{activeInputs:i,passiveInputs:r}=un(e),{outputs:o}=we(s),a=cn(s),c=l=>{const u=te(s),h=rn(e);if(l){const p=hr(r,s,t);Ei(i,s,p,!1),!n&&!St(s)&&u.connect(h,t)}else{const p=pa(i,s,t);Mi(r,p,!1),!n&&!St(s)&&u.disconnect(h,t)}};return kt(o,[e,t],l=>l[0]===e&&l[1]===t,!0)?(a.add(c),Je(s)?Ei(i,s,[t,c],!0):Mi(r,[s,t,c],!0),!0):!1},_a=(s,e,t,n)=>{const{activeInputs:i,passiveInputs:r}=we(e),o=lr(i[n],s,t);return o===null?[rr(r,s,t,n)[2],!1]:[o[2],!0]},ga=(s,e,t)=>{const{activeInputs:n,passiveInputs:i}=un(e),r=lr(n,s,t);return r===null?[hr(i,s,t)[1],!1]:[r[2],!0]},Es=(s,e,t,n,i)=>{const[r,o]=_a(s,t,n,i);if(r!==null&&(ur(s,r),o&&!e&&!St(s)&&Dn(te(s),te(t),n,i)),Je(t)){const{activeInputs:a}=we(t);ws(t,a)}},Ms=(s,e,t,n)=>{const[i,r]=ga(s,t,n);i!==null&&(ur(s,i),r&&!e&&!St(s)&&te(s).disconnect(rn(t),n))},va=(s,e)=>{const t=we(s),n=[];for(const i of t.outputs)hn(i)?Es(s,e,...i):Ms(s,e,...i),n.push(i[0]);return t.outputs.clear(),n},ya=(s,e,t)=>{const n=we(s),i=[];for(const r of n.outputs)r[1]===t&&(hn(r)?Es(s,e,...r):Ms(s,e,...r),i.push(r[0]),n.outputs.delete(r));return i},xa=(s,e,t,n,i)=>{const r=we(s);return Array.from(r.outputs).filter(o=>o[0]===t&&(n===void 0||o[1]===n)&&(i===void 0||o[2]===i)).map(o=>(hn(o)?Es(s,e,...o):Ms(s,e,...o),r.outputs.delete(o),o[0]))},wa=(s,e,t,n,i,r,o,a,c,l,u,h,p,f,d,m)=>class extends l{constructor(v,T,S,C){super(S),this._context=v,this._nativeAudioNode=S;const g=u(v);h(g)&&t(Ii,()=>Ii(g,m))!==!0&&fa(S),Ns.set(this,S),sr.set(this,new Set),v.state!=="closed"&&T&&Wt(this),s(this,C,S)}get channelCount(){return this._nativeAudioNode.channelCount}set channelCount(v){this._nativeAudioNode.channelCount=v}get channelCountMode(){return this._nativeAudioNode.channelCountMode}set channelCountMode(v){this._nativeAudioNode.channelCountMode=v}get channelInterpretation(){return this._nativeAudioNode.channelInterpretation}set channelInterpretation(v){this._nativeAudioNode.channelInterpretation=v}get context(){return this._context}get numberOfInputs(){return this._nativeAudioNode.numberOfInputs}get numberOfOutputs(){return this._nativeAudioNode.numberOfOutputs}connect(v,T=0,S=0){if(T<0||T>=this._nativeAudioNode.numberOfOutputs)throw i();const C=u(this._context),g=d(C);if(p(v)||f(v))throw r();if(Mn(v)){const y=te(v);try{const N=In(this._nativeAudioNode,y,T,S),A=An(this);(g||A)&&this._nativeAudioNode.disconnect(...N),this.context.state!=="closed"&&!A&&An(v)&&Wt(v)}catch(N){throw N.code===12?r():N}if(e(this,v,T,S,g)){const N=c([this],v);hs(N,n(g))}return v}const x=rn(v);if(x.name==="playbackRate"&&x.maxValue===1024)throw o();try{this._nativeAudioNode.connect(x,T),(g||An(this))&&this._nativeAudioNode.disconnect(x,T)}catch(y){throw y.code===12?r():y}if(ma(this,v,T,g)){const y=c([this],v);hs(y,n(g))}}disconnect(v,T,S){let C;const g=u(this._context),x=d(g);if(v===void 0)C=va(this,x);else if(typeof v=="number"){if(v<0||v>=this.numberOfOutputs)throw i();C=ya(this,x,v)}else{if(T!==void 0&&(T<0||T>=this.numberOfOutputs)||Mn(v)&&S!==void 0&&(S<0||S>=v.numberOfInputs))throw i();if(C=xa(this,x,v,T,S),C.length===0)throw r()}for(const w of C){const y=c([this],w);hs(y,a)}}},Ta=(s,e,t,n,i,r,o,a,c,l,u,h,p)=>(f,d,m,_=null,v=null)=>{const T=m.value,S=new Io(T),C=d?n(S):null,g={get defaultValue(){return T},get maxValue(){return _===null?m.maxValue:_},get minValue(){return v===null?m.minValue:v},get value(){return m.value},set value(x){m.value=x,g.setValueAtTime(x,f.context.currentTime)},cancelAndHoldAtTime(x){if(typeof m.cancelAndHoldAtTime=="function")C===null&&S.flush(f.context.currentTime),S.add(i(x)),m.cancelAndHoldAtTime(x);else{const w=Array.from(S).pop();C===null&&S.flush(f.context.currentTime),S.add(i(x));const y=Array.from(S).pop();m.cancelScheduledValues(x),w!==y&&y!==void 0&&(y.type==="exponentialRampToValue"?m.exponentialRampToValueAtTime(y.value,y.endTime):y.type==="linearRampToValue"?m.linearRampToValueAtTime(y.value,y.endTime):y.type==="setValue"?m.setValueAtTime(y.value,y.startTime):y.type==="setValueCurve"&&m.setValueCurveAtTime(y.values,y.startTime,y.duration))}return g},cancelScheduledValues(x){return C===null&&S.flush(f.context.currentTime),S.add(r(x)),m.cancelScheduledValues(x),g},exponentialRampToValueAtTime(x,w){if(x===0)throw new RangeError;if(!Number.isFinite(w)||w<0)throw new RangeError;const y=f.context.currentTime;return C===null&&S.flush(y),Array.from(S).length===0&&(S.add(l(T,y)),m.setValueAtTime(T,y)),S.add(o(x,w)),m.exponentialRampToValueAtTime(x,w),g},linearRampToValueAtTime(x,w){const y=f.context.currentTime;return C===null&&S.flush(y),Array.from(S).length===0&&(S.add(l(T,y)),m.setValueAtTime(T,y)),S.add(a(x,w)),m.linearRampToValueAtTime(x,w),g},setTargetAtTime(x,w,y){return C===null&&S.flush(f.context.currentTime),S.add(c(x,w,y)),m.setTargetAtTime(x,w,y),g},setValueAtTime(x,w){return C===null&&S.flush(f.context.currentTime),S.add(l(x,w)),m.setValueAtTime(x,w),g},setValueCurveAtTime(x,w,y){const k=x instanceof Float32Array?x:new Float32Array(x);if(h!==null&&h.name==="webkitAudioContext"){const N=w+y,A=f.context.sampleRate,b=Math.ceil(w*A),M=Math.floor(N*A),E=M-b,F=new Float32Array(E);for(let D=0;D<E;D+=1){const B=(k.length-1)/y*((b+D)/A-w),V=Math.floor(B),j=Math.ceil(B);F[D]=V===j?k[V]:(1-(B-V))*k[V]+(1-(j-B))*k[j]}C===null&&S.flush(f.context.currentTime),S.add(u(F,w,y)),m.setValueCurveAtTime(F,w,y);const I=M/A;I<N&&p(g,F[F.length-1],I),p(g,k[k.length-1],N)}else C===null&&S.flush(f.context.currentTime),S.add(u(k,w,y)),m.setValueCurveAtTime(k,w,y);return g}};return t.set(g,m),e.set(g,f),s(g,C),g},Sa=s=>({replay(e){for(const t of s)if(t.type==="exponentialRampToValue"){const{endTime:n,value:i}=t;e.exponentialRampToValueAtTime(i,n)}else if(t.type==="linearRampToValue"){const{endTime:n,value:i}=t;e.linearRampToValueAtTime(i,n)}else if(t.type==="setTarget"){const{startTime:n,target:i,timeConstant:r}=t;e.setTargetAtTime(i,n,r)}else if(t.type==="setValue"){const{startTime:n,value:i}=t;e.setValueAtTime(i,n)}else if(t.type==="setValueCurve"){const{duration:n,startTime:i,values:r}=t;e.setValueCurveAtTime(r,i,n)}else throw new Error("Can't apply an unknown automation.")}});class dr{constructor(e){this._map=new Map(e)}get size(){return this._map.size}entries(){return this._map.entries()}forEach(e,t=null){return this._map.forEach((n,i)=>e.call(t,n,i,this))}get(e){return this._map.get(e)}has(e){return this._map.has(e)}keys(){return this._map.keys()}values(){return this._map.values()}}const ba={channelCount:2,channelCountMode:"explicit",channelInterpretation:"speakers",numberOfInputs:1,numberOfOutputs:1,parameterData:{},processorOptions:{}},Ca=(s,e,t,n,i,r,o,a,c,l,u,h,p,f)=>class extends e{constructor(m,_,v){var T;const S=a(m),C=c(S),g=u({...ba,...v});p(g);const x=ys.get(S),w=x==null?void 0:x.get(_),y=C||S.state!=="closed"?S:(T=o(S))!==null&&T!==void 0?T:S,k=i(y,C?null:m.baseLatency,l,_,w,g),N=C?n(_,g,w):null;super(m,!0,k,N);const A=[];k.parameters.forEach((M,E)=>{const F=t(this,C,M);A.push([E,F])}),this._nativeAudioWorkletNode=k,this._onprocessorerror=null,this._parameters=new dr(A),C&&s(S,this);const{activeInputs:b}=r(this);h(k,b)}get onprocessorerror(){return this._onprocessorerror}set onprocessorerror(m){const _=typeof m=="function"?f(this,m):null;this._nativeAudioWorkletNode.onprocessorerror=_;const v=this._nativeAudioWorkletNode.onprocessorerror;this._onprocessorerror=v!==null&&v===_?m:v}get parameters(){return this._parameters===null?this._nativeAudioWorkletNode.parameters:this._parameters}get port(){return this._nativeAudioWorkletNode.port}};function Pn(s,e,t,n,i){if(typeof s.copyFromChannel=="function")e[t].byteLength===0&&(e[t]=new Float32Array(128)),s.copyFromChannel(e[t],n,i);else{const r=s.getChannelData(n);if(e[t].byteLength===0)e[t]=r.slice(i,i+128);else{const o=new Float32Array(r.buffer,i*Float32Array.BYTES_PER_ELEMENT,128);e[t].set(o)}}}const pr=(s,e,t,n,i)=>{typeof s.copyToChannel=="function"?e[t].byteLength!==0&&s.copyToChannel(e[t],n,i):e[t].byteLength!==0&&s.getChannelData(n).set(e[t],i)},zn=(s,e)=>{const t=[];for(let n=0;n<s;n+=1){const i=[],r=typeof e=="number"?e:e[n];for(let o=0;o<r;o+=1)i.push(new Float32Array(128));t.push(i)}return t},Aa=(s,e)=>{const t=Le(xs,s),n=te(e);return Le(t,n)},Na=async(s,e,t,n,i,r,o)=>{const a=e===null?Math.ceil(s.context.length/128)*128:e.length,c=n.channelCount*n.numberOfInputs,l=i.reduce((_,v)=>_+v,0),u=l===0?null:t.createBuffer(l,a,t.sampleRate);if(r===void 0)throw new Error("Missing the processor constructor.");const h=we(s),p=await Aa(t,s),f=zn(n.numberOfInputs,n.channelCount),d=zn(n.numberOfOutputs,i),m=Array.from(s.parameters.keys()).reduce((_,v)=>({..._,[v]:new Float32Array(128)}),{});for(let _=0;_<a;_+=128){if(n.numberOfInputs>0&&e!==null)for(let v=0;v<n.numberOfInputs;v+=1)for(let T=0;T<n.channelCount;T+=1)Pn(e,f[v],T,T,_);r.parameterDescriptors!==void 0&&e!==null&&r.parameterDescriptors.forEach(({name:v},T)=>{Pn(e,m,v,c+T,_)});for(let v=0;v<n.numberOfInputs;v+=1)for(let T=0;T<i[v];T+=1)d[v][T].byteLength===0&&(d[v][T]=new Float32Array(128));try{const v=f.map((S,C)=>h.activeInputs[C].size===0?[]:S),T=o(_/t.sampleRate,t.sampleRate,()=>p.process(v,d,m));if(u!==null)for(let S=0,C=0;S<n.numberOfOutputs;S+=1){for(let g=0;g<i[S];g+=1)pr(u,d[S],g,C+g,_);C+=i[S]}if(!T)break}catch(v){s.dispatchEvent(new ErrorEvent("processorerror",{colno:v.colno,filename:v.filename,lineno:v.lineno,message:v.message}));break}}return u},ka=(s,e,t,n,i,r,o,a,c,l,u,h,p,f,d,m)=>(_,v,T)=>{const S=new WeakMap;let C=null;const g=async(x,w)=>{let y=u(x),k=null;const N=ge(y,w),A=Array.isArray(v.outputChannelCount)?v.outputChannelCount:Array.from(v.outputChannelCount);if(h===null){const b=A.reduce((I,D)=>I+D,0),M=i(w,{channelCount:Math.max(1,b),channelCountMode:"explicit",channelInterpretation:"discrete",numberOfOutputs:Math.max(1,b)}),E=[];for(let I=0;I<x.numberOfOutputs;I+=1)E.push(n(w,{channelCount:1,channelCountMode:"explicit",channelInterpretation:"speakers",numberOfInputs:A[I]}));const F=o(w,{channelCount:v.channelCount,channelCountMode:v.channelCountMode,channelInterpretation:v.channelInterpretation,gain:1});F.connect=e.bind(null,E),F.disconnect=c.bind(null,E),k=[M,E,F]}else N||(y=new h(w,_));if(S.set(w,k===null?y:k[2]),k!==null){if(C===null){if(T===void 0)throw new Error("Missing the processor constructor.");if(p===null)throw new Error("Missing the native OfflineAudioContext constructor.");const D=x.channelCount*x.numberOfInputs,B=T.parameterDescriptors===void 0?0:T.parameterDescriptors.length,V=D+B;C=Na(x,V===0?null:await(async()=>{const W=new p(V,Math.ceil(x.context.length/128)*128,w.sampleRate),$=[],Ae=[];for(let ne=0;ne<v.numberOfInputs;ne+=1)$.push(o(W,{channelCount:v.channelCount,channelCountMode:v.channelCountMode,channelInterpretation:v.channelInterpretation,gain:1})),Ae.push(i(W,{channelCount:v.channelCount,channelCountMode:"explicit",channelInterpretation:"discrete",numberOfOutputs:v.channelCount}));const Ne=await Promise.all(Array.from(x.parameters.values()).map(async ne=>{const ve=r(W,{channelCount:1,channelCountMode:"explicit",channelInterpretation:"discrete",offset:ne.value});return await f(W,ne,ve.offset),ve})),U=n(W,{channelCount:1,channelCountMode:"explicit",channelInterpretation:"speakers",numberOfInputs:Math.max(1,D+B)});for(let ne=0;ne<v.numberOfInputs;ne+=1){$[ne].connect(Ae[ne]);for(let ve=0;ve<v.channelCount;ve+=1)Ae[ne].connect(U,ve,ne*v.channelCount+ve)}for(const[ne,ve]of Ne.entries())ve.connect(U,0,D+ne),ve.start(0);return U.connect(W.destination),await Promise.all($.map(ne=>d(x,W,ne))),m(W)})(),w,v,A,T,l)}const b=await C,M=t(w,{buffer:null,channelCount:2,channelCountMode:"max",channelInterpretation:"speakers",loop:!1,loopEnd:0,loopStart:0,playbackRate:1}),[E,F,I]=k;b!==null&&(M.buffer=b,M.start(0)),M.connect(E);for(let D=0,B=0;D<x.numberOfOutputs;D+=1){const V=F[D];for(let j=0;j<A[D];j+=1)E.connect(V,B+j,j);B+=A[D]}return I}if(N)for(const[b,M]of x.parameters.entries())await s(w,M,y.parameters.get(b));else for(const[b,M]of x.parameters.entries())await f(w,M,y.parameters.get(b));return await d(x,w,y),y};return{render(x,w){a(w,x);const y=S.get(w);return y!==void 0?Promise.resolve(y):g(x,w)}}},Oa=(s,e,t,n,i,r,o,a,c,l,u,h,p,f,d,m,_,v,T,S)=>class extends d{constructor(g,x){super(g,x),this._nativeContext=g,this._audioWorklet=s===void 0?void 0:{addModule:(w,y)=>s(this,w,y)}}get audioWorklet(){return this._audioWorklet}createAnalyser(){return new e(this)}createBiquadFilter(){return new i(this)}createBuffer(g,x,w){return new t({length:x,numberOfChannels:g,sampleRate:w})}createBufferSource(){return new n(this)}createChannelMerger(g=6){return new r(this,{numberOfInputs:g})}createChannelSplitter(g=6){return new o(this,{numberOfOutputs:g})}createConstantSource(){return new a(this)}createConvolver(){return new c(this)}createDelay(g=1){return new u(this,{maxDelayTime:g})}createDynamicsCompressor(){return new h(this)}createGain(){return new p(this)}createIIRFilter(g,x){return new f(this,{feedback:x,feedforward:g})}createOscillator(){return new m(this)}createPanner(){return new _(this)}createPeriodicWave(g,x,w={disableNormalization:!1}){return new v(this,{...w,imag:x,real:g})}createStereoPanner(){return new T(this)}createWaveShaper(){return new S(this)}decodeAudioData(g,x,w){return l(this._nativeContext,g).then(y=>(typeof x=="function"&&x(y),y),y=>{throw typeof w=="function"&&w(y),y})}},Ea={Q:1,channelCount:2,channelCountMode:"max",channelInterpretation:"speakers",detune:0,frequency:350,gain:0,type:"lowpass"},Ma=(s,e,t,n,i,r,o,a)=>class extends s{constructor(l,u){const h=r(l),p={...Ea,...u},f=i(h,p),d=o(h),m=d?t():null;super(l,!1,f,m),this._Q=e(this,d,f.Q,xe,Se),this._detune=e(this,d,f.detune,1200*Math.log2(xe),-1200*Math.log2(xe)),this._frequency=e(this,d,f.frequency,l.sampleRate/2,0),this._gain=e(this,d,f.gain,40*Math.log10(xe),Se),this._nativeBiquadFilterNode=f,a(this,1)}get detune(){return this._detune}get frequency(){return this._frequency}get gain(){return this._gain}get Q(){return this._Q}get type(){return this._nativeBiquadFilterNode.type}set type(l){this._nativeBiquadFilterNode.type=l}getFrequencyResponse(l,u,h){try{this._nativeBiquadFilterNode.getFrequencyResponse(l,u,h)}catch(p){throw p.code===11?n():p}if(l.length!==u.length||u.length!==h.length)throw n()}},Ia=(s,e,t,n,i)=>()=>{const r=new WeakMap,o=async(a,c)=>{let l=t(a);const u=ge(l,c);if(!u){const h={Q:l.Q.value,channelCount:l.channelCount,channelCountMode:l.channelCountMode,channelInterpretation:l.channelInterpretation,detune:l.detune.value,frequency:l.frequency.value,gain:l.gain.value,type:l.type};l=e(c,h)}return r.set(c,l),u?(await s(c,a.Q,l.Q),await s(c,a.detune,l.detune),await s(c,a.frequency,l.frequency),await s(c,a.gain,l.gain)):(await n(c,a.Q,l.Q),await n(c,a.detune,l.detune),await n(c,a.frequency,l.frequency),await n(c,a.gain,l.gain)),await i(a,c,l),l};return{render(a,c){const l=r.get(c);return l!==void 0?Promise.resolve(l):o(a,c)}}},Da=(s,e)=>(t,n)=>{const i=e.get(t);if(i!==void 0)return i;const r=s.get(t);if(r!==void 0)return r;try{const o=n();return o instanceof Promise?(s.set(t,o),o.catch(()=>!1).then(a=>(s.delete(t),e.set(t,a),a))):(e.set(t,o),o)}catch{return e.set(t,!1),!1}},Ra={channelCount:1,channelCountMode:"explicit",channelInterpretation:"speakers",numberOfInputs:6},Pa=(s,e,t,n,i)=>class extends s{constructor(o,a){const c=n(o),l={...Ra,...a},u=t(c,l),h=i(c)?e():null;super(o,!1,u,h)}},za=(s,e,t)=>()=>{const n=new WeakMap,i=async(r,o)=>{let a=e(r);if(!ge(a,o)){const l={channelCount:a.channelCount,channelCountMode:a.channelCountMode,channelInterpretation:a.channelInterpretation,numberOfInputs:a.numberOfInputs};a=s(o,l)}return n.set(o,a),await t(r,o,a),a};return{render(r,o){const a=n.get(o);return a!==void 0?Promise.resolve(a):i(r,o)}}},Fa={channelCount:6,channelCountMode:"explicit",channelInterpretation:"discrete",numberOfOutputs:6},Va=(s,e,t,n,i,r)=>class extends s{constructor(a,c){const l=n(a),u=r({...Fa,...c}),h=t(l,u),p=i(l)?e():null;super(a,!1,h,p)}},La=(s,e,t)=>()=>{const n=new WeakMap,i=async(r,o)=>{let a=e(r);if(!ge(a,o)){const l={channelCount:a.channelCount,channelCountMode:a.channelCountMode,channelInterpretation:a.channelInterpretation,numberOfOutputs:a.numberOfOutputs};a=s(o,l)}return n.set(o,a),await t(r,o,a),a};return{render(r,o){const a=n.get(o);return a!==void 0?Promise.resolve(a):i(r,o)}}},qa=s=>(e,t,n)=>s(t,e,n),Wa=s=>(e,t,n=0,i=0)=>{const r=e[n];if(r===void 0)throw s();return Rn(t)?r.connect(t,0,i):r.connect(t,0)},ja=s=>(e,t)=>{const n=s(e,{buffer:null,channelCount:2,channelCountMode:"max",channelInterpretation:"speakers",loop:!1,loopEnd:0,loopStart:0,playbackRate:1}),i=e.createBuffer(1,2,44100);return n.buffer=i,n.loop=!0,n.connect(t),n.start(),()=>{n.stop(),n.disconnect(t)}},Ba={channelCount:2,channelCountMode:"max",channelInterpretation:"speakers",offset:1},Ua=(s,e,t,n,i,r,o)=>class extends s{constructor(c,l){const u=i(c),h={...Ba,...l},p=n(u,h),f=r(u),d=f?t():null;super(c,!1,p,d),this._constantSourceNodeRenderer=d,this._nativeConstantSourceNode=p,this._offset=e(this,f,p.offset,xe,Se),this._onended=null}get offset(){return this._offset}get onended(){return this._onended}set onended(c){const l=typeof c=="function"?o(this,c):null;this._nativeConstantSourceNode.onended=l;const u=this._nativeConstantSourceNode.onended;this._onended=u!==null&&u===l?c:u}start(c=0){if(this._nativeConstantSourceNode.start(c),this._constantSourceNodeRenderer!==null&&(this._constantSourceNodeRenderer.start=c),this.context.state!=="closed"){Wt(this);const l=()=>{this._nativeConstantSourceNode.removeEventListener("ended",l),Je(this)&&ln(this)};this._nativeConstantSourceNode.addEventListener("ended",l)}}stop(c=0){this._nativeConstantSourceNode.stop(c),this._constantSourceNodeRenderer!==null&&(this._constantSourceNodeRenderer.stop=c)}},Ga=(s,e,t,n,i)=>()=>{const r=new WeakMap;let o=null,a=null;const c=async(l,u)=>{let h=t(l);const p=ge(h,u);if(!p){const f={channelCount:h.channelCount,channelCountMode:h.channelCountMode,channelInterpretation:h.channelInterpretation,offset:h.offset.value};h=e(u,f),o!==null&&h.start(o),a!==null&&h.stop(a)}return r.set(u,h),p?await s(u,l.offset,h.offset):await n(u,l.offset,h.offset),await i(l,u,h),h};return{set start(l){o=l},set stop(l){a=l},render(l,u){const h=r.get(u);return h!==void 0?Promise.resolve(h):c(l,u)}}},Ha=s=>e=>(s[0]=e,s[0]),Za={buffer:null,channelCount:2,channelCountMode:"clamped-max",channelInterpretation:"speakers",disableNormalization:!1},$a=(s,e,t,n,i,r)=>class extends s{constructor(a,c){const l=n(a),u={...Za,...c},h=t(l,u),f=i(l)?e():null;super(a,!1,h,f),this._isBufferNullified=!1,this._nativeConvolverNode=h,u.buffer!==null&&r(this,u.buffer.duration)}get buffer(){return this._isBufferNullified?null:this._nativeConvolverNode.buffer}set buffer(a){if(this._nativeConvolverNode.buffer=a,a===null&&this._nativeConvolverNode.buffer!==null){const c=this._nativeConvolverNode.context;this._nativeConvolverNode.buffer=c.createBuffer(1,1,c.sampleRate),this._isBufferNullified=!0,r(this,0)}else this._isBufferNullified=!1,r(this,this._nativeConvolverNode.buffer===null?0:this._nativeConvolverNode.buffer.duration)}get normalize(){return this._nativeConvolverNode.normalize}set normalize(a){this._nativeConvolverNode.normalize=a}},Xa=(s,e,t)=>()=>{const n=new WeakMap,i=async(r,o)=>{let a=e(r);if(!ge(a,o)){const l={buffer:a.buffer,channelCount:a.channelCount,channelCountMode:a.channelCountMode,channelInterpretation:a.channelInterpretation,disableNormalization:!a.normalize};a=s(o,l)}return n.set(o,a),$t(a)?await t(r,o,a.inputs[0]):await t(r,o,a),a};return{render(r,o){const a=n.get(o);return a!==void 0?Promise.resolve(a):i(r,o)}}},Ya=(s,e)=>(t,n,i)=>{if(e===null)throw new Error("Missing the native OfflineAudioContext constructor.");try{return new e(t,n,i)}catch(r){throw r.name==="SyntaxError"?s():r}},Qa=()=>new DOMException("","DataCloneError"),Di=s=>{const{port1:e,port2:t}=new MessageChannel;return new Promise(n=>{const i=()=>{t.onmessage=null,e.close(),t.close(),n()};t.onmessage=()=>i();try{e.postMessage(s,[s])}catch{}finally{i()}})},Ja=(s,e,t,n,i,r,o,a,c,l,u)=>(h,p)=>{const f=o(h)?h:r(h);if(i.has(p)){const d=t();return Promise.reject(d)}try{i.add(p)}catch{}return e(c,()=>c(f))?f.decodeAudioData(p).then(d=>(Di(p).catch(()=>{}),e(a,()=>a(d))||u(d),s.add(d),d)):new Promise((d,m)=>{const _=async()=>{try{await Di(p)}catch{}},v=T=>{m(T),_()};try{f.decodeAudioData(p,T=>{typeof T.copyFromChannel!="function"&&(l(T),Os(T)),s.add(T),_().then(()=>d(T))},T=>{v(T===null?n():T)})}catch(T){v(T)}})},Ka=(s,e,t,n,i,r,o,a)=>(c,l)=>{const u=e.get(c);if(u===void 0)throw new Error("Missing the expected cycle count.");const h=r(c.context),p=a(h);if(u===l){if(e.delete(c),!p&&o(c)){const f=n(c),{outputs:d}=t(c);for(const m of d)if(hn(m)){const _=n(m[0]);s(f,_,m[1],m[2])}else{const _=i(m[0]);f.connect(_,m[1])}}}else e.set(c,u-l)},ec={channelCount:2,channelCountMode:"max",channelInterpretation:"speakers",delayTime:0,maxDelayTime:1},tc=(s,e,t,n,i,r,o)=>class extends s{constructor(c,l){const u=i(c),h={...ec,...l},p=n(u,h),f=r(u),d=f?t(h.maxDelayTime):null;super(c,!1,p,d),this._delayTime=e(this,f,p.delayTime),o(this,h.maxDelayTime)}get delayTime(){return this._delayTime}},nc=(s,e,t,n,i)=>r=>{const o=new WeakMap,a=async(c,l)=>{let u=t(c);const h=ge(u,l);if(!h){const p={channelCount:u.channelCount,channelCountMode:u.channelCountMode,channelInterpretation:u.channelInterpretation,delayTime:u.delayTime.value,maxDelayTime:r};u=e(l,p)}return o.set(l,u),h?await s(l,c.delayTime,u.delayTime):await n(l,c.delayTime,u.delayTime),await i(c,l,u),u};return{render(c,l){const u=o.get(l);return u!==void 0?Promise.resolve(u):a(c,l)}}},sc=s=>(e,t,n,i)=>s(e[i],r=>r[0]===t&&r[1]===n),ic=s=>(e,t)=>{s(e).delete(t)},rc=s=>"delayTime"in s,oc=(s,e,t)=>function n(i,r){const o=Mn(r)?r:t(s,r);if(rc(o))return[];if(i[0]===o)return[i];if(i.includes(o))return[];const{outputs:a}=e(o);return Array.from(a).map(c=>n([...i,o],c[0])).reduce((c,l)=>c.concat(l),[])},Sn=(s,e,t)=>{const n=e[t];if(n===void 0)throw s();return n},ac=s=>(e,t=void 0,n=void 0,i=0)=>t===void 0?e.forEach(r=>r.disconnect()):typeof t=="number"?Sn(s,e,t).disconnect():Rn(t)?n===void 0?e.forEach(r=>r.disconnect(t)):i===void 0?Sn(s,e,n).disconnect(t,0):Sn(s,e,n).disconnect(t,0,i):n===void 0?e.forEach(r=>r.disconnect(t)):Sn(s,e,n).disconnect(t,0),cc={attack:.003,channelCount:2,channelCountMode:"clamped-max",channelInterpretation:"speakers",knee:30,ratio:12,release:.25,threshold:-24},lc=(s,e,t,n,i,r,o,a)=>class extends s{constructor(l,u){const h=r(l),p={...cc,...u},f=n(h,p),d=o(h),m=d?t():null;super(l,!1,f,m),this._attack=e(this,d,f.attack),this._knee=e(this,d,f.knee),this._nativeDynamicsCompressorNode=f,this._ratio=e(this,d,f.ratio),this._release=e(this,d,f.release),this._threshold=e(this,d,f.threshold),a(this,.006)}get attack(){return this._attack}get channelCount(){return this._nativeDynamicsCompressorNode.channelCount}set channelCount(l){const u=this._nativeDynamicsCompressorNode.channelCount;if(this._nativeDynamicsCompressorNode.channelCount=l,l>2)throw this._nativeDynamicsCompressorNode.channelCount=u,i()}get channelCountMode(){return this._nativeDynamicsCompressorNode.channelCountMode}set channelCountMode(l){const u=this._nativeDynamicsCompressorNode.channelCountMode;if(this._nativeDynamicsCompressorNode.channelCountMode=l,l==="max")throw this._nativeDynamicsCompressorNode.channelCountMode=u,i()}get knee(){return this._knee}get ratio(){return this._ratio}get reduction(){return typeof this._nativeDynamicsCompressorNode.reduction.value=="number"?this._nativeDynamicsCompressorNode.reduction.value:this._nativeDynamicsCompressorNode.reduction}get release(){return this._release}get threshold(){return this._threshold}},uc=(s,e,t,n,i)=>()=>{const r=new WeakMap,o=async(a,c)=>{let l=t(a);const u=ge(l,c);if(!u){const h={attack:l.attack.value,channelCount:l.channelCount,channelCountMode:l.channelCountMode,channelInterpretation:l.channelInterpretation,knee:l.knee.value,ratio:l.ratio.value,release:l.release.value,threshold:l.threshold.value};l=e(c,h)}return r.set(c,l),u?(await s(c,a.attack,l.attack),await s(c,a.knee,l.knee),await s(c,a.ratio,l.ratio),await s(c,a.release,l.release),await s(c,a.threshold,l.threshold)):(await n(c,a.attack,l.attack),await n(c,a.knee,l.knee),await n(c,a.ratio,l.ratio),await n(c,a.release,l.release),await n(c,a.threshold,l.threshold)),await i(a,c,l),l};return{render(a,c){const l=r.get(c);return l!==void 0?Promise.resolve(l):o(a,c)}}},hc=()=>new DOMException("","EncodingError"),dc=s=>e=>new Promise((t,n)=>{if(s===null){n(new SyntaxError);return}const i=s.document.head;if(i===null)n(new SyntaxError);else{const r=s.document.createElement("script"),o=new Blob([e],{type:"application/javascript"}),a=URL.createObjectURL(o),c=s.onerror,l=()=>{s.onerror=c,URL.revokeObjectURL(a)};s.onerror=(u,h,p,f,d)=>{if(h===a||h===s.location.href&&p===1&&f===1)return l(),n(d),!1;if(c!==null)return c(u,h,p,f,d)},r.onerror=()=>{l(),n(new SyntaxError)},r.onload=()=>{l(),t()},r.src=a,r.type="module",i.appendChild(r)}}),pc=s=>class{constructor(t){this._nativeEventTarget=t,this._listeners=new WeakMap}addEventListener(t,n,i){if(n!==null){let r=this._listeners.get(n);r===void 0&&(r=s(this,n),typeof n=="function"&&this._listeners.set(n,r)),this._nativeEventTarget.addEventListener(t,r,i)}}dispatchEvent(t){return this._nativeEventTarget.dispatchEvent(t)}removeEventListener(t,n,i){const r=n===null?void 0:this._listeners.get(n);this._nativeEventTarget.removeEventListener(t,r===void 0?null:r,i)}},fc=s=>(e,t,n)=>{Object.defineProperties(s,{currentFrame:{configurable:!0,get(){return Math.round(e*t)}},currentTime:{configurable:!0,get(){return e}}});try{return n()}finally{s!==null&&(delete s.currentFrame,delete s.currentTime)}},mc=s=>async e=>{try{const t=await fetch(e);if(t.ok)return[await t.text(),t.url]}catch{}throw s()},_c={channelCount:2,channelCountMode:"max",channelInterpretation:"speakers",gain:1},gc=(s,e,t,n,i,r)=>class extends s{constructor(a,c){const l=i(a),u={..._c,...c},h=n(l,u),p=r(l),f=p?t():null;super(a,!1,h,f),this._gain=e(this,p,h.gain,xe,Se)}get gain(){return this._gain}},vc=(s,e,t,n,i)=>()=>{const r=new WeakMap,o=async(a,c)=>{let l=t(a);const u=ge(l,c);if(!u){const h={channelCount:l.channelCount,channelCountMode:l.channelCountMode,channelInterpretation:l.channelInterpretation,gain:l.gain.value};l=e(c,h)}return r.set(c,l),u?await s(c,a.gain,l.gain):await n(c,a.gain,l.gain),await i(a,c,l),l};return{render(a,c){const l=r.get(c);return l!==void 0?Promise.resolve(l):o(a,c)}}},yc=(s,e)=>t=>e(s,t),xc=s=>e=>{const t=s(e);if(t.renderer===null)throw new Error("Missing the renderer of the given AudioNode in the audio graph.");return t.renderer},wc=s=>e=>{var t;return(t=s.get(e))!==null&&t!==void 0?t:0},Tc=s=>e=>{const t=s(e);if(t.renderer===null)throw new Error("Missing the renderer of the given AudioParam in the audio graph.");return t.renderer},Sc=s=>e=>s.get(e),fe=()=>new DOMException("","InvalidStateError"),bc=s=>e=>{const t=s.get(e);if(t===void 0)throw fe();return t},Cc=(s,e)=>t=>{let n=s.get(t);if(n!==void 0)return n;if(e===null)throw new Error("Missing the native OfflineAudioContext constructor.");return n=new e(1,1,44100),s.set(t,n),n},Ac=s=>e=>{const t=s.get(e);if(t===void 0)throw new Error("The context has no set of AudioWorkletNodes.");return t},Gn=()=>new DOMException("","InvalidAccessError"),Nc=s=>{s.getFrequencyResponse=(e=>(t,n,i)=>{if(t.length!==n.length||n.length!==i.length)throw Gn();return e.call(s,t,n,i)})(s.getFrequencyResponse)},kc={channelCount:2,channelCountMode:"max",channelInterpretation:"speakers"},Oc=(s,e,t,n,i,r)=>class extends s{constructor(a,c){const l=n(a),u=i(l),h={...kc,...c},p=e(l,u?null:a.baseLatency,h),f=u?t(h.feedback,h.feedforward):null;super(a,!1,p,f),Nc(p),this._nativeIIRFilterNode=p,r(this,1)}getFrequencyResponse(a,c,l){return this._nativeIIRFilterNode.getFrequencyResponse(a,c,l)}},fr=(s,e,t,n,i,r,o,a,c,l,u)=>{const h=l.length;let p=a;for(let f=0;f<h;f+=1){let d=t[0]*l[f];for(let m=1;m<i;m+=1){const _=p-m&c-1;d+=t[m]*r[_],d-=s[m]*o[_]}for(let m=i;m<n;m+=1)d+=t[m]*r[p-m&c-1];for(let m=i;m<e;m+=1)d-=s[m]*o[p-m&c-1];r[p]=l[f],o[p]=d,p=p+1&c-1,u[f]=d}return p},Ec=(s,e,t,n)=>{const i=t instanceof Float64Array?t:new Float64Array(t),r=n instanceof Float64Array?n:new Float64Array(n),o=i.length,a=r.length,c=Math.min(o,a);if(i[0]!==1){for(let d=0;d<o;d+=1)r[d]/=i[0];for(let d=1;d<a;d+=1)i[d]/=i[0]}const l=32,u=new Float32Array(l),h=new Float32Array(l),p=e.createBuffer(s.numberOfChannels,s.length,s.sampleRate),f=s.numberOfChannels;for(let d=0;d<f;d+=1){const m=s.getChannelData(d),_=p.getChannelData(d);u.fill(0),h.fill(0),fr(i,o,r,a,c,u,h,0,l,m,_)}return p},Mc=(s,e,t,n,i)=>(r,o)=>{const a=new WeakMap;let c=null;const l=async(u,h)=>{let p=null,f=e(u);const d=ge(f,h);if(h.createIIRFilter===void 0?p=s(h,{buffer:null,channelCount:2,channelCountMode:"max",channelInterpretation:"speakers",loop:!1,loopEnd:0,loopStart:0,playbackRate:1}):d||(f=h.createIIRFilter(o,r)),a.set(h,p===null?f:p),p!==null){if(c===null){if(t===null)throw new Error("Missing the native OfflineAudioContext constructor.");const _=new t(u.context.destination.channelCount,u.context.length,h.sampleRate);c=(async()=>{await n(u,_,_.destination);const v=await i(_);return Ec(v,h,r,o)})()}const m=await c;return p.buffer=m,p.start(0),p}return await n(u,h,f),f};return{render(u,h){const p=a.get(h);return p!==void 0?Promise.resolve(p):l(u,h)}}},Ic=(s,e,t,n,i,r)=>o=>(a,c)=>{const l=s.get(a);if(l===void 0){if(!o&&r(a)){const u=n(a),{outputs:h}=t(a);for(const p of h)if(hn(p)){const f=n(p[0]);e(u,f,p[1],p[2])}else{const f=i(p[0]);u.disconnect(f,p[1])}}s.set(a,c)}else s.set(a,l+c)},Dc=(s,e)=>t=>{const n=s.get(t);return e(n)||e(t)},Rc=(s,e)=>t=>s.has(t)||e(t),Pc=(s,e)=>t=>s.has(t)||e(t),zc=(s,e)=>t=>{const n=s.get(t);return e(n)||e(t)},Fc=s=>e=>s!==null&&e instanceof s,Vc=s=>e=>s!==null&&typeof s.AudioNode=="function"&&e instanceof s.AudioNode,Lc=s=>e=>s!==null&&typeof s.AudioParam=="function"&&e instanceof s.AudioParam,qc=(s,e)=>t=>s(t)||e(t),Wc=s=>e=>s!==null&&e instanceof s,jc=s=>s!==null&&s.isSecureContext,Bc=(s,e,t,n)=>class extends s{constructor(r,o){const a=t(r),c=e(a,o);if(n(a))throw TypeError();super(r,!0,c,null),this._nativeMediaElementAudioSourceNode=c}get mediaElement(){return this._nativeMediaElementAudioSourceNode.mediaElement}},Uc={channelCount:2,channelCountMode:"explicit",channelInterpretation:"speakers"},Gc=(s,e,t,n)=>class extends s{constructor(r,o){const a=t(r);if(n(a))throw new TypeError;const c={...Uc,...o},l=e(a,c);super(r,!1,l,null),this._nativeMediaStreamAudioDestinationNode=l}get stream(){return this._nativeMediaStreamAudioDestinationNode.stream}},Hc=(s,e,t,n)=>class extends s{constructor(r,o){const a=t(r),c=e(a,o);if(n(a))throw new TypeError;super(r,!0,c,null),this._nativeMediaStreamAudioSourceNode=c}get mediaStream(){return this._nativeMediaStreamAudioSourceNode.mediaStream}},Zc=(s,e,t)=>class extends s{constructor(i,r){const o=t(i),a=e(o,r);super(i,!0,a,null)}},$c=(s,e,t,n,i,r)=>class extends t{constructor(a,c){super(a),this._nativeContext=a,Bn.set(this,a),n(a)&&i.set(a,new Set),this._destination=new s(this,c),this._listener=e(this,a),this._onstatechange=null}get currentTime(){return this._nativeContext.currentTime}get destination(){return this._destination}get listener(){return this._listener}get onstatechange(){return this._onstatechange}set onstatechange(a){const c=typeof a=="function"?r(this,a):null;this._nativeContext.onstatechange=c;const l=this._nativeContext.onstatechange;this._onstatechange=l!==null&&l===c?a:l}get sampleRate(){return this._nativeContext.sampleRate}get state(){return this._nativeContext.state}},on=s=>{const e=new Uint32Array([1179011410,40,1163280727,544501094,16,131073,44100,176400,1048580,1635017060,4,0]);try{const t=s.decodeAudioData(e.buffer,()=>{});return t===void 0?!1:(t.catch(()=>{}),!0)}catch{}return!1},Xc=(s,e)=>(t,n,i)=>{const r=new Set;return t.connect=(o=>(a,c=0,l=0)=>{const u=r.size===0;if(e(a))return o.call(t,a,c,l),s(r,[a,c,l],h=>h[0]===a&&h[1]===c&&h[2]===l,!0),u&&n(),a;o.call(t,a,c),s(r,[a,c],h=>h[0]===a&&h[1]===c,!0),u&&n()})(t.connect),t.disconnect=(o=>(a,c,l)=>{const u=r.size>0;if(a===void 0)o.apply(t),r.clear();else if(typeof a=="number"){o.call(t,a);for(const p of r)p[1]===a&&r.delete(p)}else{e(a)?o.call(t,a,c,l):o.call(t,a,c);for(const p of r)p[0]===a&&(c===void 0||p[1]===c)&&(l===void 0||p[2]===l)&&r.delete(p)}const h=r.size===0;u&&h&&i()})(t.disconnect),t},se=(s,e,t)=>{const n=e[t];n!==void 0&&n!==s[t]&&(s[t]=n)},pe=(s,e)=>{se(s,e,"channelCount"),se(s,e,"channelCountMode"),se(s,e,"channelInterpretation")},Ri=s=>typeof s.getFloatTimeDomainData=="function",Yc=s=>{s.getFloatTimeDomainData=e=>{const t=new Uint8Array(e.length);s.getByteTimeDomainData(t);const n=Math.max(t.length,s.fftSize);for(let i=0;i<n;i+=1)e[i]=(t[i]-128)*.0078125;return e}},Qc=(s,e)=>(t,n)=>{const i=t.createAnalyser();if(pe(i,n),!(n.maxDecibels>n.minDecibels))throw e();return se(i,n,"fftSize"),se(i,n,"maxDecibels"),se(i,n,"minDecibels"),se(i,n,"smoothingTimeConstant"),s(Ri,()=>Ri(i))||Yc(i),i},Jc=s=>s===null?null:s.hasOwnProperty("AudioBuffer")?s.AudioBuffer:null,oe=(s,e,t)=>{const n=e[t];n!==void 0&&n!==s[t].value&&(s[t].value=n)},Kc=s=>{s.start=(e=>{let t=!1;return(n=0,i=0,r)=>{if(t)throw fe();e.call(s,n,i,r),t=!0}})(s.start)},Is=s=>{s.start=(e=>(t=0,n=0,i)=>{if(typeof i=="number"&&i<0||n<0||t<0)throw new RangeError("The parameters can't be negative.");e.call(s,t,n,i)})(s.start)},Ds=s=>{s.stop=(e=>(t=0)=>{if(t<0)throw new RangeError("The parameter can't be negative.");e.call(s,t)})(s.stop)},el=(s,e,t,n,i,r,o,a,c,l,u)=>(h,p)=>{const f=h.createBufferSource();return pe(f,p),oe(f,p,"playbackRate"),se(f,p,"buffer"),se(f,p,"loop"),se(f,p,"loopEnd"),se(f,p,"loopStart"),e(t,()=>t(h))||Kc(f),e(n,()=>n(h))||c(f),e(i,()=>i(h))||l(f,h),e(r,()=>r(h))||Is(f),e(o,()=>o(h))||u(f,h),e(a,()=>a(h))||Ds(f),s(h,f),f},tl=s=>s===null?null:s.hasOwnProperty("AudioContext")?s.AudioContext:s.hasOwnProperty("webkitAudioContext")?s.webkitAudioContext:null,nl=(s,e)=>(t,n,i)=>{const r=t.destination;if(r.channelCount!==n)try{r.channelCount=n}catch{}i&&r.channelCountMode!=="explicit"&&(r.channelCountMode="explicit"),r.maxChannelCount===0&&Object.defineProperty(r,"maxChannelCount",{value:n});const o=s(t,{channelCount:n,channelCountMode:r.channelCountMode,channelInterpretation:r.channelInterpretation,gain:1});return e(o,"channelCount",a=>()=>a.call(o),a=>c=>{a.call(o,c);try{r.channelCount=c}catch(l){if(c>r.maxChannelCount)throw l}}),e(o,"channelCountMode",a=>()=>a.call(o),a=>c=>{a.call(o,c),r.channelCountMode=c}),e(o,"channelInterpretation",a=>()=>a.call(o),a=>c=>{a.call(o,c),r.channelInterpretation=c}),Object.defineProperty(o,"maxChannelCount",{get:()=>r.maxChannelCount}),o.connect(r),o},sl=s=>s===null?null:s.hasOwnProperty("AudioWorkletNode")?s.AudioWorkletNode:null,il=s=>{const{port1:e}=new MessageChannel;try{e.postMessage(s)}finally{e.close()}},rl=(s,e,t,n,i)=>(r,o,a,c,l,u)=>{if(a!==null)try{const h=new a(r,c,u),p=new Map;let f=null;if(Object.defineProperties(h,{channelCount:{get:()=>u.channelCount,set:()=>{throw s()}},channelCountMode:{get:()=>"explicit",set:()=>{throw s()}},onprocessorerror:{get:()=>f,set:d=>{typeof f=="function"&&h.removeEventListener("processorerror",f),f=typeof d=="function"?d:null,typeof f=="function"&&h.addEventListener("processorerror",f)}}}),h.addEventListener=(d=>(...m)=>{if(m[0]==="processorerror"){const _=typeof m[1]=="function"?m[1]:typeof m[1]=="object"&&m[1]!==null&&typeof m[1].handleEvent=="function"?m[1].handleEvent:null;if(_!==null){const v=p.get(m[1]);v!==void 0?m[1]=v:(m[1]=T=>{T.type==="error"?(Object.defineProperties(T,{type:{value:"processorerror"}}),_(T)):_(new ErrorEvent(m[0],{...T}))},p.set(_,m[1]))}}return d.call(h,"error",m[1],m[2]),d.call(h,...m)})(h.addEventListener),h.removeEventListener=(d=>(...m)=>{if(m[0]==="processorerror"){const _=p.get(m[1]);_!==void 0&&(p.delete(m[1]),m[1]=_)}return d.call(h,"error",m[1],m[2]),d.call(h,m[0],m[1],m[2])})(h.removeEventListener),u.numberOfOutputs!==0){const d=t(r,{channelCount:1,channelCountMode:"explicit",channelInterpretation:"discrete",gain:0});return h.connect(d).connect(r.destination),i(h,()=>d.disconnect(),()=>d.connect(r.destination))}return h}catch(h){throw h.code===11?n():h}if(l===void 0)throw n();return il(u),e(r,o,l,u)},mr=(s,e)=>s===null?512:Math.max(512,Math.min(16384,Math.pow(2,Math.round(Math.log2(s*e))))),ol=s=>new Promise((e,t)=>{const{port1:n,port2:i}=new MessageChannel;n.onmessage=({data:r})=>{n.close(),i.close(),e(r)},n.onmessageerror=({data:r})=>{n.close(),i.close(),t(r)},i.postMessage(s)}),al=async(s,e)=>{const t=await ol(e);return new s(t)},cl=(s,e,t,n)=>{let i=xs.get(s);i===void 0&&(i=new WeakMap,xs.set(s,i));const r=al(t,n);return i.set(e,r),r},ll=(s,e,t,n,i,r,o,a,c,l,u,h,p)=>(f,d,m,_)=>{if(_.numberOfInputs===0&&_.numberOfOutputs===0)throw c();const v=Array.isArray(_.outputChannelCount)?_.outputChannelCount:Array.from(_.outputChannelCount);if(v.some(O=>O<1))throw c();if(v.length!==_.numberOfOutputs)throw e();if(_.channelCountMode!=="explicit")throw c();const T=_.channelCount*_.numberOfInputs,S=v.reduce((O,L)=>O+L,0),C=m.parameterDescriptors===void 0?0:m.parameterDescriptors.length;if(T+C>6||S>6)throw c();const g=new MessageChannel,x=[],w=[];for(let O=0;O<_.numberOfInputs;O+=1)x.push(o(f,{channelCount:_.channelCount,channelCountMode:_.channelCountMode,channelInterpretation:_.channelInterpretation,gain:1})),w.push(i(f,{channelCount:_.channelCount,channelCountMode:"explicit",channelInterpretation:"discrete",numberOfOutputs:_.channelCount}));const y=[];if(m.parameterDescriptors!==void 0)for(const{defaultValue:O,maxValue:L,minValue:de,name:ie}of m.parameterDescriptors){const H=r(f,{channelCount:1,channelCountMode:"explicit",channelInterpretation:"discrete",offset:_.parameterData[ie]!==void 0?_.parameterData[ie]:O===void 0?0:O});Object.defineProperties(H.offset,{defaultValue:{get:()=>O===void 0?0:O},maxValue:{get:()=>L===void 0?xe:L},minValue:{get:()=>de===void 0?Se:de}}),y.push(H)}const k=n(f,{channelCount:1,channelCountMode:"explicit",channelInterpretation:"speakers",numberOfInputs:Math.max(1,T+C)}),N=mr(d,f.sampleRate),A=a(f,N,T+C,Math.max(1,S)),b=i(f,{channelCount:Math.max(1,S),channelCountMode:"explicit",channelInterpretation:"discrete",numberOfOutputs:Math.max(1,S)}),M=[];for(let O=0;O<_.numberOfOutputs;O+=1)M.push(n(f,{channelCount:1,channelCountMode:"explicit",channelInterpretation:"speakers",numberOfInputs:v[O]}));for(let O=0;O<_.numberOfInputs;O+=1){x[O].connect(w[O]);for(let L=0;L<_.channelCount;L+=1)w[O].connect(k,L,O*_.channelCount+L)}const E=new dr(m.parameterDescriptors===void 0?[]:m.parameterDescriptors.map(({name:O},L)=>{const de=y[L];return de.connect(k,0,T+L),de.start(0),[O,de.offset]}));k.connect(A);let F=_.channelInterpretation,I=null;const D=_.numberOfOutputs===0?[A]:M,B={get bufferSize(){return N},get channelCount(){return _.channelCount},set channelCount(O){throw t()},get channelCountMode(){return _.channelCountMode},set channelCountMode(O){throw t()},get channelInterpretation(){return F},set channelInterpretation(O){for(const L of x)L.channelInterpretation=O;F=O},get context(){return A.context},get inputs(){return x},get numberOfInputs(){return _.numberOfInputs},get numberOfOutputs(){return _.numberOfOutputs},get onprocessorerror(){return I},set onprocessorerror(O){typeof I=="function"&&B.removeEventListener("processorerror",I),I=typeof O=="function"?O:null,typeof I=="function"&&B.addEventListener("processorerror",I)},get parameters(){return E},get port(){return g.port2},addEventListener(...O){return A.addEventListener(O[0],O[1],O[2])},connect:s.bind(null,D),disconnect:l.bind(null,D),dispatchEvent(...O){return A.dispatchEvent(O[0])},removeEventListener(...O){return A.removeEventListener(O[0],O[1],O[2])}},V=new Map;g.port1.addEventListener=(O=>(...L)=>{if(L[0]==="message"){const de=typeof L[1]=="function"?L[1]:typeof L[1]=="object"&&L[1]!==null&&typeof L[1].handleEvent=="function"?L[1].handleEvent:null;if(de!==null){const ie=V.get(L[1]);ie!==void 0?L[1]=ie:(L[1]=H=>{u(f.currentTime,f.sampleRate,()=>de(H))},V.set(de,L[1]))}}return O.call(g.port1,L[0],L[1],L[2])})(g.port1.addEventListener),g.port1.removeEventListener=(O=>(...L)=>{if(L[0]==="message"){const de=V.get(L[1]);de!==void 0&&(V.delete(L[1]),L[1]=de)}return O.call(g.port1,L[0],L[1],L[2])})(g.port1.removeEventListener);let j=null;Object.defineProperty(g.port1,"onmessage",{get:()=>j,set:O=>{typeof j=="function"&&g.port1.removeEventListener("message",j),j=typeof O=="function"?O:null,typeof j=="function"&&(g.port1.addEventListener("message",j),g.port1.start())}}),m.prototype.port=g.port1;let W=null;cl(f,B,m,_).then(O=>W=O);const Ae=zn(_.numberOfInputs,_.channelCount),Ne=zn(_.numberOfOutputs,v),U=m.parameterDescriptors===void 0?[]:m.parameterDescriptors.reduce((O,{name:L})=>({...O,[L]:new Float32Array(128)}),{});let ne=!0;const ve=()=>{_.numberOfOutputs>0&&A.disconnect(b);for(let O=0,L=0;O<_.numberOfOutputs;O+=1){const de=M[O];for(let ie=0;ie<v[O];ie+=1)b.disconnect(de,L+ie,ie);L+=v[O]}},z=new Map;A.onaudioprocess=({inputBuffer:O,outputBuffer:L})=>{if(W!==null){const de=h(B);for(let ie=0;ie<N;ie+=128){for(let H=0;H<_.numberOfInputs;H+=1)for(let re=0;re<_.channelCount;re+=1)Pn(O,Ae[H],re,re,ie);m.parameterDescriptors!==void 0&&m.parameterDescriptors.forEach(({name:H},re)=>{Pn(O,U,H,T+re,ie)});for(let H=0;H<_.numberOfInputs;H+=1)for(let re=0;re<v[H];re+=1)Ne[H][re].byteLength===0&&(Ne[H][re]=new Float32Array(128));try{const H=Ae.map((De,it)=>{if(de[it].size>0)return z.set(it,N/128),De;const us=z.get(it);return us===void 0?[]:(De.every(go=>go.every(vo=>vo===0))&&(us===1?z.delete(it):z.set(it,us-1)),De)});ne=u(f.currentTime+ie/f.sampleRate,f.sampleRate,()=>W.process(H,Ne,U));for(let De=0,it=0;De<_.numberOfOutputs;De+=1){for(let en=0;en<v[De];en+=1)pr(L,Ne[De],en,it+en,ie);it+=v[De]}}catch(H){ne=!1,B.dispatchEvent(new ErrorEvent("processorerror",{colno:H.colno,filename:H.filename,lineno:H.lineno,message:H.message}))}if(!ne){for(let H=0;H<_.numberOfInputs;H+=1){x[H].disconnect(w[H]);for(let re=0;re<_.channelCount;re+=1)w[ie].disconnect(k,re,H*_.channelCount+re)}if(m.parameterDescriptors!==void 0){const H=m.parameterDescriptors.length;for(let re=0;re<H;re+=1){const De=y[re];De.disconnect(k,0,T+re),De.stop()}}k.disconnect(A),A.onaudioprocess=null,mt?ve():It();break}}}};let mt=!1;const _t=o(f,{channelCount:1,channelCountMode:"explicit",channelInterpretation:"discrete",gain:0}),Mt=()=>A.connect(_t).connect(f.destination),It=()=>{A.disconnect(_t),_t.disconnect()},mo=()=>{if(ne){It(),_.numberOfOutputs>0&&A.connect(b);for(let O=0,L=0;O<_.numberOfOutputs;O+=1){const de=M[O];for(let ie=0;ie<v[O];ie+=1)b.connect(de,L+ie,ie);L+=v[O]}}mt=!0},_o=()=>{ne&&(Mt(),ve()),mt=!1};return Mt(),p(B,mo,_o)},_r=(s,e)=>{const t=s.createBiquadFilter();return pe(t,e),oe(t,e,"Q"),oe(t,e,"detune"),oe(t,e,"frequency"),oe(t,e,"gain"),se(t,e,"type"),t},ul=(s,e)=>(t,n)=>{const i=t.createChannelMerger(n.numberOfInputs);return s!==null&&s.name==="webkitAudioContext"&&e(t,i),pe(i,n),i},hl=s=>{const e=s.numberOfOutputs;Object.defineProperty(s,"channelCount",{get:()=>e,set:t=>{if(t!==e)throw fe()}}),Object.defineProperty(s,"channelCountMode",{get:()=>"explicit",set:t=>{if(t!=="explicit")throw fe()}}),Object.defineProperty(s,"channelInterpretation",{get:()=>"discrete",set:t=>{if(t!=="discrete")throw fe()}})},dn=(s,e)=>{const t=s.createChannelSplitter(e.numberOfOutputs);return pe(t,e),hl(t),t},dl=(s,e,t,n,i)=>(r,o)=>{if(r.createConstantSource===void 0)return t(r,o);const a=r.createConstantSource();return pe(a,o),oe(a,o,"offset"),e(n,()=>n(r))||Is(a),e(i,()=>i(r))||Ds(a),s(r,a),a},Xt=(s,e)=>(s.connect=e.connect.bind(e),s.disconnect=e.disconnect.bind(e),s),pl=(s,e,t,n)=>(i,{offset:r,...o})=>{const a=i.createBuffer(1,2,44100),c=e(i,{buffer:null,channelCount:2,channelCountMode:"max",channelInterpretation:"speakers",loop:!1,loopEnd:0,loopStart:0,playbackRate:1}),l=t(i,{...o,gain:r}),u=a.getChannelData(0);u[0]=1,u[1]=1,c.buffer=a,c.loop=!0;const h={get bufferSize(){},get channelCount(){return l.channelCount},set channelCount(d){l.channelCount=d},get channelCountMode(){return l.channelCountMode},set channelCountMode(d){l.channelCountMode=d},get channelInterpretation(){return l.channelInterpretation},set channelInterpretation(d){l.channelInterpretation=d},get context(){return l.context},get inputs(){return[]},get numberOfInputs(){return c.numberOfInputs},get numberOfOutputs(){return l.numberOfOutputs},get offset(){return l.gain},get onended(){return c.onended},set onended(d){c.onended=d},addEventListener(...d){return c.addEventListener(d[0],d[1],d[2])},dispatchEvent(...d){return c.dispatchEvent(d[0])},removeEventListener(...d){return c.removeEventListener(d[0],d[1],d[2])},start(d=0){c.start.call(c,d)},stop(d=0){c.stop.call(c,d)}},p=()=>c.connect(l),f=()=>c.disconnect(l);return s(i,c),n(Xt(h,l),p,f)},fl=(s,e)=>(t,n)=>{const i=t.createConvolver();if(pe(i,n),n.disableNormalization===i.normalize&&(i.normalize=!n.disableNormalization),se(i,n,"buffer"),n.channelCount>2||(e(i,"channelCount",r=>()=>r.call(i),r=>o=>{if(o>2)throw s();return r.call(i,o)}),n.channelCountMode==="max"))throw s();return e(i,"channelCountMode",r=>()=>r.call(i),r=>o=>{if(o==="max")throw s();return r.call(i,o)}),i},gr=(s,e)=>{const t=s.createDelay(e.maxDelayTime);return pe(t,e),oe(t,e,"delayTime"),t},ml=s=>(e,t)=>{const n=e.createDynamicsCompressor();if(pe(n,t),t.channelCount>2||t.channelCountMode==="max")throw s();return oe(n,t,"attack"),oe(n,t,"knee"),oe(n,t,"ratio"),oe(n,t,"release"),oe(n,t,"threshold"),n},Ce=(s,e)=>{const t=s.createGain();return pe(t,e),oe(t,e,"gain"),t},_l=s=>(e,t,n)=>{if(e.createIIRFilter===void 0)return s(e,t,n);const i=e.createIIRFilter(n.feedforward,n.feedback);return pe(i,n),i};function gl(s,e){const t=e[0]*e[0]+e[1]*e[1];return[(s[0]*e[0]+s[1]*e[1])/t,(s[1]*e[0]-s[0]*e[1])/t]}function vl(s,e){return[s[0]*e[0]-s[1]*e[1],s[0]*e[1]+s[1]*e[0]]}function Pi(s,e){let t=[0,0];for(let n=s.length-1;n>=0;n-=1)t=vl(t,e),t[0]+=s[n];return t}const yl=(s,e,t,n)=>(i,r,{channelCount:o,channelCountMode:a,channelInterpretation:c,feedback:l,feedforward:u})=>{const h=mr(r,i.sampleRate),p=l instanceof Float64Array?l:new Float64Array(l),f=u instanceof Float64Array?u:new Float64Array(u),d=p.length,m=f.length,_=Math.min(d,m);if(d===0||d>20)throw n();if(p[0]===0)throw e();if(m===0||m>20)throw n();if(f[0]===0)throw e();if(p[0]!==1){for(let y=0;y<m;y+=1)f[y]/=p[0];for(let y=1;y<d;y+=1)p[y]/=p[0]}const v=t(i,h,o,o);v.channelCount=o,v.channelCountMode=a,v.channelInterpretation=c;const T=32,S=[],C=[],g=[];for(let y=0;y<o;y+=1){S.push(0);const k=new Float32Array(T),N=new Float32Array(T);k.fill(0),N.fill(0),C.push(k),g.push(N)}v.onaudioprocess=y=>{const k=y.inputBuffer,N=y.outputBuffer,A=k.numberOfChannels;for(let b=0;b<A;b+=1){const M=k.getChannelData(b),E=N.getChannelData(b);S[b]=fr(p,d,f,m,_,C[b],g[b],S[b],T,M,E)}};const x=i.sampleRate/2;return Xt({get bufferSize(){return h},get channelCount(){return v.channelCount},set channelCount(y){v.channelCount=y},get channelCountMode(){return v.channelCountMode},set channelCountMode(y){v.channelCountMode=y},get channelInterpretation(){return v.channelInterpretation},set channelInterpretation(y){v.channelInterpretation=y},get context(){return v.context},get inputs(){return[v]},get numberOfInputs(){return v.numberOfInputs},get numberOfOutputs(){return v.numberOfOutputs},addEventListener(...y){return v.addEventListener(y[0],y[1],y[2])},dispatchEvent(...y){return v.dispatchEvent(y[0])},getFrequencyResponse(y,k,N){if(y.length!==k.length||k.length!==N.length)throw s();const A=y.length;for(let b=0;b<A;b+=1){const M=-Math.PI*(y[b]/x),E=[Math.cos(M),Math.sin(M)],F=Pi(f,E),I=Pi(p,E),D=gl(F,I);k[b]=Math.sqrt(D[0]*D[0]+D[1]*D[1]),N[b]=Math.atan2(D[1],D[0])}},removeEventListener(...y){return v.removeEventListener(y[0],y[1],y[2])}},v)},xl=(s,e)=>s.createMediaElementSource(e.mediaElement),wl=(s,e)=>{const t=s.createMediaStreamDestination();return pe(t,e),t.numberOfOutputs===1&&Object.defineProperty(t,"numberOfOutputs",{get:()=>0}),t},Tl=(s,{mediaStream:e})=>{const t=e.getAudioTracks();t.sort((r,o)=>r.id<o.id?-1:r.id>o.id?1:0);const n=t.slice(0,1),i=s.createMediaStreamSource(new MediaStream(n));return Object.defineProperty(i,"mediaStream",{value:e}),i},Sl=(s,e)=>(t,{mediaStreamTrack:n})=>{if(typeof t.createMediaStreamTrackSource=="function")return t.createMediaStreamTrackSource(n);const i=new MediaStream([n]),r=t.createMediaStreamSource(i);if(n.kind!=="audio")throw s();if(e(t))throw new TypeError;return r},bl=s=>s===null?null:s.hasOwnProperty("OfflineAudioContext")?s.OfflineAudioContext:s.hasOwnProperty("webkitOfflineAudioContext")?s.webkitOfflineAudioContext:null,Cl=(s,e,t,n,i,r)=>(o,a)=>{const c=o.createOscillator();return pe(c,a),oe(c,a,"detune"),oe(c,a,"frequency"),a.periodicWave!==void 0?c.setPeriodicWave(a.periodicWave):se(c,a,"type"),e(t,()=>t(o))||Is(c),e(n,()=>n(o))||r(c,o),e(i,()=>i(o))||Ds(c),s(o,c),c},Al=s=>(e,t)=>{const n=e.createPanner();return n.orientationX===void 0?s(e,t):(pe(n,t),oe(n,t,"orientationX"),oe(n,t,"orientationY"),oe(n,t,"orientationZ"),oe(n,t,"positionX"),oe(n,t,"positionY"),oe(n,t,"positionZ"),se(n,t,"coneInnerAngle"),se(n,t,"coneOuterAngle"),se(n,t,"coneOuterGain"),se(n,t,"distanceModel"),se(n,t,"maxDistance"),se(n,t,"panningModel"),se(n,t,"refDistance"),se(n,t,"rolloffFactor"),n)},Nl=(s,e,t,n,i,r,o,a,c,l)=>(u,{coneInnerAngle:h,coneOuterAngle:p,coneOuterGain:f,distanceModel:d,maxDistance:m,orientationX:_,orientationY:v,orientationZ:T,panningModel:S,positionX:C,positionY:g,positionZ:x,refDistance:w,rolloffFactor:y,...k})=>{const N=u.createPanner();if(k.channelCount>2||k.channelCountMode==="max")throw o();pe(N,k);const A={channelCount:1,channelCountMode:"explicit",channelInterpretation:"discrete"},b=t(u,{...A,channelInterpretation:"speakers",numberOfInputs:6}),M=n(u,{...k,gain:1}),E=n(u,{...A,gain:1}),F=n(u,{...A,gain:0}),I=n(u,{...A,gain:0}),D=n(u,{...A,gain:0}),B=n(u,{...A,gain:0}),V=n(u,{...A,gain:0}),j=i(u,256,6,1),W=r(u,{...A,curve:new Float32Array([1,1]),oversample:"none"});let $=[_,v,T],Ae=[C,g,x];const Ne=new Float32Array(1);j.onaudioprocess=({inputBuffer:z})=>{const mt=[c(z,Ne,0),c(z,Ne,1),c(z,Ne,2)];mt.some((Mt,It)=>Mt!==$[It])&&(N.setOrientation(...mt),$=mt);const _t=[c(z,Ne,3),c(z,Ne,4),c(z,Ne,5)];_t.some((Mt,It)=>Mt!==Ae[It])&&(N.setPosition(..._t),Ae=_t)},Object.defineProperty(F.gain,"defaultValue",{get:()=>0}),Object.defineProperty(I.gain,"defaultValue",{get:()=>0}),Object.defineProperty(D.gain,"defaultValue",{get:()=>0}),Object.defineProperty(B.gain,"defaultValue",{get:()=>0}),Object.defineProperty(V.gain,"defaultValue",{get:()=>0});const U={get bufferSize(){},get channelCount(){return N.channelCount},set channelCount(z){if(z>2)throw o();M.channelCount=z,N.channelCount=z},get channelCountMode(){return N.channelCountMode},set channelCountMode(z){if(z==="max")throw o();M.channelCountMode=z,N.channelCountMode=z},get channelInterpretation(){return N.channelInterpretation},set channelInterpretation(z){M.channelInterpretation=z,N.channelInterpretation=z},get coneInnerAngle(){return N.coneInnerAngle},set coneInnerAngle(z){N.coneInnerAngle=z},get coneOuterAngle(){return N.coneOuterAngle},set coneOuterAngle(z){N.coneOuterAngle=z},get coneOuterGain(){return N.coneOuterGain},set coneOuterGain(z){if(z<0||z>1)throw e();N.coneOuterGain=z},get context(){return N.context},get distanceModel(){return N.distanceModel},set distanceModel(z){N.distanceModel=z},get inputs(){return[M]},get maxDistance(){return N.maxDistance},set maxDistance(z){if(z<0)throw new RangeError;N.maxDistance=z},get numberOfInputs(){return N.numberOfInputs},get numberOfOutputs(){return N.numberOfOutputs},get orientationX(){return E.gain},get orientationY(){return F.gain},get orientationZ(){return I.gain},get panningModel(){return N.panningModel},set panningModel(z){N.panningModel=z},get positionX(){return D.gain},get positionY(){return B.gain},get positionZ(){return V.gain},get refDistance(){return N.refDistance},set refDistance(z){if(z<0)throw new RangeError;N.refDistance=z},get rolloffFactor(){return N.rolloffFactor},set rolloffFactor(z){if(z<0)throw new RangeError;N.rolloffFactor=z},addEventListener(...z){return M.addEventListener(z[0],z[1],z[2])},dispatchEvent(...z){return M.dispatchEvent(z[0])},removeEventListener(...z){return M.removeEventListener(z[0],z[1],z[2])}};h!==U.coneInnerAngle&&(U.coneInnerAngle=h),p!==U.coneOuterAngle&&(U.coneOuterAngle=p),f!==U.coneOuterGain&&(U.coneOuterGain=f),d!==U.distanceModel&&(U.distanceModel=d),m!==U.maxDistance&&(U.maxDistance=m),_!==U.orientationX.value&&(U.orientationX.value=_),v!==U.orientationY.value&&(U.orientationY.value=v),T!==U.orientationZ.value&&(U.orientationZ.value=T),S!==U.panningModel&&(U.panningModel=S),C!==U.positionX.value&&(U.positionX.value=C),g!==U.positionY.value&&(U.positionY.value=g),x!==U.positionZ.value&&(U.positionZ.value=x),w!==U.refDistance&&(U.refDistance=w),y!==U.rolloffFactor&&(U.rolloffFactor=y),($[0]!==1||$[1]!==0||$[2]!==0)&&N.setOrientation(...$),(Ae[0]!==0||Ae[1]!==0||Ae[2]!==0)&&N.setPosition(...Ae);const ne=()=>{M.connect(N),s(M,W,0,0),W.connect(E).connect(b,0,0),W.connect(F).connect(b,0,1),W.connect(I).connect(b,0,2),W.connect(D).connect(b,0,3),W.connect(B).connect(b,0,4),W.connect(V).connect(b,0,5),b.connect(j).connect(u.destination)},ve=()=>{M.disconnect(N),a(M,W,0,0),W.disconnect(E),E.disconnect(b),W.disconnect(F),F.disconnect(b),W.disconnect(I),I.disconnect(b),W.disconnect(D),D.disconnect(b),W.disconnect(B),B.disconnect(b),W.disconnect(V),V.disconnect(b),b.disconnect(j),j.disconnect(u.destination)};return l(Xt(U,N),ne,ve)},kl=s=>(e,{disableNormalization:t,imag:n,real:i})=>{const r=n instanceof Float32Array?n:new Float32Array(n),o=i instanceof Float32Array?i:new Float32Array(i),a=e.createPeriodicWave(o,r,{disableNormalization:t});if(Array.from(n).length<2)throw s();return a},pn=(s,e,t,n)=>s.createScriptProcessor(e,t,n),Ol=(s,e)=>(t,n)=>{const i=n.channelCountMode;if(i==="clamped-max")throw e();if(t.createStereoPanner===void 0)return s(t,n);const r=t.createStereoPanner();return pe(r,n),oe(r,n,"pan"),Object.defineProperty(r,"channelCountMode",{get:()=>i,set:o=>{if(o!==i)throw e()}}),r},El=(s,e,t,n,i,r)=>{const a=new Float32Array([1,1]),c=Math.PI/2,l={channelCount:1,channelCountMode:"explicit",channelInterpretation:"discrete"},u={...l,oversample:"none"},h=(d,m,_,v)=>{const T=new Float32Array(16385),S=new Float32Array(16385);for(let k=0;k<16385;k+=1){const N=k/16384*c;T[k]=Math.cos(N),S[k]=Math.sin(N)}const C=t(d,{...l,gain:0}),g=n(d,{...u,curve:T}),x=n(d,{...u,curve:a}),w=t(d,{...l,gain:0}),y=n(d,{...u,curve:S});return{connectGraph(){m.connect(C),m.connect(x.inputs===void 0?x:x.inputs[0]),m.connect(w),x.connect(_),_.connect(g.inputs===void 0?g:g.inputs[0]),_.connect(y.inputs===void 0?y:y.inputs[0]),g.connect(C.gain),y.connect(w.gain),C.connect(v,0,0),w.connect(v,0,1)},disconnectGraph(){m.disconnect(C),m.disconnect(x.inputs===void 0?x:x.inputs[0]),m.disconnect(w),x.disconnect(_),_.disconnect(g.inputs===void 0?g:g.inputs[0]),_.disconnect(y.inputs===void 0?y:y.inputs[0]),g.disconnect(C.gain),y.disconnect(w.gain),C.disconnect(v,0,0),w.disconnect(v,0,1)}}},p=(d,m,_,v)=>{const T=new Float32Array(16385),S=new Float32Array(16385),C=new Float32Array(16385),g=new Float32Array(16385),x=Math.floor(16385/2);for(let D=0;D<16385;D+=1)if(D>x){const B=(D-x)/(16384-x)*c;T[D]=Math.cos(B),S[D]=Math.sin(B),C[D]=0,g[D]=1}else{const B=D/(16384-x)*c;T[D]=1,S[D]=0,C[D]=Math.cos(B),g[D]=Math.sin(B)}const w=e(d,{channelCount:2,channelCountMode:"explicit",channelInterpretation:"discrete",numberOfOutputs:2}),y=t(d,{...l,gain:0}),k=n(d,{...u,curve:T}),N=t(d,{...l,gain:0}),A=n(d,{...u,curve:S}),b=n(d,{...u,curve:a}),M=t(d,{...l,gain:0}),E=n(d,{...u,curve:C}),F=t(d,{...l,gain:0}),I=n(d,{...u,curve:g});return{connectGraph(){m.connect(w),m.connect(b.inputs===void 0?b:b.inputs[0]),w.connect(y,0),w.connect(N,0),w.connect(M,1),w.connect(F,1),b.connect(_),_.connect(k.inputs===void 0?k:k.inputs[0]),_.connect(A.inputs===void 0?A:A.inputs[0]),_.connect(E.inputs===void 0?E:E.inputs[0]),_.connect(I.inputs===void 0?I:I.inputs[0]),k.connect(y.gain),A.connect(N.gain),E.connect(M.gain),I.connect(F.gain),y.connect(v,0,0),M.connect(v,0,0),N.connect(v,0,1),F.connect(v,0,1)},disconnectGraph(){m.disconnect(w),m.disconnect(b.inputs===void 0?b:b.inputs[0]),w.disconnect(y,0),w.disconnect(N,0),w.disconnect(M,1),w.disconnect(F,1),b.disconnect(_),_.disconnect(k.inputs===void 0?k:k.inputs[0]),_.disconnect(A.inputs===void 0?A:A.inputs[0]),_.disconnect(E.inputs===void 0?E:E.inputs[0]),_.disconnect(I.inputs===void 0?I:I.inputs[0]),k.disconnect(y.gain),A.disconnect(N.gain),E.disconnect(M.gain),I.disconnect(F.gain),y.disconnect(v,0,0),M.disconnect(v,0,0),N.disconnect(v,0,1),F.disconnect(v,0,1)}}},f=(d,m,_,v,T)=>{if(m===1)return h(d,_,v,T);if(m===2)return p(d,_,v,T);throw i()};return(d,{channelCount:m,channelCountMode:_,pan:v,...T})=>{if(_==="max")throw i();const S=s(d,{...T,channelCount:1,channelCountMode:_,numberOfInputs:2}),C=t(d,{...T,channelCount:m,channelCountMode:_,gain:1}),g=t(d,{channelCount:1,channelCountMode:"explicit",channelInterpretation:"discrete",gain:v});let{connectGraph:x,disconnectGraph:w}=f(d,m,C,g,S);Object.defineProperty(g.gain,"defaultValue",{get:()=>0}),Object.defineProperty(g.gain,"maxValue",{get:()=>1}),Object.defineProperty(g.gain,"minValue",{get:()=>-1});const y={get bufferSize(){},get channelCount(){return C.channelCount},set channelCount(b){C.channelCount!==b&&(k&&w(),{connectGraph:x,disconnectGraph:w}=f(d,b,C,g,S),k&&x()),C.channelCount=b},get channelCountMode(){return C.channelCountMode},set channelCountMode(b){if(b==="clamped-max"||b==="max")throw i();C.channelCountMode=b},get channelInterpretation(){return C.channelInterpretation},set channelInterpretation(b){C.channelInterpretation=b},get context(){return C.context},get inputs(){return[C]},get numberOfInputs(){return C.numberOfInputs},get numberOfOutputs(){return C.numberOfOutputs},get pan(){return g.gain},addEventListener(...b){return C.addEventListener(b[0],b[1],b[2])},dispatchEvent(...b){return C.dispatchEvent(b[0])},removeEventListener(...b){return C.removeEventListener(b[0],b[1],b[2])}};let k=!1;const N=()=>{x(),k=!0},A=()=>{w(),k=!1};return r(Xt(y,S),N,A)}},Ml=(s,e,t,n,i,r,o)=>(a,c)=>{const l=a.createWaveShaper();if(r!==null&&r.name==="webkitAudioContext"&&a.createGain().gain.automationRate===void 0)return t(a,c);pe(l,c);const u=c.curve===null||c.curve instanceof Float32Array?c.curve:new Float32Array(c.curve);if(u!==null&&u.length<2)throw e();se(l,{curve:u},"curve"),se(l,c,"oversample");let h=null,p=!1;return o(l,"curve",m=>()=>m.call(l),m=>_=>(m.call(l,_),p&&(n(_)&&h===null?h=s(a,l):!n(_)&&h!==null&&(h(),h=null)),_)),i(l,()=>{p=!0,n(l.curve)&&(h=s(a,l))},()=>{p=!1,h!==null&&(h(),h=null)})},Il=(s,e,t,n,i)=>(r,{curve:o,oversample:a,...c})=>{const l=r.createWaveShaper(),u=r.createWaveShaper();pe(l,c),pe(u,c);const h=t(r,{...c,gain:1}),p=t(r,{...c,gain:-1}),f=t(r,{...c,gain:1}),d=t(r,{...c,gain:-1});let m=null,_=!1,v=null;const T={get bufferSize(){},get channelCount(){return l.channelCount},set channelCount(g){h.channelCount=g,p.channelCount=g,l.channelCount=g,f.channelCount=g,u.channelCount=g,d.channelCount=g},get channelCountMode(){return l.channelCountMode},set channelCountMode(g){h.channelCountMode=g,p.channelCountMode=g,l.channelCountMode=g,f.channelCountMode=g,u.channelCountMode=g,d.channelCountMode=g},get channelInterpretation(){return l.channelInterpretation},set channelInterpretation(g){h.channelInterpretation=g,p.channelInterpretation=g,l.channelInterpretation=g,f.channelInterpretation=g,u.channelInterpretation=g,d.channelInterpretation=g},get context(){return l.context},get curve(){return v},set curve(g){if(g!==null&&g.length<2)throw e();if(g===null)l.curve=g,u.curve=g;else{const x=g.length,w=new Float32Array(x+2-x%2),y=new Float32Array(x+2-x%2);w[0]=g[0],y[0]=-g[x-1];const k=Math.ceil((x+1)/2),N=(x+1)/2-1;for(let A=1;A<k;A+=1){const b=A/k*N,M=Math.floor(b),E=Math.ceil(b);w[A]=M===E?g[M]:(1-(b-M))*g[M]+(1-(E-b))*g[E],y[A]=M===E?-g[x-1-M]:-((1-(b-M))*g[x-1-M])-(1-(E-b))*g[x-1-E]}w[k]=x%2===1?g[k-1]:(g[k-2]+g[k-1])/2,l.curve=w,u.curve=y}v=g,_&&(n(v)&&m===null?m=s(r,h):m!==null&&(m(),m=null))},get inputs(){return[h]},get numberOfInputs(){return l.numberOfInputs},get numberOfOutputs(){return l.numberOfOutputs},get oversample(){return l.oversample},set oversample(g){l.oversample=g,u.oversample=g},addEventListener(...g){return h.addEventListener(g[0],g[1],g[2])},dispatchEvent(...g){return h.dispatchEvent(g[0])},removeEventListener(...g){return h.removeEventListener(g[0],g[1],g[2])}};o!==null&&(T.curve=o instanceof Float32Array?o:new Float32Array(o)),a!==T.oversample&&(T.oversample=a);const S=()=>{h.connect(l).connect(f),h.connect(p).connect(u).connect(d).connect(f),_=!0,n(v)&&(m=s(r,h))},C=()=>{h.disconnect(l),l.disconnect(f),h.disconnect(p),p.disconnect(u),u.disconnect(d),d.disconnect(f),_=!1,m!==null&&(m(),m=null)};return i(Xt(T,f),S,C)},Te=()=>new DOMException("","NotSupportedError"),Dl={numberOfChannels:1},Rl=(s,e,t,n,i)=>class extends s{constructor(o,a,c){let l;if(typeof o=="number"&&a!==void 0&&c!==void 0)l={length:a,numberOfChannels:o,sampleRate:c};else if(typeof o=="object")l=o;else throw new Error("The given parameters are not valid.");const{length:u,numberOfChannels:h,sampleRate:p}={...Dl,...l},f=n(h,u,p);e(on,()=>on(f))||f.addEventListener("statechange",(()=>{let d=0;const m=_=>{this._state==="running"&&(d>0?(f.removeEventListener("statechange",m),_.stopImmediatePropagation(),this._waitForThePromiseToSettle(_)):d+=1)};return m})()),super(f,h),this._length=u,this._nativeOfflineAudioContext=f,this._state=null}get length(){return this._nativeOfflineAudioContext.length===void 0?this._length:this._nativeOfflineAudioContext.length}get state(){return this._state===null?this._nativeOfflineAudioContext.state:this._state}startRendering(){return this._state==="running"?Promise.reject(t()):(this._state="running",i(this.destination,this._nativeOfflineAudioContext).finally(()=>{this._state=null,cr(this)}))}_waitForThePromiseToSettle(o){this._state===null?this._nativeOfflineAudioContext.dispatchEvent(o):setTimeout(()=>this._waitForThePromiseToSettle(o))}},Pl={channelCount:2,channelCountMode:"max",channelInterpretation:"speakers",detune:0,frequency:440,periodicWave:void 0,type:"sine"},zl=(s,e,t,n,i,r,o)=>class extends s{constructor(c,l){const u=i(c),h={...Pl,...l},p=t(u,h),f=r(u),d=f?n():null,m=c.sampleRate/2;super(c,!1,p,d),this._detune=e(this,f,p.detune,153600,-153600),this._frequency=e(this,f,p.frequency,m,-m),this._nativeOscillatorNode=p,this._onended=null,this._oscillatorNodeRenderer=d,this._oscillatorNodeRenderer!==null&&h.periodicWave!==void 0&&(this._oscillatorNodeRenderer.periodicWave=h.periodicWave)}get detune(){return this._detune}get frequency(){return this._frequency}get onended(){return this._onended}set onended(c){const l=typeof c=="function"?o(this,c):null;this._nativeOscillatorNode.onended=l;const u=this._nativeOscillatorNode.onended;this._onended=u!==null&&u===l?c:u}get type(){return this._nativeOscillatorNode.type}set type(c){this._nativeOscillatorNode.type=c,this._oscillatorNodeRenderer!==null&&(this._oscillatorNodeRenderer.periodicWave=null)}setPeriodicWave(c){this._nativeOscillatorNode.setPeriodicWave(c),this._oscillatorNodeRenderer!==null&&(this._oscillatorNodeRenderer.periodicWave=c)}start(c=0){if(this._nativeOscillatorNode.start(c),this._oscillatorNodeRenderer!==null&&(this._oscillatorNodeRenderer.start=c),this.context.state!=="closed"){Wt(this);const l=()=>{this._nativeOscillatorNode.removeEventListener("ended",l),Je(this)&&ln(this)};this._nativeOscillatorNode.addEventListener("ended",l)}}stop(c=0){this._nativeOscillatorNode.stop(c),this._oscillatorNodeRenderer!==null&&(this._oscillatorNodeRenderer.stop=c)}},Fl=(s,e,t,n,i)=>()=>{const r=new WeakMap;let o=null,a=null,c=null;const l=async(u,h)=>{let p=t(u);const f=ge(p,h);if(!f){const d={channelCount:p.channelCount,channelCountMode:p.channelCountMode,channelInterpretation:p.channelInterpretation,detune:p.detune.value,frequency:p.frequency.value,periodicWave:o===null?void 0:o,type:p.type};p=e(h,d),a!==null&&p.start(a),c!==null&&p.stop(c)}return r.set(h,p),f?(await s(h,u.detune,p.detune),await s(h,u.frequency,p.frequency)):(await n(h,u.detune,p.detune),await n(h,u.frequency,p.frequency)),await i(u,h,p),p};return{set periodicWave(u){o=u},set start(u){a=u},set stop(u){c=u},render(u,h){const p=r.get(h);return p!==void 0?Promise.resolve(p):l(u,h)}}},Vl={channelCount:2,channelCountMode:"clamped-max",channelInterpretation:"speakers",coneInnerAngle:360,coneOuterAngle:360,coneOuterGain:0,distanceModel:"inverse",maxDistance:1e4,orientationX:1,orientationY:0,orientationZ:0,panningModel:"equalpower",positionX:0,positionY:0,positionZ:0,refDistance:1,rolloffFactor:1},Ll=(s,e,t,n,i,r,o)=>class extends s{constructor(c,l){const u=i(c),h={...Vl,...l},p=t(u,h),f=r(u),d=f?n():null;super(c,!1,p,d),this._nativePannerNode=p,this._orientationX=e(this,f,p.orientationX,xe,Se),this._orientationY=e(this,f,p.orientationY,xe,Se),this._orientationZ=e(this,f,p.orientationZ,xe,Se),this._positionX=e(this,f,p.positionX,xe,Se),this._positionY=e(this,f,p.positionY,xe,Se),this._positionZ=e(this,f,p.positionZ,xe,Se),o(this,1)}get coneInnerAngle(){return this._nativePannerNode.coneInnerAngle}set coneInnerAngle(c){this._nativePannerNode.coneInnerAngle=c}get coneOuterAngle(){return this._nativePannerNode.coneOuterAngle}set coneOuterAngle(c){this._nativePannerNode.coneOuterAngle=c}get coneOuterGain(){return this._nativePannerNode.coneOuterGain}set coneOuterGain(c){this._nativePannerNode.coneOuterGain=c}get distanceModel(){return this._nativePannerNode.distanceModel}set distanceModel(c){this._nativePannerNode.distanceModel=c}get maxDistance(){return this._nativePannerNode.maxDistance}set maxDistance(c){this._nativePannerNode.maxDistance=c}get orientationX(){return this._orientationX}get orientationY(){return this._orientationY}get orientationZ(){return this._orientationZ}get panningModel(){return this._nativePannerNode.panningModel}set panningModel(c){this._nativePannerNode.panningModel=c}get positionX(){return this._positionX}get positionY(){return this._positionY}get positionZ(){return this._positionZ}get refDistance(){return this._nativePannerNode.refDistance}set refDistance(c){this._nativePannerNode.refDistance=c}get rolloffFactor(){return this._nativePannerNode.rolloffFactor}set rolloffFactor(c){this._nativePannerNode.rolloffFactor=c}},ql=(s,e,t,n,i,r,o,a,c,l)=>()=>{const u=new WeakMap;let h=null;const p=async(f,d)=>{let m=null,_=r(f);const v={channelCount:_.channelCount,channelCountMode:_.channelCountMode,channelInterpretation:_.channelInterpretation},T={...v,coneInnerAngle:_.coneInnerAngle,coneOuterAngle:_.coneOuterAngle,coneOuterGain:_.coneOuterGain,distanceModel:_.distanceModel,maxDistance:_.maxDistance,panningModel:_.panningModel,refDistance:_.refDistance,rolloffFactor:_.rolloffFactor},S=ge(_,d);if("bufferSize"in _)m=n(d,{...v,gain:1});else if(!S){const C={...T,orientationX:_.orientationX.value,orientationY:_.orientationY.value,orientationZ:_.orientationZ.value,positionX:_.positionX.value,positionY:_.positionY.value,positionZ:_.positionZ.value};_=i(d,C)}if(u.set(d,m===null?_:m),m!==null){if(h===null){if(o===null)throw new Error("Missing the native OfflineAudioContext constructor.");const A=new o(6,f.context.length,d.sampleRate),b=e(A,{channelCount:1,channelCountMode:"explicit",channelInterpretation:"speakers",numberOfInputs:6});b.connect(A.destination),h=(async()=>{const M=await Promise.all([f.orientationX,f.orientationY,f.orientationZ,f.positionX,f.positionY,f.positionZ].map(async(E,F)=>{const I=t(A,{channelCount:1,channelCountMode:"explicit",channelInterpretation:"discrete",offset:F===0?1:0});return await a(A,E,I.offset),I}));for(let E=0;E<6;E+=1)M[E].connect(b,0,E),M[E].start(0);return l(A)})()}const C=await h,g=n(d,{...v,gain:1});await c(f,d,g);const x=[];for(let A=0;A<C.numberOfChannels;A+=1)x.push(C.getChannelData(A));let w=[x[0][0],x[1][0],x[2][0]],y=[x[3][0],x[4][0],x[5][0]],k=n(d,{...v,gain:1}),N=i(d,{...T,orientationX:w[0],orientationY:w[1],orientationZ:w[2],positionX:y[0],positionY:y[1],positionZ:y[2]});g.connect(k).connect(N.inputs[0]),N.connect(m);for(let A=128;A<C.length;A+=128){const b=[x[0][A],x[1][A],x[2][A]],M=[x[3][A],x[4][A],x[5][A]];if(b.some((E,F)=>E!==w[F])||M.some((E,F)=>E!==y[F])){w=b,y=M;const E=A/d.sampleRate;k.gain.setValueAtTime(0,E),k=n(d,{...v,gain:0}),N=i(d,{...T,orientationX:w[0],orientationY:w[1],orientationZ:w[2],positionX:y[0],positionY:y[1],positionZ:y[2]}),k.gain.setValueAtTime(1,E),g.connect(k).connect(N.inputs[0]),N.connect(m)}}return m}return S?(await s(d,f.orientationX,_.orientationX),await s(d,f.orientationY,_.orientationY),await s(d,f.orientationZ,_.orientationZ),await s(d,f.positionX,_.positionX),await s(d,f.positionY,_.positionY),await s(d,f.positionZ,_.positionZ)):(await a(d,f.orientationX,_.orientationX),await a(d,f.orientationY,_.orientationY),await a(d,f.orientationZ,_.orientationZ),await a(d,f.positionX,_.positionX),await a(d,f.positionY,_.positionY),await a(d,f.positionZ,_.positionZ)),$t(_)?await c(f,d,_.inputs[0]):await c(f,d,_),_};return{render(f,d){const m=u.get(d);return m!==void 0?Promise.resolve(m):p(f,d)}}},Wl={disableNormalization:!1},jl=(s,e,t,n)=>class vr{constructor(r,o){const a=e(r),c=n({...Wl,...o}),l=s(a,c);return t.add(l),l}static[Symbol.hasInstance](r){return r!==null&&typeof r=="object"&&Object.getPrototypeOf(r)===vr.prototype||t.has(r)}},Bl=(s,e)=>(t,n,i)=>(s(n).replay(i),e(n,t,i)),Ul=(s,e,t)=>async(n,i,r)=>{const o=s(n);await Promise.all(o.activeInputs.map((a,c)=>Array.from(a).map(async([l,u])=>{const p=await e(l).render(l,i),f=n.context.destination;!t(l)&&(n!==f||!t(n))&&p.connect(r,u,c)})).reduce((a,c)=>[...a,...c],[]))},Gl=(s,e,t)=>async(n,i,r)=>{const o=e(n);await Promise.all(Array.from(o.activeInputs).map(async([a,c])=>{const u=await s(a).render(a,i);t(a)||u.connect(r,c)}))},Hl=(s,e,t,n)=>i=>s(on,()=>on(i))?Promise.resolve(s(n,n)).then(r=>{if(!r){const o=t(i,512,0,1);i.oncomplete=()=>{o.onaudioprocess=null,o.disconnect()},o.onaudioprocess=()=>i.currentTime,o.connect(i.destination)}return i.startRendering()}):new Promise(r=>{const o=e(i,{channelCount:1,channelCountMode:"explicit",channelInterpretation:"discrete",gain:0});i.oncomplete=a=>{o.disconnect(),r(a.renderedBuffer)},o.connect(i.destination),i.startRendering()}),Zl=s=>(e,t)=>{s.set(e,t)},$l=s=>(e,t)=>s.set(e,t),Xl=(s,e,t,n,i,r,o,a)=>(c,l)=>t(c).render(c,l).then(()=>Promise.all(Array.from(n(l)).map(u=>t(u).render(u,l)))).then(()=>i(l)).then(u=>(typeof u.copyFromChannel!="function"?(o(u),Os(u)):e(r,()=>r(u))||a(u),s.add(u),u)),Yl={channelCount:2,channelCountMode:"explicit",channelInterpretation:"speakers",pan:0},Ql=(s,e,t,n,i,r)=>class extends s{constructor(a,c){const l=i(a),u={...Yl,...c},h=t(l,u),p=r(l),f=p?n():null;super(a,!1,h,f),this._pan=e(this,p,h.pan)}get pan(){return this._pan}},Jl=(s,e,t,n,i)=>()=>{const r=new WeakMap,o=async(a,c)=>{let l=t(a);const u=ge(l,c);if(!u){const h={channelCount:l.channelCount,channelCountMode:l.channelCountMode,channelInterpretation:l.channelInterpretation,pan:l.pan.value};l=e(c,h)}return r.set(c,l),u?await s(c,a.pan,l.pan):await n(c,a.pan,l.pan),$t(l)?await i(a,c,l.inputs[0]):await i(a,c,l),l};return{render(a,c){const l=r.get(c);return l!==void 0?Promise.resolve(l):o(a,c)}}},Kl=s=>()=>{if(s===null)return!1;try{new s({length:1,sampleRate:44100})}catch{return!1}return!0},eu=(s,e)=>async()=>{if(s===null)return!0;if(e===null)return!1;const t=new Blob(['class A extends AudioWorkletProcessor{process(i){this.port.postMessage(i,[i[0][0].buffer])}}registerProcessor("a",A)'],{type:"application/javascript; charset=utf-8"}),n=new e(1,128,44100),i=URL.createObjectURL(t);let r=!1,o=!1;try{await n.audioWorklet.addModule(i);const a=new s(n,"a",{numberOfOutputs:0}),c=n.createOscillator();a.port.onmessage=()=>r=!0,a.onprocessorerror=()=>o=!0,c.connect(a),c.start(0),await n.startRendering(),await new Promise(l=>setTimeout(l))}catch{}finally{URL.revokeObjectURL(i)}return r&&!o},tu=(s,e)=>()=>{if(e===null)return Promise.resolve(!1);const t=new e(1,1,44100),n=s(t,{channelCount:1,channelCountMode:"explicit",channelInterpretation:"discrete",gain:0});return new Promise(i=>{t.oncomplete=()=>{n.disconnect(),i(t.currentTime!==0)},t.startRendering()})},nu=()=>new DOMException("","UnknownError"),su={channelCount:2,channelCountMode:"max",channelInterpretation:"speakers",curve:null,oversample:"none"},iu=(s,e,t,n,i,r,o)=>class extends s{constructor(c,l){const u=i(c),h={...su,...l},p=t(u,h),d=r(u)?n():null;super(c,!0,p,d),this._isCurveNullified=!1,this._nativeWaveShaperNode=p,o(this,1)}get curve(){return this._isCurveNullified?null:this._nativeWaveShaperNode.curve}set curve(c){if(c===null)this._isCurveNullified=!0,this._nativeWaveShaperNode.curve=new Float32Array([0,0]);else{if(c.length<2)throw e();this._isCurveNullified=!1,this._nativeWaveShaperNode.curve=c}}get oversample(){return this._nativeWaveShaperNode.oversample}set oversample(c){this._nativeWaveShaperNode.oversample=c}},ru=(s,e,t)=>()=>{const n=new WeakMap,i=async(r,o)=>{let a=e(r);if(!ge(a,o)){const l={channelCount:a.channelCount,channelCountMode:a.channelCountMode,channelInterpretation:a.channelInterpretation,curve:a.curve,oversample:a.oversample};a=s(o,l)}return n.set(o,a),$t(a)?await t(r,o,a.inputs[0]):await t(r,o,a),a};return{render(r,o){const a=n.get(o);return a!==void 0?Promise.resolve(a):i(r,o)}}},ou=()=>typeof window>"u"?null:window,au=(s,e)=>t=>{t.copyFromChannel=(n,i,r=0)=>{const o=s(r),a=s(i);if(a>=t.numberOfChannels)throw e();const c=t.length,l=t.getChannelData(a),u=n.length;for(let h=o<0?-o:0;h+o<c&&h<u;h+=1)n[h]=l[h+o]},t.copyToChannel=(n,i,r=0)=>{const o=s(r),a=s(i);if(a>=t.numberOfChannels)throw e();const c=t.length,l=t.getChannelData(a),u=n.length;for(let h=o<0?-o:0;h+o<c&&h<u;h+=1)l[h+o]=n[h]}},cu=s=>e=>{e.copyFromChannel=(t=>(n,i,r=0)=>{const o=s(r),a=s(i);if(o<e.length)return t.call(e,n,a,o)})(e.copyFromChannel),e.copyToChannel=(t=>(n,i,r=0)=>{const o=s(r),a=s(i);if(o<e.length)return t.call(e,n,a,o)})(e.copyToChannel)},lu=s=>(e,t)=>{const n=t.createBuffer(1,1,44100);e.buffer===null&&(e.buffer=n),s(e,"buffer",i=>()=>{const r=i.call(e);return r===n?null:r},i=>r=>i.call(e,r===null?n:r))},uu=(s,e)=>(t,n)=>{n.channelCount=1,n.channelCountMode="explicit",Object.defineProperty(n,"channelCount",{get:()=>1,set:()=>{throw s()}}),Object.defineProperty(n,"channelCountMode",{get:()=>"explicit",set:()=>{throw s()}});const i=t.createBufferSource();e(n,()=>{const a=n.numberOfInputs;for(let c=0;c<a;c+=1)i.connect(n,0,c)},()=>i.disconnect(n))},yr=(s,e,t)=>s.copyFromChannel===void 0?s.getChannelData(t)[0]:(s.copyFromChannel(e,t),e[0]),xr=s=>{if(s===null)return!1;const e=s.length;return e%2!==0?s[Math.floor(e/2)]!==0:s[e/2-1]+s[e/2]!==0},fn=(s,e,t,n)=>{let i=s;for(;!i.hasOwnProperty(e);)i=Object.getPrototypeOf(i);const{get:r,set:o}=Object.getOwnPropertyDescriptor(i,e);Object.defineProperty(s,e,{get:t(r),set:n(o)})},hu=s=>({...s,outputChannelCount:s.outputChannelCount!==void 0?s.outputChannelCount:s.numberOfInputs===1&&s.numberOfOutputs===1?[s.channelCount]:Array.from({length:s.numberOfOutputs},()=>1)}),du=s=>({...s,channelCount:s.numberOfOutputs}),pu=s=>{const{imag:e,real:t}=s;return e===void 0?t===void 0?{...s,imag:[0,0],real:[0,0]}:{...s,imag:Array.from(t,()=>0),real:t}:t===void 0?{...s,imag:e,real:Array.from(e,()=>0)}:{...s,imag:e,real:t}},wr=(s,e,t)=>{try{s.setValueAtTime(e,t)}catch(n){if(n.code!==9)throw n;wr(s,e,t+1e-7)}},fu=s=>{const e=s.createBufferSource();e.start();try{e.start()}catch{return!0}return!1},mu=s=>{const e=s.createBufferSource(),t=s.createBuffer(1,1,44100);e.buffer=t;try{e.start(0,1)}catch{return!1}return!0},_u=s=>{const e=s.createBufferSource();e.start();try{e.stop()}catch{return!1}return!0},Rs=s=>{const e=s.createOscillator();try{e.start(-1)}catch(t){return t instanceof RangeError}return!1},Tr=s=>{const e=s.createBuffer(1,1,44100),t=s.createBufferSource();t.buffer=e,t.start(),t.stop();try{return t.stop(),!0}catch{return!1}},Ps=s=>{const e=s.createOscillator();try{e.stop(-1)}catch(t){return t instanceof RangeError}return!1},gu=s=>{const{port1:e,port2:t}=new MessageChannel;try{e.postMessage(s)}finally{e.close(),t.close()}},vu=s=>{s.start=(e=>(t=0,n=0,i)=>{const r=s.buffer,o=r===null?n:Math.min(r.duration,n);r!==null&&o>r.duration-.5/s.context.sampleRate?e.call(s,t,0,0):e.call(s,t,o,i)})(s.start)},Sr=(s,e)=>{const t=e.createGain();s.connect(t);const n=(i=>()=>{i.call(s,t),s.removeEventListener("ended",n)})(s.disconnect);s.addEventListener("ended",n),Xt(s,t),s.stop=(i=>{let r=!1;return(o=0)=>{if(r)try{i.call(s,o)}catch{t.gain.setValueAtTime(0,o)}else i.call(s,o),r=!0}})(s.stop)},Yt=(s,e)=>t=>{const n={value:s};return Object.defineProperties(t,{currentTarget:n,target:n}),typeof e=="function"?e.call(s,t):e.handleEvent.call(s,t)},yu=Lo(kt),xu=Go(kt),wu=sc(Un),br=new WeakMap,Tu=wc(br),qe=Da(new Map,new WeakMap),Ge=ou(),Cr=Qc(qe,$e),zs=xc(we),_e=Ul(we,zs,St),Su=Yo(Cr,te,_e),K=bc(Bn),tt=bl(Ge),X=Wc(tt),Ar=new WeakMap,Nr=pc(Yt),mn=tl(Ge),Fs=Fc(mn),Vs=Vc(Ge),kr=Lc(Ge),an=sl(Ge),ce=wa(qo(tr),Uo(yu,xu,In,wu,Dn,we,Tu,cn,te,kt,Je,St,An),qe,Ic(vs,Dn,we,te,rn,Je),$e,Gn,Te,Ka(In,vs,we,te,rn,K,Je,X),oc(Ar,we,Le),Nr,K,Fs,Vs,kr,X,an),bu=Xo(ce,Su,$e,Cr,K,X),Ls=new WeakSet,zi=Jc(Ge),Or=Ha(new Uint32Array(1)),qs=au(Or,$e),Ws=cu(Or),Er=Jo(Ls,qe,Te,zi,tt,Kl(zi),qs,Ws),Hn=Ho(Ce),Mr=Gl(zs,un,St),Xe=qa(Mr),Qt=el(Hn,qe,fu,mu,_u,Rs,Tr,Ps,vu,lu(fn),Sr),Ye=Bl(Tc(un),Mr),Cu=ta(Xe,Qt,te,Ye,_e),We=Ta(Wo(nr),Ar,ks,Sa,Do,Ro,Po,zo,Fo,ms,Ki,mn,wr),Au=ea(ce,Cu,We,fe,Qt,K,X,Yt),Nu=ua(ce,ha,$e,fe,nl(Ce,fn),K,X,_e),ku=Ia(Xe,_r,te,Ye,_e),Ot=$l(br),Ou=Ma(ce,We,ku,Gn,_r,K,X,Ot),dt=Xc(kt,Vs),Eu=uu(fe,dt),pt=ul(mn,Eu),Mu=za(pt,te,_e),Iu=Pa(ce,Mu,pt,K,X),Du=La(dn,te,_e),Ru=Va(ce,Du,dn,K,X,du),Pu=pl(Hn,Qt,Ce,dt),Jt=dl(Hn,qe,Pu,Rs,Ps),zu=Ga(Xe,Jt,te,Ye,_e),Fu=Ua(ce,We,zu,Jt,K,X,Yt),Ir=fl(Te,fn),Vu=Xa(Ir,te,_e),Lu=$a(ce,Vu,Ir,K,X,Ot),qu=nc(Xe,gr,te,Ye,_e),Wu=tc(ce,We,qu,gr,K,X,Ot),Dr=ml(Te),ju=uc(Xe,Dr,te,Ye,_e),Bu=lc(ce,We,ju,Dr,Te,K,X,Ot),Uu=vc(Xe,Ce,te,Ye,_e),Gu=gc(ce,We,Uu,Ce,K,X),Hu=yl(Gn,fe,pn,Te),Zn=Hl(qe,Ce,pn,tu(Ce,tt)),Zu=Mc(Qt,te,tt,_e,Zn),$u=_l(Hu),Xu=Oc(ce,$u,Zu,K,X,Ot),Yu=da(We,pt,Jt,pn,Te,yr,X,fn),Rr=new WeakMap,Qu=$c(Nu,Yu,Nr,X,Rr,Yt),Pr=Cl(Hn,qe,Rs,Tr,Ps,Sr),Ju=Fl(Xe,Pr,te,Ye,_e),Ku=zl(ce,We,Pr,Ju,K,X,Yt),zr=ja(Qt),eh=Il(zr,fe,Ce,xr,dt),$n=Ml(zr,fe,eh,xr,dt,mn,fn),th=Nl(In,fe,pt,Ce,pn,$n,Te,Dn,yr,dt),Fr=Al(th),nh=ql(Xe,pt,Jt,Ce,Fr,te,tt,Ye,_e,Zn),sh=Ll(ce,We,Fr,nh,K,X,Ot),ih=kl($e),rh=jl(ih,K,new WeakSet,pu),oh=El(pt,dn,Ce,$n,Te,dt),Vr=Ol(oh,Te),ah=Jl(Xe,Vr,te,Ye,_e),ch=Ql(ce,We,Vr,ah,K,X),lh=ru($n,te,_e),uh=iu(ce,fe,$n,lh,K,X,Ot),Lr=jc(Ge),js=fc(Ge),qr=new WeakMap,hh=Cc(qr,tt),dh=Lr?Bo(qe,Te,dc(Ge),js,mc(Vo),K,hh,X,an,new WeakMap,new WeakMap,eu(an,tt),Ge):void 0,ph=qc(Fs,X),fh=Ja(Ls,qe,Qa,hc,new WeakSet,K,ph,En,on,qs,Ws),Wr=Oa(dh,bu,Er,Au,Ou,Iu,Ru,Fu,Lu,fh,Wu,Bu,Gu,Xu,Qu,Ku,sh,rh,ch,uh),mh=Bc(ce,xl,K,X),_h=Gc(ce,wl,K,X),gh=Hc(ce,Tl,K,X),vh=Sl(fe,X),yh=Zc(ce,vh,K),xh=la(Wr,fe,Te,nu,mh,_h,gh,yh,mn),Bs=Ac(Rr),wh=Zo(Bs),jr=Wa($e),Th=ic(Bs),Br=ac($e),Ur=new WeakMap,Sh=yc(Ur,Le),bh=ll(jr,$e,fe,pt,dn,Jt,Ce,pn,Te,Br,js,Sh,dt),Ch=rl(fe,bh,Ce,Te,dt),Ah=ka(Xe,jr,Qt,pt,dn,Jt,Ce,Th,Br,js,te,an,tt,Ye,_e,Zn),Nh=Sc(qr),kh=Zl(Ur),Fi=Lr?Ca(wh,ce,We,Ah,Ch,we,Nh,K,X,an,hu,kh,gu,Yt):void 0,Oh=Ya(Te,tt),Eh=Xl(Ls,qe,zs,Bs,Zn,En,qs,Ws),Mh=Rl(Wr,qe,fe,Oh,Eh),Ih=Dc(Bn,Fs),Dh=Rc(Ns,Vs),Rh=Pc(ks,kr),Ph=zc(Bn,X);function Re(s){return s===void 0}function G(s){return s!==void 0}function zh(s){return typeof s=="function"}function ct(s){return typeof s=="number"}function xt(s){return Object.prototype.toString.call(s)==="[object Object]"&&s.constructor===Object}function Fh(s){return typeof s=="boolean"}function Ie(s){return Array.isArray(s)}function Ke(s){return typeof s=="string"}function bn(s){return Ke(s)&&/^([a-g]{1}(?:b|#|x|bb)?)(-?[0-9]+)/i.test(s)}function q(s,e){if(!s)throw new Error(e)}function Oe(s,e,t=1/0){if(!(e<=s&&s<=t))throw new RangeError(`Value must be within [${e}, ${t}], got: ${s}`)}function Gr(s){!s.isOffline&&s.state!=="running"&&_n('The AudioContext is "suspended". Invoke Tone.start() from a user action to start the audio.')}let Hr=!1,Vi=!1;function Li(s){Hr=s}function Vh(s){Re(s)&&Hr&&!Vi&&(Vi=!0,_n("Events scheduled inside of scheduled callbacks should use the passed in scheduling time. See https://github.com/Tonejs/Tone.js/wiki/Accurate-Timing"))}let Zr=console;function Lh(...s){Zr.log(...s)}function _n(...s){Zr.warn(...s)}function qh(s){return new xh(s)}function Wh(s,e,t){return new Mh(s,e,t)}const ke=typeof self=="object"?self:null,jh=ke&&(ke.hasOwnProperty("AudioContext")||ke.hasOwnProperty("webkitAudioContext"));function Bh(s,e,t){return q(G(Fi),"AudioWorkletNode only works in a secure context (https or localhost)"),new(s instanceof(ke==null?void 0:ke.BaseAudioContext)?ke==null?void 0:ke.AudioWorkletNode:Fi)(s,e,t)}function je(s,e,t,n){var i=arguments.length,r=i<3?e:n===null?n=Object.getOwnPropertyDescriptor(e,t):n,o;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")r=Reflect.decorate(s,e,t,n);else for(var a=s.length-1;a>=0;a--)(o=s[a])&&(r=(i<3?o(r):i>3?o(e,t,r):o(e,t))||r);return i>3&&r&&Object.defineProperty(e,t,r),r}function he(s,e,t,n){function i(r){return r instanceof t?r:new t(function(o){o(r)})}return new(t||(t=Promise))(function(r,o){function a(u){try{l(n.next(u))}catch(h){o(h)}}function c(u){try{l(n.throw(u))}catch(h){o(h)}}function l(u){u.done?r(u.value):i(u.value).then(a,c)}l((n=n.apply(s,e||[])).next())})}class Uh{constructor(e,t,n,i){this._callback=e,this._type=t,this._minimumUpdateInterval=Math.max(128/(i||44100),.001),this.updateInterval=n,this._createClock()}_createWorker(){const e=new Blob([`
