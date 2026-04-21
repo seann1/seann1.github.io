@@ -320,6 +320,7 @@ const fireflyMaterial = new THREE.ShaderMaterial({
         uTime: { value: 0 },
         uSize: { value: 18.0 * window.devicePixelRatio },
         uMouse: { value: new THREE.Vector2(0, 0) },
+        uLogoMatrix: { value: new THREE.Matrix4() },
     },
     vertexShader: particleVertexShader,
     fragmentShader: particleFragmentShader,
@@ -420,6 +421,10 @@ function animate() {
             lerpSpeed
         );
         model.rotation.z = scrollY * 5;
+
+        // Keep particle spawn points locked to the logo's current orientation
+        model.updateWorldMatrix(true, false);
+        fireflyMaterial.uniforms.uLogoMatrix.value.copy(model.matrixWorld);
     }
     renderer.render(scene, camera);
     // effect.render(scene, camera);

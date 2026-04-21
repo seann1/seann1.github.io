@@ -2,6 +2,7 @@ attribute vec3 aSeed;
 uniform float uTime;
 uniform float uSize;
 uniform vec2 uMouse; // normalized mouse position in world space
+uniform mat4 uLogoMatrix; // logo's world transform — rotates spawn points with the logo
 
 varying float vAlpha;
 varying float vSize;
@@ -29,11 +30,12 @@ float perlinNoise(vec3 p) {
 }
 
 void main() {
-    vec3 pos = position;
+    // Spawn in logo-local space, then transform to world space so spawn points tilt with the logo
+    vec3 pos = (uLogoMatrix * vec4(position, 1.0)).xyz;
 
     float riseSpeed = aSeed.y;
     float t = mod(uTime * riseSpeed * 0.18 + aSeed.x, 1.0);
-    pos.y += mix(-0.3, 0.5, t);
+    pos.y += mix(0.0, 1.0, t);
 
     pos.x += sin(uTime * 0.6 + aSeed.z) * 0.06;
     pos.z += cos(uTime * 0.5 + aSeed.x) * 0.04;
