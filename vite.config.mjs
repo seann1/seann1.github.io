@@ -1,6 +1,7 @@
 import glsl from 'vite-plugin-glsl';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import {qrcode} from 'vite-plugin-qrcode'
+import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 import path from "path";
 import { defineConfig } from 'vite';
 
@@ -13,7 +14,15 @@ export default defineConfig({
 			root: '/',  // or try: defaultExtension: 'glsl'
 		}),
 		createHtmlPlugin(),
-		qrcode()
+		qrcode(),
+		ViteImageOptimizer({
+			png: { quality: 80 },
+			jpeg: { quality: 80 },
+			jpg: { quality: 80 },
+			webp: { quality: 80 },
+			avif: { quality: 65 },
+			svg: { multipass: true },
+		})
 	],
 	server: {
 		host: '0.0.0.0',
@@ -34,6 +43,8 @@ export default defineConfig({
 				threeJsExperiment5: path.resolve(__dirname, 'src/three-js-experiment-5/index.html'),
 				threeJsExperiment6: path.resolve(__dirname, 'src/three-js-experiment-6/index.html'),
 				threeJsExperiment7: path.resolve(__dirname, 'src/three-js-experiment-7/index.html'),
+				touchdesignerReel: path.resolve(__dirname, 'src/touchdesigner-reel/index.html'),
+				motionGraphicsReel: path.resolve(__dirname, 'src/motion-graphics-reel/index.html'),
 				// p5Experiment1: path.resolve(__dirname, 'src/p5-experiment-1/index.html'),
 				// p5Experiment2: path.resolve(__dirname, 'src/p5-experiment-2/index.html'),
 				// cocaCola: path.resolve(__dirname, 'src/cocaColaProject/index.html'),
