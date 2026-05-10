@@ -1,4 +1,4 @@
-import{al as C,an as S,ao as T,a9 as k,ac as R,C as F,z as W,ah as D,D as M,ap as G,O as H,V as U,ai as V,G as B,am as j,u as I,a6 as L,g as w,ag as N}from"./three.module-873ba857.js";import{g as o}from"./index-134cb283.js";import{O as q}from"./OrbitControls-e004a33c.js";const A=`
+import"./modulepreload-polyfill-3cfb730f.js";import{al as C,an as S,ao as T,a9 as k,ac as R,C as F,z as W,ah as D,D as M,ap as G,O as H,V as U,ai as V,G as B,am as j,u as I,a6 as L,g as w,ag as N}from"./three.module-16fbc70e.js";import{g as o}from"./index-134cb283.js";import{O as q}from"./OrbitControls-5d5338b2.js";const A=`
 #define PHONG
 
 varying vec3 vViewPosition;
