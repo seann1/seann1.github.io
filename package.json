@@ -9,7 +9,7 @@
         "start": "vite serve --host",
         "build": "vite build",
         "preview": "vite preview",
-        "deploy": "gh-pages -d src/dist --cname seanniesen.digital"
+        "deploy": "gh-pages -d src/dist --cname seanniesen.digital --repo git@github.com:seann1/seann1.github.io.git"
     },
     "author": "",
     "license": "MIT",
