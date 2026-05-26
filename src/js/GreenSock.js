@@ -177,6 +177,36 @@ if (cards.length > 0) {
         );
     });
 }
+const projectsSection = document.querySelector('.projects-section');
+
+gsap.from(projectsSection, {
+    scrollTrigger: {
+        trigger: '.lastCard',
+        start: 'top 50%',
+        toggleActions: 'play none none reverse',
+    },
+    opacity: 0,
+    y: 200,
+    skewY: 27,
+    duration: 1.7,
+    ease: 'back.out(1.7)',
+});
+
+const reelsSection = document.querySelectorAll('.reel-card');
+
+gsap.from(reelsSection, {
+    scrollTrigger: {
+        trigger: '.reelsAnim',
+        start: 'top 50%',
+        toggleActions: 'play none none reverse',
+    },
+    opacity: 0,
+    y: 200,
+    stagger: 0.2,
+    // skewY: 27,
+    duration: 1.7,
+    ease: 'back.out(1.7)',
+});
 
 const experimentItems = document.querySelectorAll('experiment-item');
 

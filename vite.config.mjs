@@ -45,6 +45,7 @@ export default defineConfig({
 				threeJsExperiment7: path.resolve(__dirname, 'src/three-js-experiment-7/index.html'),
 				touchdesignerReel: path.resolve(__dirname, 'src/touchdesigner-reel/index.html'),
 				motionGraphicsReel: path.resolve(__dirname, 'src/motion-graphics-reel/index.html'),
+				projects: path.resolve(__dirname, 'src/projects/index.html'),
 				// p5Experiment1: path.resolve(__dirname, 'src/p5-experiment-1/index.html'),
 				// p5Experiment2: path.resolve(__dirname, 'src/p5-experiment-2/index.html'),
 				// cocaCola: path.resolve(__dirname, 'src/cocaColaProject/index.html'),

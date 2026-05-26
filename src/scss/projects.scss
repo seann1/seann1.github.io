@@ -1,0 +1,95 @@
+@import 'fonts';
+@import 'variables';
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Poppins', arial;
+    background-color: $main-color;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+a,
+a:hover,
+a:visited,
+a:active {
+    color: inherit;
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+}
+
+.reel-header {
+    background: $secondary-color;
+    color: $main-color;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1em;
+    flex-shrink: 0;
+
+    .logo img {
+        height: 50px;
+        padding: 0 1em;
+        display: block;
+        width: auto;
+    }
+
+    .back-btn {
+        font-weight: bold;
+        font-size: 0.85em;
+        padding: 0.4em 1em;
+        border: 2px solid $tertiary-color;
+        border-radius: 999px;
+        letter-spacing: 0.05em;
+        color: $tertiary-color;
+        transition:
+            background 0.2s,
+            color 0.2s;
+
+        &:hover {
+            background: $tertiary-color;
+            color: $secondary-color;
+        }
+    }
+}
+
+.marquee-wrapper {
+    overflow: hidden;
+    width: 100%;
+    flex-shrink: 0;
+
+    #marquee {
+        background-color: $secondary-color;
+        color: $main-color;
+        font-weight: bolder;
+        font-size: 1rem;
+        font-style: italic;
+        font-family: 'Bebas Neue', sans-serif;
+        line-height: 11px;
+    }
+}
+
+.projects-list {
+    flex: 1;
+    padding: 3em 4em;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+
+    @media (max-width: 700px) {
+        padding: 2em 1.5em;
+    }
+}
+
+project-item {
+    display: block;
+}

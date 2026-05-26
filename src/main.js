@@ -202,7 +202,6 @@ function updateCombinedProgress() {
 // Create a LoadingManager and wire it to the UI
 const manager = new THREE.LoadingManager();
 manager.onStart = (url, itemsLoaded, itemsTotal) => {
-    console.log(itemsLoaded, itemsTotal);
     threeFraction = itemsTotal ? itemsLoaded / itemsTotal : 0;
     updateCombinedProgress();
 };
