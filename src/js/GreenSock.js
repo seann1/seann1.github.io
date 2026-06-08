@@ -113,28 +113,28 @@ tl.from(
 // Horizontal "stacking cards" section
 const cards = gsap.utils.toArray('.cards-wrapper .card');
 // video background
-ScrollTrigger.create({
-    trigger: '.horizontal-section',
-    start: 'top top',
-    end: () => `+=${cards.length * 600}`, // reuse your cards length calculation
-    onEnter: () => {
-        overlay.style.pointerEvents = 'auto';
-        gsap.to(overlay, { autoAlpha: 1, duration: 0.35, ease: 'power1.out' });
-    },
-    onLeave: () => {
-        overlay.style.pointerEvents = 'none';
-        gsap.to(overlay, { autoAlpha: 0, duration: 0.25, ease: 'power1.in' });
-    },
-    onEnterBack: () => {
-        overlay.style.pointerEvents = 'auto';
-        gsap.to(overlay, { autoAlpha: 1, duration: 0.35, ease: 'power1.out' });
-    },
-    onLeaveBack: () => {
-        overlay.style.pointerEvents = 'none';
-        gsap.to(overlay, { autoAlpha: 0, duration: 0.25, ease: 'power1.in' });
-    },
-    // markers: true, // enable to debug positions
-});
+// ScrollTrigger.create({
+//     trigger: '.horizontal-section',
+//     start: 'top top',
+//     end: () => `+=${cards.length * 600}`, // reuse your cards length calculation
+//     onEnter: () => {
+//         overlay.style.pointerEvents = 'auto';
+//         gsap.to(overlay, { autoAlpha: 1, duration: 0.35, ease: 'power1.out' });
+//     },
+//     onLeave: () => {
+//         overlay.style.pointerEvents = 'none';
+//         gsap.to(overlay, { autoAlpha: 0, duration: 0.25, ease: 'power1.in' });
+//     },
+//     onEnterBack: () => {
+//         overlay.style.pointerEvents = 'auto';
+//         gsap.to(overlay, { autoAlpha: 1, duration: 0.35, ease: 'power1.out' });
+//     },
+//     onLeaveBack: () => {
+//         overlay.style.pointerEvents = 'none';
+//         gsap.to(overlay, { autoAlpha: 0, duration: 0.25, ease: 'power1.in' });
+//     },
+//     // markers: true, // enable to debug positions
+// });
 
 if (cards.length > 0) {
     // Make sure stacking order is correct: later cards above earlier ones
