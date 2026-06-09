@@ -36,6 +36,12 @@ export default class ExperimentItem extends HTMLElement {
                     color: var(--main-color);
                 }
             }
+
+            @media (max-width: 900px) {
+                .experiment {
+                    height: 150px;
+                }
+            }
             </style>
             <a
                 href="${link}"
