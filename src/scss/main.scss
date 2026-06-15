@@ -669,6 +669,36 @@ html.lenis {
     }
 }
 
+.comfyui-section {
+    display: flex;
+    justify-content: center;
+
+    .comfyui-card {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        cursor: pointer;
+        font-weight: bold;
+        background-color: $secondary-color;
+        min-height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.3s ease;
+
+        &:hover {
+            opacity: 0.85;
+        }
+
+        .comfyui-card-label {
+            font-size: 8vw;
+            color: $tertiary-color;
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 0.05em;
+        }
+    }
+}
+
 .reels-section {
     display: flex;
     gap: 2em;

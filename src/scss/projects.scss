@@ -90,6 +90,32 @@ img {
     }
 }
 
-project-item {
+project-item,
+comfyui-item {
     display: block;
+}
+
+.comfyui-gallery {
+    flex: 1;
+    padding: 3em 4em;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5em;
+
+    @media (max-width: 700px) {
+        padding: 2em 1.5em;
+        grid-template-columns: 1fr;
+    }
+
+    img {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.4s ease;
+
+        &:hover {
+            transform: scale(1.03);
+        }
+    }
 }
