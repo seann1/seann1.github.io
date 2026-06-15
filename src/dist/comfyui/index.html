@@ -1,0 +1,33 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>ComfyUI Portfolio – Sean Niesen</title><script type="module" crossorigin src="/assets/comfyui-f7adc0c7.js"></script><link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-3cfb730f.js"><link rel="modulepreload" crossorigin href="/assets/reel-c517e403.js"><link rel="stylesheet" href="/assets/projects-0efa9c23.css"></head><body><div class="marquee-wrapper"><div id="marquee"><span>Sean Niesen Software Developer&nbsp;</span></div></div><div class="reel-header"><a href="/" class="logo"><img src="/images/sn-logo-grey.svg" alt="Sean Niesen"/> </a><a href="/" class="back-btn">← Back</a></div><main class="projects-list"><comfyui-item title="Object Removal &amp; Clean Plate Generation" model="Realistic Vision v5.1 Inpainting" tags="ComfyUI, Stable Diffusion, inpainting, object removal, clean plate, VFX" description="Clean plates are a foundational deliverable in VFX production — a background frame free of unwanted elements, used as the base for compositing, motion tracking, and rotoscoping. This ComfyUI workflow automates their generation using Realistic Vision v5.1's inpainting checkpoint, a fine-tuned Stable Diffusion model built for photorealistic reconstruction of occluded regions. A mask is drawn over the target object and fed into the inpainting pipeline alongside the original frame. The model reconstructs the masked area with context-aware detail, sampling surrounding texture, lighting, and perspective to produce a seamless fill. Three outputs are compared below to evaluate the quality and performance tradeoffs of running inpainting at different resolutions — a relevant consideration for production pipelines where processing time and output fidelity must be balanced against available hardware." before="/images/ComfyUI/clean-plate/original-image-1.png" results='[
+                    {
+                        "label": "Result 1 — Full Resolution (2560×1440)",
+                        "note": "Input processed at native resolution. No downscaling or upscaling applied.",
+                        "workflow": "/images/ComfyUI/clean-plate/workflow.png",
+                        "after": "/images/ComfyUI/clean-plate/clean-image-1.png"
+                    },
+                    {
+                        "label": "Result 2 — Downscaled to 25%, Upscaled 50%",
+                        "note": "Input downscaled to 25% of original resolution before inpainting, then upscaled 50% at output.",
+                        "workflow": "/images/ComfyUI/clean-plate/workflow-2.png",
+                        "after": "/images/ComfyUI/clean-plate/clean-image-downscaled-upscaled.png"
+                    },
+                    {
+                        "label": "Result 3 — Downscaled to 25%, No Upscale",
+                        "note": "Input downscaled to 25% of original resolution before inpainting. Output left at reduced resolution.",
+                        "workflow": "/images/ComfyUI/clean-plate/workflow-2.png",
+                        "after": "/images/ComfyUI/clean-plate/clean-image-downscaled.png"
+                    }
+                ]'></comfyui-item><comfyui-item title="Dual LoRA + ControlNet Text-to-Image" model="flux.1 [dev]" tags="ComfyUI, Stable Diffusion, LoRA, ControlNet, Canny, text-to-image, concept art, look development" description="This workflow explores multi-LoRA stacking with ControlNet structural conditioning — a technique relevant to concept art generation and look development in VFX pipelines. Two LoRA checkpoints are loaded simultaneously and blended at varying weight ratios: one trained on Art Nouveau illustration, characterized by organic curves, decorative linework, and botanical ornamentation; the second trained on infrared heat map photography, which introduces false-color thermal gradients and luminous tonal separations into the latent space. As the relative strength of each LoRA shifts across generations, the outputs move between decorative illustration and data-visualization aesthetics — the most distinctive results emerging at intermediate ratios where both styles compete for influence over texture, color, and line quality. Compositional structure is enforced through a ControlNet conditioned on a Canny edge map derived from a Balenciaga runway photograph: a model posed upright in a wing mask, flanked by curtains. The Canny algorithm extracts the structural skeleton of the silhouette, garment edges, and negative space, which ControlNet uses to anchor the generated composition without prescribing style. Because LoRA aesthetics and ControlNet spatial conditioning operate in separate latent dimensions, the stylistic exploration remains fully decoupled from compositional intent — the pose and framing stay consistent across all nine outputs while color science and surface quality vary freely." workflows='[
+                    "/images/ComfyUI/lora-controlnet/workflow-1.png",
+                    "/images/ComfyUI/lora-controlnet/workflow-2.png"
+                ]' gallery='[
+                    "/images/ComfyUI/lora-controlnet/result-1.png",
+                    "/images/ComfyUI/lora-controlnet/result-2.png",
+                    "/images/ComfyUI/lora-controlnet/result-3.png",
+                    "/images/ComfyUI/lora-controlnet/result-4.png",
+                    "/images/ComfyUI/lora-controlnet/result-5.png",
+                    "/images/ComfyUI/lora-controlnet/result-6.png",
+                    "/images/ComfyUI/lora-controlnet/result-7.png",
+                    "/images/ComfyUI/lora-controlnet/result-8.png",
+                    "/images/ComfyUI/lora-controlnet/result-9.png"
+                ]'></comfyui-item></main></body></html>
