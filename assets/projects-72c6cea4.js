@@ -1,12 +1,20 @@
-import"./modulepreload-polyfill-3cfb730f.js";/* empty css                 */import"./reel-c517e403.js";class j extends HTMLElement{constructor(){super();const r=this.getAttribute("title")||"",p=this.getAttribute("subtitle")||"",h=this.getAttribute("tags")||"",f=this.getAttribute("description")||"";let s=[];try{s=JSON.parse(this.getAttribute("pictures")||"[]")}catch{}const i=this.attachShadow({mode:"open"}),u=s.map((t,a)=>typeof t=="string"?`<img src="${t}" alt="${r}" data-index="${a}" class="gallery-thumb" />`:t.type==="youtube"?`
-                        <div class="gallery-thumb vimeo-thumb" data-index="${a}">
-                            <img src="https://img.youtube.com/vi/${t.id}/hqdefault.jpg" alt="${r}" />
-                            <div class="play-icon">▶</div>
-                        </div>`:t.type==="short"?`
-                        <div class="gallery-thumb vimeo-thumb short-thumb" data-index="${a}">
-                            <img src="https://img.youtube.com/vi/${t.id}/hqdefault.jpg" alt="${r}" />
-                            <div class="play-icon">▶</div>
-                        </div>`:"").join(""),y=p?`<span class="project-subtitle">${p}</span>`:"",v=h?`<p class="project-tags">${h}</p>`:"";i.innerHTML=`
+import"./modulepreload-polyfill-3cfb730f.js";/* empty css                 */import"./reel-c517e403.js";class z extends HTMLElement{constructor(){super();const l=this.getAttribute("title")||"",f=this.getAttribute("subtitle")||"",b=this.getAttribute("tags")||"",w=this.getAttribute("description")||"",o=this.attachShadow({mode:"open"}),p=e=>{try{return JSON.parse(this.getAttribute(e)||"[]")}catch{return[]}},a=p("pictures-before"),g=p("pictures-after"),u=a.length>0||g.length>0,c=u?[...a,...g]:p("pictures"),h=(e,t)=>typeof e=="string"?`<img src="${e}" alt="${l}" data-index="${t}" class="gallery-thumb" />`:e.type==="youtube"?`
+                    <div class="gallery-thumb vimeo-thumb" data-index="${t}">
+                        <img src="https://img.youtube.com/vi/${e.id}/hqdefault.jpg" alt="${l}" />
+                        <div class="play-icon">▶</div>
+                    </div>`:e.type==="short"?`
+                    <div class="gallery-thumb vimeo-thumb short-thumb" data-index="${t}">
+                        <img src="https://img.youtube.com/vi/${e.id}/hqdefault.jpg" alt="${l}" />
+                        <div class="play-icon">▶</div>
+                    </div>`:"",j=u?`
+                <div class="gallery-group">
+                    <span class="gallery-group-label">Before</span>
+                    <div class="project-gallery">${a.map((e,t)=>h(e,t)).join("")}</div>
+                </div>
+                <div class="gallery-group">
+                    <span class="gallery-group-label">After</span>
+                    <div class="project-gallery">${g.map((e,t)=>h(e,t+a.length)).join("")}</div>
+                </div>`:`<div class="project-gallery">${c.map((e,t)=>h(e,t)).join("")}</div>`,L=f?`<span class="project-subtitle">${f}</span>`:"",k=b?`<p class="project-tags">${b}</p>`:"";o.innerHTML=`
             <style>
             * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -23,10 +31,39 @@ import"./modulepreload-polyfill-3cfb730f.js";/* empty css                 */impo
                 .project-card { grid-template-columns: 1fr; }
             }
 
+            .project-media {
+                display: flex;
+                flex-direction: column;
+                gap: 1em;
+                /* grid items default to min-width: auto, which sizes to
+                   their content's max-content width — without this, the
+                   wide flex galleries below blow out the grid column
+                   (and the page) instead of scrolling internally. */
+                min-width: 0;
+            }
+
+            .gallery-group {
+                display: flex;
+                flex-direction: column;
+                gap: 0.4em;
+                min-width: 0;
+            }
+
+            .gallery-group-label {
+                font-family: 'Poppins', sans-serif;
+                font-size: 0.75em;
+                font-weight: 700;
+                letter-spacing: 0.15em;
+                text-transform: uppercase;
+                color: var(--secondary-color, #a6034f);
+                opacity: 0.7;
+            }
+
             .project-gallery {
                 display: flex;
                 gap: 0.5em;
                 overflow-x: auto;
+                min-width: 0;
                 scrollbar-width: thin;
                 scrollbar-color: var(--secondary-color, #a6034f) transparent;
             }
@@ -201,14 +238,14 @@ import"./modulepreload-polyfill-3cfb730f.js";/* empty css                 */impo
             </style>
 
             <div class="project-card">
-                <div class="project-gallery">${u}</div>
+                <div class="project-media">${j}</div>
                 <div class="project-info">
                     <div class="project-title-group">
-                        <h2>${r}</h2>
-                        ${y}
+                        <h2>${l}</h2>
+                        ${L}
                     </div>
-                    ${v}
-                    <p>${f}</p>
+                    ${k}
+                    <p>${w}</p>
                 </div>
             </div>
 
@@ -217,4 +254,4 @@ import"./modulepreload-polyfill-3cfb730f.js";/* empty css                 */impo
                 <span class="lightbox-arrow prev" id="lb-prev">&#8592;</span>
                 <div class="lightbox-inner" id="lb-inner"></div>
                 <span class="lightbox-arrow next" id="lb-next">&#8594;</span>
-            </div>`;const c=i.getElementById("lightbox"),n=i.getElementById("lb-inner"),x=i.getElementById("lb-close"),g=i.getElementById("lb-prev"),m=i.getElementById("lb-next");let e=0;const w=t=>{e=t,l(),c.classList.add("open"),document.addEventListener("keydown",b)},d=()=>{c.classList.remove("open"),n.innerHTML="",document.removeEventListener("keydown",b)},l=()=>{n.innerHTML="";const t=s[e],a=typeof t=="object"&&t.type==="short";if(n.classList.toggle("portrait",a),typeof t=="string"){const o=document.createElement("img");o.src=t,o.alt=r,n.appendChild(o)}else if(t.type==="youtube"||t.type==="short"){const o=document.createElement("iframe");o.src=`https://www.youtube.com/embed/${t.id}?autoplay=1`,o.allow="autoplay; fullscreen; picture-in-picture",n.appendChild(o)}g.classList.toggle("hidden",e===0),m.classList.toggle("hidden",e===s.length-1)},b=t=>{t.key==="Escape"&&d(),t.key==="ArrowLeft"&&e>0&&(e--,l()),t.key==="ArrowRight"&&e<s.length-1&&(e++,l())};i.querySelectorAll(".gallery-thumb").forEach(t=>{t.addEventListener("click",()=>w(Number(t.dataset.index)))}),x.addEventListener("click",d),g.addEventListener("click",()=>{e--,l()}),m.addEventListener("click",()=>{e++,l()}),c.addEventListener("click",t=>{t.target===c&&d()})}}customElements.define("project-item",j);
+            </div>`;const d=o.getElementById("lightbox"),s=o.getElementById("lb-inner"),$=o.getElementById("lb-close"),y=o.getElementById("lb-prev"),v=o.getElementById("lb-next");let i=0;const E=e=>{i=e,n(),d.classList.add("open"),document.addEventListener("keydown",x)},m=()=>{d.classList.remove("open"),s.innerHTML="",document.removeEventListener("keydown",x)},n=()=>{s.innerHTML="";const e=c[i],t=typeof e=="object"&&e.type==="short";if(s.classList.toggle("portrait",t),typeof e=="string"){const r=document.createElement("img");r.src=e,r.alt=l,s.appendChild(r)}else if(e.type==="youtube"||e.type==="short"){const r=document.createElement("iframe");r.src=`https://www.youtube.com/embed/${e.id}?autoplay=1`,r.allow="autoplay; fullscreen; picture-in-picture",s.appendChild(r)}y.classList.toggle("hidden",i===0),v.classList.toggle("hidden",i===c.length-1)},x=e=>{e.key==="Escape"&&m(),e.key==="ArrowLeft"&&i>0&&(i--,n()),e.key==="ArrowRight"&&i<c.length-1&&(i++,n())};o.querySelectorAll(".gallery-thumb").forEach(e=>{e.addEventListener("click",()=>E(Number(e.dataset.index)))}),$.addEventListener("click",m),y.addEventListener("click",()=>{i--,n()}),v.addEventListener("click",()=>{i++,n()}),d.addEventListener("click",e=>{e.target===d&&m()})}}customElements.define("project-item",z);
