@@ -135,6 +135,10 @@ header {
     margin: 0 auto;
     font-weight: bold;
     color: $tertiary-color;
+    font-size: 1.1em;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.25);
 }
 
 section {
@@ -640,17 +644,32 @@ html.lenis {
         cursor: pointer;
         font-weight: bold;
 
-        .projects-preview-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+        .projects-preview-stack {
+            position: relative;
+            width: 100%;
+            height: 330px;
+            overflow: hidden;
+        }
 
-            img {
-                width: 100%;
-                height: 330px;
-                object-fit: cover;
-                display: block;
-                transition: transform 0.4s ease;
-            }
+        .projects-preview-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        // dot-grid dissolve: dots start big enough to fully overlap
+        // (opaque coverage) and shrink to 0 (fully transparent),
+        // revealing the base image underneath. The grid itself is skewed
+        // via the SVG pattern's patternTransform (see index.html), which
+        // shears the dots without distorting the masked photo. The dot
+        // radius is driven by GSAP animating the SVG circle's r attribute.
+        .projects-preview-img--dots {
+            -webkit-mask-image: url(#projectsDotMask);
+            mask-image: url(#projectsDotMask);
         }
 
         .projects-card-label {
@@ -663,7 +682,7 @@ html.lenis {
             color: $tertiary-color;
         }
 
-        &:hover .projects-preview-grid img {
+        &:hover .projects-preview-img {
             transform: scale(1.05);
         }
     }
@@ -692,6 +711,7 @@ html.lenis {
 
         .comfyui-card-label {
             font-size: 8vw;
+            line-height: 1;
             color: $tertiary-color;
             font-family: 'Bebas Neue', sans-serif;
             letter-spacing: 0.05em;
@@ -717,8 +737,14 @@ html.lenis {
 
         img {
             width: 100%;
+            height: 320px;
+            object-fit: cover;
             display: block;
             transition: transform 0.4s ease;
+
+            @media only screen and (max-width: 700px) {
+                height: 220px;
+            }
         }
 
         .reel-card-label {
@@ -775,5 +801,5 @@ html.lenis {
 }
 
 .placeholder {
-    height: 60vh;
+    height: 30vh;
 }

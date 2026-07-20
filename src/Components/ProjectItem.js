@@ -5,35 +5,59 @@ export default class ProjectItem extends HTMLElement {
         const subtitle = this.getAttribute('subtitle') || '';
         const tags = this.getAttribute('tags') || '';
         const description = this.getAttribute('description') || '';
-        let media = [];
-        try {
-            media = JSON.parse(this.getAttribute('pictures') || '[]');
-        } catch (_) {}
-
         const shadow = this.attachShadow({ mode: 'open' });
 
-        const galleryHTML = media
-            .map((item, i) => {
-                if (typeof item === 'string') {
-                    return `<img src="${item}" alt="${title}" data-index="${i}" class="gallery-thumb" />`;
-                }
-                if (item.type === 'youtube') {
-                    return `
-                        <div class="gallery-thumb vimeo-thumb" data-index="${i}">
-                            <img src="https://img.youtube.com/vi/${item.id}/hqdefault.jpg" alt="${title}" />
-                            <div class="play-icon">▶</div>
-                        </div>`;
-                }
-                if (item.type === 'short') {
-                    return `
-                        <div class="gallery-thumb vimeo-thumb short-thumb" data-index="${i}">
-                            <img src="https://img.youtube.com/vi/${item.id}/hqdefault.jpg" alt="${title}" />
-                            <div class="play-icon">▶</div>
-                        </div>`;
-                }
-                return '';
-            })
-            .join('');
+        const parseMedia = (attr) => {
+            try {
+                return JSON.parse(this.getAttribute(attr) || '[]');
+            } catch (_) {
+                return [];
+            }
+        };
+
+        const beforeMedia = parseMedia('pictures-before');
+        const afterMedia = parseMedia('pictures-after');
+        const hasBeforeAfter = beforeMedia.length > 0 || afterMedia.length > 0;
+
+        // When pictures-before/pictures-after are given, the lightbox still
+        // navigates across one combined list — the before group just comes
+        // first, so indices carry straight over.
+        const media = hasBeforeAfter
+            ? [...beforeMedia, ...afterMedia]
+            : parseMedia('pictures');
+
+        const thumbHTML = (item, i) => {
+            if (typeof item === 'string') {
+                return `<img src="${item}" alt="${title}" data-index="${i}" class="gallery-thumb" />`;
+            }
+            if (item.type === 'youtube') {
+                return `
+                    <div class="gallery-thumb vimeo-thumb" data-index="${i}">
+                        <img src="https://img.youtube.com/vi/${item.id}/hqdefault.jpg" alt="${title}" />
+                        <div class="play-icon">▶</div>
+                    </div>`;
+            }
+            if (item.type === 'short') {
+                return `
+                    <div class="gallery-thumb vimeo-thumb short-thumb" data-index="${i}">
+                        <img src="https://img.youtube.com/vi/${item.id}/hqdefault.jpg" alt="${title}" />
+                        <div class="play-icon">▶</div>
+                    </div>`;
+            }
+            return '';
+        };
+
+        const galleryHTML = hasBeforeAfter
+            ? `
+                <div class="gallery-group">
+                    <span class="gallery-group-label">Before</span>
+                    <div class="project-gallery">${beforeMedia.map((item, i) => thumbHTML(item, i)).join('')}</div>
+                </div>
+                <div class="gallery-group">
+                    <span class="gallery-group-label">After</span>
+                    <div class="project-gallery">${afterMedia.map((item, i) => thumbHTML(item, i + beforeMedia.length)).join('')}</div>
+                </div>`
+            : `<div class="project-gallery">${media.map((item, i) => thumbHTML(item, i)).join('')}</div>`;
 
         const subtitleHTML = subtitle
             ? `<span class="project-subtitle">${subtitle}</span>`
@@ -60,10 +84,39 @@ export default class ProjectItem extends HTMLElement {
                 .project-card { grid-template-columns: 1fr; }
             }
 
+            .project-media {
+                display: flex;
+                flex-direction: column;
+                gap: 1em;
+                /* grid items default to min-width: auto, which sizes to
+                   their content's max-content width — without this, the
+                   wide flex galleries below blow out the grid column
+                   (and the page) instead of scrolling internally. */
+                min-width: 0;
+            }
+
+            .gallery-group {
+                display: flex;
+                flex-direction: column;
+                gap: 0.4em;
+                min-width: 0;
+            }
+
+            .gallery-group-label {
+                font-family: 'Poppins', sans-serif;
+                font-size: 0.75em;
+                font-weight: 700;
+                letter-spacing: 0.15em;
+                text-transform: uppercase;
+                color: var(--secondary-color, #a6034f);
+                opacity: 0.7;
+            }
+
             .project-gallery {
                 display: flex;
                 gap: 0.5em;
                 overflow-x: auto;
+                min-width: 0;
                 scrollbar-width: thin;
                 scrollbar-color: var(--secondary-color, #a6034f) transparent;
             }
@@ -238,7 +291,7 @@ export default class ProjectItem extends HTMLElement {
             </style>
 
             <div class="project-card">
-                <div class="project-gallery">${galleryHTML}</div>
+                <div class="project-media">${galleryHTML}</div>
                 <div class="project-info">
                     <div class="project-title-group">
                         <h2>${title}</h2>

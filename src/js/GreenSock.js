@@ -187,7 +187,56 @@ gsap.from(projectsSection, {
     },
     opacity: 0,
     y: 200,
-    skewY: 27,
+    // skewY: 27,
+    duration: 1.7,
+    ease: 'back.out(1.7)',
+});
+
+// Projects card: ambient dot-grid dissolve between the two preview images.
+// The dot grid's radius grows until neighboring dots fully overlap (opaque
+// coverage of the top image), then shrinks back to 0 (fully transparent,
+// revealing the base image beneath). The grid is skewed via the SVG
+// pattern's patternTransform (see index.html), so radius is animated on
+// the SVG <circle> itself rather than a CSS custom property.
+const projectsDotLayer = document.querySelector('.projects-preview-img--dots');
+const projectsDotCircle = document.getElementById('projectsDotCircle');
+const reduceMotion = window.matchMedia(
+    '(prefers-reduced-motion: reduce)'
+).matches;
+
+if (projectsDotLayer && projectsDotCircle && !reduceMotion) {
+    gsap.set(projectsDotCircle, { attr: { r: 0 } });
+
+    const dotTween = gsap
+        .timeline({ repeat: -1, yoyo: true, repeatDelay: 1, paused: true })
+        .to(projectsDotCircle, {
+            attr: { r: 34 },
+            duration: 3,
+            ease: 'power2.inOut',
+        });
+
+    ScrollTrigger.create({
+        trigger: '.projects-card',
+        start: 'top 90%',
+        end: 'bottom 10%',
+        onEnter: () => dotTween.play(),
+        onEnterBack: () => dotTween.play(),
+        onLeave: () => dotTween.pause(),
+        onLeaveBack: () => dotTween.pause(),
+    });
+}
+
+const comfyuiSection = document.querySelector('.comfyui-section');
+
+gsap.from(comfyuiSection, {
+    scrollTrigger: {
+        trigger: '.comfyui-section',
+        start: 'top 80%',
+        toggleActions: 'play none none reverse',
+    },
+    opacity: 0,
+    y: 200,
+    // skewY: 27,
     duration: 1.7,
     ease: 'back.out(1.7)',
 });
